@@ -236,7 +236,7 @@
                     <button class="restart-btn" onclick="restartBooking()">
                         🔄 Book Another Session
                     </button>
-                      <button onclick="debugDatabaseUpdate()">🔍 Test DB Update</button>
+                    
                 </div>
             </div>
 
@@ -351,10 +351,21 @@
             return `${dateStr}-${time}`;
         }
 
-        // Helper function to check if slot is booked
+        // Enhanced function to check if slot is booked (checks both memory and database)
         function isSlotBooked(date, time) {
             const slotKey = createSlotKey(date, time);
-            return bookedSlots.has(slotKey);
+            
+            // Check both in-memory bookings and database bookings
+            const memoryBooked = bookedSlots.has(slotKey);
+            const databaseBooked = databaseBookings.has(slotKey);
+            
+            const isBooked = memoryBooked || databaseBooked;
+            
+            if (isBooked) {
+                console.log(`🔒 Slot ${slotKey} is booked (Memory: ${memoryBooked}, Database: ${databaseBooked})`);
+            }
+            
+            return isBooked;
         }
 
         // Helper function to book a slot
@@ -364,6 +375,66 @@
             console.log(`🔒 Slot booked: ${slotKey}`);
         }
 
+        let databaseBookings = new Set(); // Will store "YYYY-MM-DD-HH:MM" format
+
+        // Function to fetch existing bookings from database
+        async function fetchExistingBookings() {
+            if (!supabase) {
+                console.warn('⚠️ Supabase not initialized, cannot fetch bookings');
+                return;
+            }
+
+            try {
+                console.log('🔍 Fetching existing bookings from database...');
+                
+                // Fetch all approved/pending bookings from database
+                const { data, error } = await supabase
+                    .from('temp_bookings')
+                    .select('scheduled_datetime, status, student_name')
+                    .in('status', ['approved', 'pending']); // Include both approved and pending
+
+                if (error) {
+                    console.error('❌ Error fetching bookings:', error);
+                    return;
+                }
+
+                // Clear existing database bookings
+                databaseBookings.clear();
+
+                if (data && data.length > 0) {
+                    console.log(`📊 Found ${data.length} existing bookings in database`);
+                    
+                    data.forEach(booking => {
+                        // Convert database datetime to Philippines timezone slot key
+                        const philippinesDateTime = new Date(booking.scheduled_datetime);
+                        
+                        // Extract date and time components in Philippines timezone
+                        const dateStr = philippinesDateTime.toLocaleDateString('en-CA', {
+                            timeZone: 'Asia/Manila'
+                        }); // Returns YYYY-MM-DD format
+                        
+                        const timeStr = philippinesDateTime.toLocaleTimeString('en-GB', {
+                            timeZone: 'Asia/Manila',
+                            hour12: false,
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        }); // Returns HH:MM format
+                        
+                        const slotKey = `${dateStr}-${timeStr}`;
+                        databaseBookings.add(slotKey);
+                        
+                        console.log(`🔒 Database booking found: ${slotKey} (${booking.student_name}, Status: ${booking.status})`);
+                    });
+                } else {
+                    console.log('📊 No existing bookings found in database');
+                }
+
+                console.log('✅ Database bookings loaded:', Array.from(databaseBookings));
+                
+            } catch (error) {
+                console.error('❌ Error fetching bookings:', error);
+            }
+        }
         // Initialize Supabase
         function initializeSupabase() {
             if (window.supabase && window.supabase.createClient) {
@@ -392,25 +463,24 @@
                     generateCalendar();
                     updateTimezoneInfo();
                     
-                    // Add some example booked slots for testing (remove these in production)
-                    // Uncomment lines below to test the booking system:
-                    // bookedSlots.add("2025-08-11-09:00"); // Book 9 AM tomorrow
-                    // bookedSlots.add("2025-08-11-20:00"); // Book 8 PM tomorrow
+                    // Fetch existing bookings from database on initialization
+                    fetchExistingBookings().then(() => {
+                        console.log('🎯 All systems ready with database bookings loaded!');
+                    });
                     
-                    console.log('🎯 All systems ready!');
-                    console.log('📝 Current booked slots:', Array.from(bookedSlots));
                 } else if (retryCount < maxRetries) {
                     retryCount++;
                     console.log(`⏳ Waiting for Supabase library... (${retryCount}/${maxRetries})`);
                     setTimeout(tryInitSupabase, 200);
                 } else {
                     console.error('❌ Failed to initialize Supabase client');
-                    showError('System initialization failed. Please refresh the page or check your internet connection.');
+                    showSupabaseError();
                 }
             }
             
             setTimeout(tryInitSupabase, 100);
         }
+
 
         // Detect user's timezone
         function detectUserTimezone() {
@@ -884,67 +954,68 @@
             document.getElementById('timeSlots').innerHTML = '<h3>Available Time Slots</h3><p style="color: #64748b; margin-bottom: 1rem;">Select a date to see available times</p>';
         }
 
-        // Select date
-        function selectDate(date) {
+        // Enhanced selectDate function that fetches bookings
+        async function selectDate(date) {
             // Remove previous selection
             document.querySelectorAll('.calendar-day.selected').forEach(day => {
                 day.classList.remove('selected');
             });
             
             // Add selection to clicked day
-            event.target.classList.add('selected');
+            if (event && event.target) {
+                event.target.classList.add('selected');
+            }
             
-            // 🔥 FIX: Create date properly without timezone shift
+            // Set selected date
             selectedDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
             
             console.log('🔥 Date selected:', selectedDate.toLocaleDateString());
             console.log('🔥 Day of week:', selectedDate.toLocaleDateString('en-US', { weekday: 'long' }));
             
-            // Load time slots for selected date
-            loadTimeSlots(selectedDate);
+            // Load time slots for selected date (this will fetch database bookings)
+            await loadTimeSlots(selectedDate);
         }
 
         // Load time slots for selected date - WITH BOOKING CHECK
-        function loadTimeSlots(date) {
+        // Enhanced loadTimeSlots function with database checking
+        async function loadTimeSlots(date) {
             const timeSlotsContainer = document.getElementById('timeSlots');
             timeSlotsContainer.innerHTML = '<h3>Available Time Slots</h3><div class="loading show"><div class="spinner"></div><p>Loading available times...</p></div>';
+            
+            // Fetch latest bookings from database before showing slots
+            await fetchExistingBookings();
             
             setTimeout(() => {
                 try {
                     let slotsHTML = '<h3>Available Time Slots</h3>';
                     
-                    // 🔥 Check if user is in same timezone as Philippines
+                    // Check timezone comparison
                     const userTimezoneOffset = new Date().toLocaleString('en-US', {timeZone: selectedTimezone, timeZoneName: 'longOffset'});
                     const philippinesOffset = new Date().toLocaleString('en-US', {timeZone: 'Asia/Manila', timeZoneName: 'longOffset'});
                     const isSameTimezone = userTimezoneOffset === philippinesOffset;
                     
+                    console.log('🔥 Loading slots for date:', date.toLocaleDateString());
                     console.log('🔥 Timezone check:', {
                         userTZ: selectedTimezone,
-                        userOffset: userTimezoneOffset,
-                        philippinesOffset: philippinesOffset,
                         isSame: isSameTimezone
                     });
                     
-                    // if (isSameTimezone) {
-                    //     slotsHTML += `<p style="color: #059669; margin-bottom: 1rem;">✅ <strong>Same timezone as Philippines!</strong> Times shown as-is.</p>`;
-                    // } else {
-                    //     slotsHTML += `<p style="color: #64748b; margin-bottom: 1rem;">🌍 Times converted to your timezone: <strong>${getTimezoneName(selectedTimezone)}</strong></p>`;
-                    // }
-                    
                     let hasAvailableSlots = false;
+                    let availableCount = 0;
+                    let bookedCount = 0;
                     
                     for (const slot of availableSlots) {
                         let userTime;
                         
                         if (isSameTimezone) {
-                            // 🔥 Same timezone: just convert 24h to 12h format
+                            // Same timezone: convert 24h to 12h format
                             const [hours, minutes] = slot.split(':');
                             const hour24 = parseInt(hours);
                             const hour12 = hour24 === 0 ? 12 : hour24 > 12 ? hour24 - 12 : hour24;
                             const ampm = hour24 < 12 ? 'AM' : 'PM';
                             userTime = `${hour12}:${minutes} ${ampm}`;
                         } else {
-                            // 🔥 Different timezone: convert properly
+                            // Different timezone: convert properly
                             const year = date.getFullYear();
                             const month = String(date.getMonth() + 1).padStart(2, '0');
                             const day = String(date.getDate()).padStart(2, '0');
@@ -959,21 +1030,35 @@
                             });
                         }
                         
-                        // Check if slot is already booked
+                        // Check if slot is already booked (now checks database too!)
                         const isBooked = isSlotBooked(date, slot);
                         
                         if (isBooked) {
+                            bookedCount++;
                             slotsHTML += `<button class="time-slot booked" disabled>${userTime} (Booked)</button>`;
                         } else {
                             hasAvailableSlots = true;
+                            availableCount++;
                             slotsHTML += `<button class="time-slot" onclick="selectTimeSlot('${slot}', '${userTime}')">${userTime}</button>`;
                         }
+                    }
+                    
+                    // Add summary information
+                    if (!hasAvailableSlots) {
+                        slotsHTML += '<p style="color: #dc2626; margin-top: 1rem; font-weight: 600;">😔 No available slots for this date</p>';
+                    } else {
+                        slotsHTML += `<p style="color: #059669; margin-top: 1rem; font-size: 0.9rem;">✅ ${availableCount} available slots`;
+                        if (bookedCount > 0) {
+                            slotsHTML += `, ${bookedCount} already booked`;
+                        }
+                        slotsHTML += '</p>';
                     }
                     
                     timeSlotsContainer.innerHTML = slotsHTML;
                     
                 } catch (error) {
-                    console.error('Error loading time slots:', error);
+                    console.error('❌ Error loading time slots:', error);
+                    timeSlotsContainer.innerHTML = '<h3>Available Time Slots</h3><p style="color: #dc2626;">Error loading time slots. Please try again.</p>';
                 }
             }, 500);
         }
@@ -996,6 +1081,20 @@
             };
             return names[timezone] || timezone;
         }
+
+        // Function to manually refresh bookings (call this if needed)
+        async function refreshBookings() {
+            console.log('🔄 Manually refreshing bookings from database...');
+            await fetchExistingBookings();
+            
+            // Reload time slots if a date is selected
+            if (selectedDate) {
+                await loadTimeSlots(selectedDate);
+            }
+            
+            showSuccess('✅ Booking availability refreshed!');
+        }
+
 
         // Select time slot - ENHANCED VERSION
         // 🔥 REPLACE your selectTimeSlot function:
