@@ -361,9 +361,7 @@
             
             const isBooked = memoryBooked || databaseBooked;
             
-            if (isBooked) {
-                console.log(`🔒 Slot ${slotKey} is booked (Memory: ${memoryBooked}, Database: ${databaseBooked})`);
-            }
+         
             
             return isBooked;
         }
@@ -372,7 +370,6 @@
         function bookSlot(date, time) {
             const slotKey = createSlotKey(date, time);
             bookedSlots.add(slotKey);
-            console.log(`🔒 Slot booked: ${slotKey}`);
         }
 
         let databaseBookings = new Set(); // Will store "YYYY-MM-DD-HH:MM" format
@@ -385,8 +382,7 @@
             }
 
             try {
-                console.log('🔍 Fetching existing bookings from database...');
-                
+             
                 // Fetch all approved/pending bookings from database
                 const { data, error } = await supabase
                     .from('temp_bookings')
@@ -402,8 +398,7 @@
                 databaseBookings.clear();
 
                 if (data && data.length > 0) {
-                    console.log(`📊 Found ${data.length} existing bookings in database`);
-                    
+                   
                     data.forEach(booking => {
                         // Convert database datetime to Philippines timezone slot key
                         const philippinesDateTime = new Date(booking.scheduled_datetime);
@@ -423,13 +418,13 @@
                         const slotKey = `${dateStr}-${timeStr}`;
                         databaseBookings.add(slotKey);
                         
-                        console.log(`🔒 Database booking found: ${slotKey} (${booking.student_name}, Status: ${booking.status})`);
+                       
                     });
                 } else {
                     console.log('📊 No existing bookings found in database');
                 }
 
-                console.log('✅ Database bookings loaded:', Array.from(databaseBookings));
+               
                 
             } catch (error) {
                 console.error('❌ Error fetching bookings:', error);
@@ -658,10 +653,7 @@
                 const philippinesDateTime = new Date(`${dateStr}T${selectedTime}:00+08:00`);
                 const adjustedDateTime = new Date(philippinesDateTime.getTime() + (8 * 60 * 60 * 1000));
 
-                console.log('🔥 BOOKING SUBMISSION DEBUG:');
-                console.log('User selected date:', selectedDate.toLocaleDateString());
-                console.log('Final datetime for database:', adjustedDateTime.toISOString());
-                
+               
                 const bookingData = {
                     student_id: currentStudent.id,
                     student_nickname: currentStudent.nickname,
@@ -674,7 +666,7 @@
                     created_at: new Date().toISOString()
                 };
 
-                console.log('🎯 Final booking data being sent to Supabase:', bookingData);
+               
 
                 let booking;
                 let databaseSuccess = false;
@@ -697,21 +689,12 @@
 
                     // Update student's booked classes count
                     try {
-                        console.log('📊 BEFORE UPDATE - Current student data:', {
-                            id: currentStudent.id,
-                            name: currentStudent.name,
-                            remaining_classes: currentStudent.remaining_classes,
-                            booked_classes: currentStudent.booked_classes
-                        });
+                      
 
                         const newRemainingClasses = currentStudent.remaining_classes - 1;
                         const newBookedClasses = currentStudent.booked_classes + 1;
 
-                        console.log('📊 WILL UPDATE TO:', {
-                            remaining_classes: newRemainingClasses,
-                            booked_classes: newBookedClasses
-                        });
-
+               
                         const { data: updatedStudent, error: updateError } = await supabase
                             .from('temp_students')
                             .update({ 
@@ -728,7 +711,7 @@
                         }
 
                         if (updatedStudent) {
-                            console.log('✅ Database updated successfully:', updatedStudent);
+        
                             currentStudent.remaining_classes = updatedStudent.remaining_classes;
                             currentStudent.booked_classes = updatedStudent.booked_classes;
                             
@@ -1253,7 +1236,7 @@
                 return;
             }
             
-            console.log('🔍 Current student before update:', currentStudent);
+           
             
             try {
                 // Try a simple update
