@@ -4,8 +4,573 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Code&Conquer with Shiela - Online Tutorial Services</title>
-    <link rel="stylesheet" href="style-b.css"></link>
+    <title>Code&Conquer with Shiela - Book Your Private Class</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8fafc;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+
+        .brand-tagline {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            display: inline-block;
+            margin-top: 1rem;
+            font-size: 1rem;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 3rem 0;
+        }
+
+        /* Steps Navigation */
+        .steps-nav {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 3rem;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 3px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .step-indicator.active {
+            border-color: #2563eb;
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .step-indicator.completed {
+            border-color: #059669;
+            background: linear-gradient(135deg, #059669, #047857);
+            color: white;
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .step-indicator.active .step-number,
+        .step-indicator.completed .step-number {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .step-text {
+            font-weight: 600;
+        }
+
+        /* Content Sections */
+        .step-content {
+            display: none;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 2.5rem;
+            border-top: 4px solid #2563eb;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Step 1: Search */
+        .search-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .search-header h2 {
+            color: #1e293b;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .search-header p {
+            color: #64748b;
+            font-size: 1.1rem;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 1rem;
+            max-width: 500px;
+            margin: 0 auto 2rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #2563eb;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .search-btn {
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        .search-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Student Info */
+        .student-info {
+            display: none;
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border: 2px solid #0ea5e9;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .student-info.show {
+            display: block;
+        }
+
+        .welcome-message {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .welcome-message h3 {
+            color: #0c4a6e;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .package-display {
+            background: rgba(37, 99, 235, 0.1);
+            color: #1e40af;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 1rem;
+            border: 2px solid #2563eb;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #2563eb;
+        }
+
+        .info-card .number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2563eb;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-card .label {
+            color: #64748b;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .email-display {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #2563eb;
+            display: block;
+            margin-bottom: 0.5rem;
+            word-break: break-all;
+            line-height: 1.3;
+        }
+
+        .email-card {
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .continue-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: linear-gradient(135deg, #059669, #047857);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3);
+        }
+
+        .continue-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4);
+        }
+
+        /* Step 2: Calendly */
+        .calendly-section h2 {
+            text-align: center;
+            color: #1e293b;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .calendly-container {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            margin: 2rem 0;
+            min-height: 600px;
+            background: #f8fafc;
+        }
+
+        .calendly-embed {
+            width: 100%;
+            height: 600px;
+            border: none;
+        }
+
+        /* Step 3: Confirmation */
+        .confirmation-section {
+            text-align: center;
+        }
+
+        .confirmation-section h2 {
+            color: #059669;
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .confirmation-details {
+            background: #f0f9ff;
+            border: 2px solid #0ea5e9;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .confirmation-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #e0f2fe;
+        }
+
+        .confirmation-item:last-child {
+            border-bottom: none;
+        }
+
+        .confirmation-label {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .confirmation-value {
+            color: #0c4a6e;
+            font-weight: 500;
+        }
+
+        .email-notice {
+            background: #ecfdf5;
+            border: 1px solid #10b981;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .email-notice h4 {
+            color: #047857;
+            margin-bottom: 0.5rem;
+        }
+
+        .email-notice p {
+            color: #065f46;
+            line-height: 1.8;
+        }
+
+        /* Additional confirmation styles */
+        .calendly-notice {
+            background: #fff7ed;
+            border: 2px solid #f59e0b;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .calendly-notice h4 {
+            color: #92400e;
+            margin-bottom: 1rem;
+        }
+
+        .calendly-notice p {
+            color: #a16207;
+        }
+
+        .final-confirmation-details {
+            background: #ecfdf5;
+            border: 2px solid #10b981;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .contact-info {
+            background: #f0f9ff;
+            border: 2px solid #0ea5e9;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .contact-info h4 {
+            color: #0c4a6e;
+            margin-bottom: 1rem;
+        }
+
+        .whatsapp-btn {
+            background: #25d366;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .whatsapp-btn:hover {
+            background: #1da851;
+            transform: translateY(-2px);
+        }
+
+        .restart-btn {
+            background: #64748b;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 2rem;
+        }
+
+        .restart-btn:hover {
+            background: #475569;
+        }
+
+        /* Error Messages */
+        .error-message {
+            background: #fef2f2;
+            color: #dc2626;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #fecaca;
+            margin: 1rem 0;
+            text-align: center;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        /* Loading Spinner */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #2563eb;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.2rem;
+            }
+
+            .header .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .steps-nav {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .step-indicator {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .search-box {
+                flex-direction: column;
+            }
+
+            .info-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .confirmation-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.5rem;
+            }
+
+            .step-content {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .step-content {
+                padding: 1rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -29,11 +594,15 @@
                 </div>
                 <div class="step-indicator" id="step2Indicator">
                     <div class="step-number">2</div>
-                    <div class="step-text">Select Schedule</div>
+                    <div class="step-text">Book Schedule</div>
                 </div>
                 <div class="step-indicator" id="step3Indicator">
                     <div class="step-number">3</div>
                     <div class="step-text">Confirm Booking</div>
+                </div>
+                <div class="step-indicator" id="step4Indicator">
+                    <div class="step-number">4</div>
+                    <div class="step-text">Complete</div>
                 </div>
             </div>
 
@@ -83,93 +652,34 @@
                         </div>
                     </div>
 
-                    <button class="continue-btn" onclick="goToScheduler()">
-                        📅 Continue to Schedule Selection
+                    <button class="continue-btn" onclick="goToBooking()">
+                        📅 Continue to Book Your Session
                     </button>
                 </div>
             </div>
 
-            <!-- Step 2: Custom Scheduler -->
+            <!-- Step 2: Calendly Booking -->
             <div class="step-content" id="step2">
-                <div class="scheduler-section">
+                <div class="calendly-section">
                     <h2>Step 2: Select Your Preferred Time</h2>
                     <p style="text-align: center; color: #64748b; margin-bottom: 2rem;">
-                        Choose your timezone and select an available time slot
+                        Choose an available time slot that works for your schedule
                     </p>
 
-                    <div class="timezone-selector">
-                        <label for="timezoneSelect">Your Timezone:</label>
-                        <select id="timezoneSelect" onchange="updateTimeSlots()">
-                            <option value="Asia/Manila">Philippines (GMT+8)</option>
-                            <option value="America/New_York">New York (EST/EDT)</option>
-                            <option value="America/Los_Angeles">Los Angeles (PST/PDT)</option>
-                            <option value="Europe/London">London (GMT/BST)</option>
-                            <option value="Asia/Tokyo">Tokyo (JST)</option>
-                            <option value="Australia/Sydney">Sydney (AEDT/AEST)</option>
-                            <option value="Europe/Paris">Paris (CET/CEST)</option>
-                            <option value="Asia/Singapore">Singapore (SGT)</option>
-                            <option value="Asia/Taipei">Taipei (CST)</option>
-                            <option value="America/Chicago">Chicago (CST/CDT)</option>
-                            <option value="Asia/Dubai">Dubai (GST)</option>
-                            <option value="Europe/Berlin">Berlin (CET/CEST)</option>
-                        </select>
+                    <div class="calendly-container">
+                        <!-- Google Calendar Appointment Scheduling begin -->
+                        <iframe
+                            src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ0K2kyFtC8OCGmU-WQD3e3RoLNqcloLvEVO_LISy1qg4jA1W8AwZo_rfgyVVfWXIDz-IVlgsmRE?gv=true"
+                            style="border: 0" width="100%" height="600" frameborder="0"></iframe>
+                        <!-- Calendly inline widget end -->
                     </div>
 
-                    <div class="timezone-info" id="timezoneInfo">
-                        All times will be automatically converted to your selected timezone
-                    </div>
-
-                    <div class="calendar-container">
-                        <div class="calendar-section">
-                            <div class="calendar-header">
-                                <button class="calendar-nav" onclick="changeMonth(-1)">‹</button>
-                                <div class="calendar-title" id="calendarTitle">Month Year</div>
-                                <button class="calendar-nav" onclick="changeMonth(1)">›</button>
-                            </div>
-                            <div class="calendar-grid" id="calendarGrid">
-                                <!-- Calendar will be generated by JavaScript -->
-                            </div>
-                        </div>
-
-                        <div class="calendar-section">
-                            <div class="time-slots" id="timeSlots">
-                                <h3>Available Time Slots</h3>
-                                <p style="color: #64748b; margin-bottom: 1rem;">Select a date to see available times</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="booking-details" id="bookingDetails">
-                        <h3 style="margin-bottom: 1rem; color: #1e293b;">Booking Summary</h3>
-                        <div class="booking-summary">
-                            <div class="booking-item">
-                                <span class="booking-label">Student:</span>
-                                <span class="booking-value" id="bookingStudentName">-</span>
-                            </div>
-                            <div class="booking-item">
-                                <span class="booking-label">Selected Date:</span>
-                                <span class="booking-value" id="bookingDate">-</span>
-                            </div>
-                            <div class="booking-item">
-                                <span class="booking-label">Selected Time:</span>
-                                <span class="booking-value" id="bookingTime">-</span>
-                            </div>
-                            <div class="booking-item">
-                                <span class="booking-label">Your Timezone:</span>
-                                <span class="booking-value" id="bookingTimezone">-</span>
-                            </div>
-                            <div class="booking-item">
-                                <span class="booking-label">Philippines Time:</span>
-                                <span class="booking-value" id="bookingPhilippinesTime">-</span>
-                            </div>
-                        </div>
-                        <button class="continue-btn" onclick="submitBookingRequest()">
-                            📤 Submit Booking Request
+                    <div style="text-align: center;">
+                        <button class="restart-btn" onclick="goToStep(1)">← Back to Profile Search</button>
+                        <button class="continue-btn" onclick="goToConfirmation()"
+                            style="width: auto; margin-left: 1rem;">
+                            Session Booked → Go to Confirmation
                         </button>
-                    </div>
-
-                    <div style="text-align: center; margin-top: 2rem;">
-                        <button class="restart-btn" onclick="goToStep(1)">← Back to Profile</button>
                     </div>
                 </div>
             </div>
@@ -177,12 +687,61 @@
             <!-- Step 3: Confirmation -->
             <div class="step-content" id="step3">
                 <div class="confirmation-section">
-                    <h2>🎉 Booking Request Submitted!</h2>
-                    <p style="color: #059669; font-size: 1.2rem; margin-bottom: 2rem; font-weight: 600;">
-                        Your booking request has been sent to Shiela for approval
+                    <h2>Step 3: Confirm Your Booking</h2>
+                    <p style="color: #64748b; font-size: 1.1rem; margin-bottom: 2rem;">
+                        Please confirm that you've successfully booked your session through Google Calendar
                     </p>
 
                     <div class="confirmation-details">
+                        <div class="confirmation-item">
+                            <span class="confirmation-label">Student:</span>
+                            <span class="confirmation-value" id="confirmedStudentName">-</span>
+                        </div>
+                        <div class="confirmation-item">
+                            <span class="confirmation-label">Package:</span>
+                            <span class="confirmation-value" id="confirmedStudentPackage">-</span>
+                        </div>
+                        <div class="confirmation-item">
+                            <span class="confirmation-label">Email:</span>
+                            <span class="confirmation-value" id="confirmedStudentEmail">-</span>
+                        </div>
+                        <div class="confirmation-item">
+                            <span class="confirmation-label">Current Remaining Classes:</span>
+                            <span class="confirmation-value" id="confirmedRemainingClasses">-</span>
+                        </div>
+                        <div class="confirmation-item">
+                            <span class="confirmation-label">Total Booked Classes:</span>
+                            <span class="confirmation-value" id="confirmedBookedClasses">-</span>
+                        </div>
+                    </div>
+
+                    <div class="calendly-notice">
+                        <h4>Did you complete your Google Calendar booking?</h4>
+                        <p style="margin-bottom: 1rem;">
+                            Make sure you've selected a date and time through the Google Calendar widget above and
+                            received a confirmation email from Google Calendar.
+                        </p>
+                        <div style="display: flex; gap: 1rem; justify-content: center;">
+                            <button class="restart-btn" onclick="goToStep(2)" style="background: #64748b;">
+                                Back to Google Calendar
+                            </button>
+                            <button class="continue-btn" onclick="finalConfirmation()" style="width: auto;">
+                                Yes, I've booked my session
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Final Confirmation -->
+            <div class="step-content" id="step4">
+                <div class="confirmation-section">
+                    <h2>🎉 Booking Successfully Confirmed!</h2>
+                    <p style="color: #059669; font-size: 1.2rem; margin-bottom: 2rem; font-weight: 600;">
+                        Your private programming session is all set!
+                    </p>
+
+                    <div class="final-confirmation-details">
                         <div class="confirmation-item">
                             <span class="confirmation-label">👤 Student:</span>
                             <span class="confirmation-value" id="finalStudentName">-</span>
@@ -192,376 +751,66 @@
                             <span class="confirmation-value" id="finalStudentPackage">-</span>
                         </div>
                         <div class="confirmation-item">
-                            <span class="confirmation-label">📅 Requested Date:</span>
-                            <span class="confirmation-value" id="finalBookingDate">-</span>
-                        </div>
-                        <div class="confirmation-item">
-                            <span class="confirmation-label">⏰ Your Time:</span>
-                            <span class="confirmation-value" id="finalBookingTime">-</span>
-                        </div>
-                        <div class="confirmation-item">
-                            <span class="confirmation-label">⏰ Philippines Time:</span>
-                            <span class="confirmation-value" id="finalPhilippinesTime">-</span>
-                        </div>
-                        <div class="confirmation-item">
-                            <span class="confirmation-label">🌍 Your Timezone:</span>
-                            <span class="confirmation-value" id="finalBookingTimezone">-</span>
-                        </div>
-                        <div class="confirmation-item">
-                            <span class="confirmation-label">📧 Notification sent to:</span>
+                            <span class="confirmation-label">📧 Confirmation sent to:</span>
                             <span class="confirmation-value" id="finalStudentEmail">-</span>
+                        </div>
+                        <div class="confirmation-item">
+                            <span class="confirmation-label">📚 Classes Remaining After This Session:</span>
+                            <span class="confirmation-value" id="finalRemainingClasses">-</span>
+                        </div>
+                        <div class="confirmation-item">
+                            <span class="confirmation-label">📝 Total Booked Classes:</span>
+                            <span class="confirmation-value" id="finalBookedClasses">-</span>
                         </div>
                     </div>
 
                     <div class="email-notice">
                         <h4>📬 What's Next?</h4>
                         <p>
-                            ✅ <strong>Request submitted!</strong> Shiela will review your booking request manually<br>
-                            📧 <strong>Manual review:</strong> Shiela will check availability and contact you directly<br>
-                            📅 <strong>Calendar invite:</strong> Upon approval, you'll get a calendar invite with Zoom details<br>
-                            🔗 <strong>Zoom link:</strong> The meeting link will be included in your confirmation email<br>
+                            ✅ <strong>Confirmation email sent!</strong> Check your inbox for booking details<br>
+                            📅 <strong>Google Calendar invitation:</strong> You should have received a calendar invite
+                            with Zoom details<br>
+                            🔗 <strong>Zoom link:</strong> The meeting link is included in your Google Calendar
+                            confirmation<br>
                             📱 <strong>Questions?</strong> Contact Shiela on WhatsApp for any assistance<br>
-                            ⏱️ <strong>Processing time:</strong> Booking requests are typically processed within 24 hours<br>
-                            💡 <strong>Note:</strong> All bookings require manual approval - no automatic confirmations
+                            👋 <strong>See you in class!</strong> Looking forward to our programming session<br>
+                            📊 <strong>Note:</strong> Your completed classes will be updated manually by Shiela after
+                            each session
                         </p>
                     </div>
 
-                    <div style="text-align: center; margin: 2rem 0;">
-                        <a href="https://wa.me/639302694206" target="_blank" 
-                           style="background: #25d366; color: white; padding: 1rem 2rem; border-radius: 8px; text-decoration: none; font-weight: 600; margin-right: 1rem;">
-                            💬 WhatsApp Shiela
-                        </a>
+                    <div class="contact-info">
+                        <h4>📞 Need Help? Contact Shiela</h4>
+                        <div
+                            style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin: 1rem 0;">
+                            <a href="https://wa.me/639302694206" target="_blank"
+                                style="background: #25d366; color: white; padding: 1rem 2rem; border-radius: 8px; text-decoration: none; font-weight: 600;">
+                                WhatsApp Shiela
+                            </a>
+                        </div>
+                        <p style="color: #64748b; font-size: 0.9rem; text-align: center;">
+                            For any questions about your session, technical issues, or schedule changes
+                        </p>
                     </div>
 
                     <button class="restart-btn" onclick="restartBooking()">
                         🔄 Book Another Session
                     </button>
-                    
                 </div>
             </div>
-
-            <div class="success-message" id="successMessage"></div>
-            <div class="error-message" id="globalErrorMessage"></div>
         </div>
     </div>
 
-    <!-- Supabase - Multiple CDN sources for reliability -->
     <script>
-        // Try loading Supabase from multiple sources
-        let supabaseLoaded = false;
-        
-        function loadSupabaseScript(src, callback) {
-            const script = document.createElement('script');
-            script.src = src;
-            script.onload = function() {
-                supabaseLoaded = true;
-                console.log('✅ Supabase loaded from:', src);
-                callback();
-            };
-            script.onerror = function() {
-                console.log('❌ Failed to load from:', src);
-                callback();
-            };
-            document.head.appendChild(script);
-        }
-        
-        // Try multiple CDN sources
-        const supabaseSources = [
-            'https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js',
-            'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.min.js',
-            'https://cdnjs.cloudflare.com/ajax/libs/supabase/2.39.0/umd/supabase.min.js'
-        ];
-        
-        function tryLoadSupabase(index = 0) {
-            if (index >= supabaseSources.length) {
-                console.error('❌ All Supabase CDN sources failed');
-                showSupabaseError();
-                return;
-            }
-            
-            loadSupabaseScript(supabaseSources[index], function() {
-                if (!supabaseLoaded && index < supabaseSources.length - 1) {
-                    tryLoadSupabase(index + 1);
-                } else if (supabaseLoaded) {
-                    initializeApp();
-                } else {
-                    showSupabaseError();
-                }
-            });
-        }
-        
-        function showSupabaseError() {
-            document.body.innerHTML = `
-                <div style="text-align: center; padding: 2rem; font-family: Arial, sans-serif;">
-                    <h2 style="color: #dc2626;">⚠️ System Unavailable</h2>
-                    <p>Unable to load required system components.</p>
-                    <p>This might be due to:</p>
-                    <ul style="text-align: left; max-width: 400px; margin: 0 auto;">
-                        <li>Network connectivity issues</li>
-                        <li>Firewall or ad blocker interference</li>
-                        <li>Browser compatibility</li>
-                    </ul>
-                    <button onclick="location.reload()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                        🔄 Try Again
-                    </button>
-                </div>
-            `;
-        }
-            // Add this button temporarily to your HTML:
-      
-        
-        // Start loading Supabase
-        tryLoadSupabase();
-    </script>
-    
-    <script>
-        // Supabase Configuration - Replace with your actual values
-        const SUPABASE_URL = 'https://wfwlcunrpxtshsacjgjh.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indmd2xjdW5ycHh0c2hzYWNqZ2poIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ3NDA0OTEsImV4cCI6MjA3MDMxNjQ5MX0.IbWQ9YGHYkDP3P2_HUxqW5kTF2zxPj50pcLRW9EMkpw';
-        
-        // Initialize Supabase client after the library loads
-        let supabase;
-        
         // Global variables
         let currentStudent = null;
         let currentStep = 1;
-        let selectedDate = null;
-        let selectedTime = null;
-        let selectedTimezone = 'Asia/Manila';
-        let currentMonth = new Date().getMonth();
-        let currentYear = new Date().getFullYear();
 
-        // Simple booking storage (in memory - you can replace this with your own tracking system)
-        let bookedSlots = new Set(); // Stores booked slots as "YYYY-MM-DD-HH:MM" format
-
-        // Available time slots (in Philippine Time - GMT+8)
-        // Morning: 8AM - 10AM, Evening: 6PM - 12AM
-        const availableSlots = [
-            '08:00', '09:00', '10:00', // Morning slots
-            '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'// Evening slots (6PM - 12AM)
-        ];
-
-        // You can manually add booked slots here for testing
-        // Format: "YYYY-MM-DD-HH:MM" (24-hour format in Philippines time)
-        // Example: bookedSlots.add("2025-08-15-09:00"); // Books 9 AM on August 15, 2025
-        
-        // Helper function to create slot key
-        function createSlotKey(date, time) {
-            const dateStr = date.toISOString().split('T')[0];
-            return `${dateStr}-${time}`;
-        }
-
-        // Enhanced function to check if slot is booked (checks both memory and database)
-        function isSlotBooked(date, time) {
-            const slotKey = createSlotKey(date, time);
-            
-            // Check both in-memory bookings and database bookings
-            const memoryBooked = bookedSlots.has(slotKey);
-            const databaseBooked = databaseBookings.has(slotKey);
-            
-            const isBooked = memoryBooked || databaseBooked;
-            
-         
-            
-            return isBooked;
-        }
-
-        // Helper function to book a slot
-        function bookSlot(date, time) {
-            const slotKey = createSlotKey(date, time);
-            bookedSlots.add(slotKey);
-        }
-
-        let databaseBookings = new Set(); // Will store "YYYY-MM-DD-HH:MM" format
-
-        // Function to fetch existing bookings from database
-        async function fetchExistingBookings() {
-            if (!supabase) {
-                console.warn('⚠️ Supabase not initialized, cannot fetch bookings');
-                return;
-            }
-
-            try {
-             
-                // Fetch all approved/pending bookings from database
-                const { data, error } = await supabase
-                    .from('temp_bookings')
-                    .select('scheduled_datetime, status, student_name')
-                    .in('status', ['approved', 'pending']); // Include both approved and pending
-
-                if (error) {
-                    console.error('❌ Error fetching bookings:', error);
-                    return;
-                }
-
-                // Clear existing database bookings
-                databaseBookings.clear();
-
-                if (data && data.length > 0) {
-                   
-                    data.forEach(booking => {
-                        // Convert database datetime to Philippines timezone slot key
-                        const philippinesDateTime = new Date(booking.scheduled_datetime);
-                        
-                        // Extract date and time components in Philippines timezone
-                        const dateStr = philippinesDateTime.toLocaleDateString('en-CA', {
-                            timeZone: 'Asia/Manila'
-                        }); // Returns YYYY-MM-DD format
-                        
-                        const timeStr = philippinesDateTime.toLocaleTimeString('en-GB', {
-                            timeZone: 'Asia/Manila',
-                            hour12: false,
-                            hour: '2-digit',
-                            minute: '2-digit'
-                        }); // Returns HH:MM format
-                        
-                        const slotKey = `${dateStr}-${timeStr}`;
-                        databaseBookings.add(slotKey);
-                        
-                       
-                    });
-                } else {
-                    console.log('📊 No existing bookings found in database');
-                }
-
-               
-                
-            } catch (error) {
-                console.error('❌ Error fetching bookings:', error);
-            }
-        }
-        // Initialize Supabase
-        function initializeSupabase() {
-            if (window.supabase && window.supabase.createClient) {
-                try {
-                    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                    console.log('✅ Supabase client initialized successfully');
-                    return true;
-                } catch (error) {
-                    console.error('❌ Supabase initialization error:', error);
-                    return false;
-                }
-            }
-            return false;
-        }
-
-        // Main app initialization
-        function initializeApp() {
-            console.log('🚀 Code & Conquer Booking System Ready!');
-            
-            let retryCount = 0;
-            const maxRetries = 10;
-            
-            function tryInitSupabase() {
-                if (initializeSupabase()) {
-                    detectUserTimezone();
-                    generateCalendar();
-                    updateTimezoneInfo();
-                    
-                    // Fetch existing bookings from database on initialization
-                    fetchExistingBookings().then(() => {
-                        console.log('🎯 All systems ready with database bookings loaded!');
-                    });
-                    
-                } else if (retryCount < maxRetries) {
-                    retryCount++;
-                    console.log(`⏳ Waiting for Supabase library... (${retryCount}/${maxRetries})`);
-                    setTimeout(tryInitSupabase, 200);
-                } else {
-                    console.error('❌ Failed to initialize Supabase client');
-                    showSupabaseError();
-                }
-            }
-            
-            setTimeout(tryInitSupabase, 100);
-        }
-
-
-        // Detect user's timezone
-        function detectUserTimezone() {
-            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-            const select = document.getElementById('timezoneSelect');
-            
-            // Try to match detected timezone with available options
-            for (let option of select.options) {
-                if (option.value === timezone) {
-                    option.selected = true;
-                    selectedTimezone = timezone;
-                    updateTimezoneInfo();
-                    break;
-                }
-            }
-        }
-
-        // Update timezone info display
-        function updateTimezoneInfo() {
-            const infoDiv = document.getElementById('timezoneInfo');
-            const now = new Date();
-            
-            // Show current time comparison
-            const userTime = now.toLocaleString('en-US', {
-                timeZone: selectedTimezone,
-                hour: '2-digit',
-                minute: '2-digit',
-                timeZoneName: 'short'
-            });
-            const philippinesTime = now.toLocaleString('en-US', {
-                timeZone: 'Asia/Manila',
-                hour: '2-digit',
-                minute: '2-digit',
-                timeZoneName: 'short'
-            });
-            
-            // Show example: What does 6PM Philippines time become in user's timezone?
-            const example6PM = new Date();
-            example6PM.setHours(18, 0, 0, 0); // 6 PM today
-            const example6PMPhilippines = new Date(example6PM.toISOString().replace('Z', '+08:00'));
-            const example6PMInUserTZ = example6PMPhilippines.toLocaleTimeString('en-US', {
-                timeZone: selectedTimezone,
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: true
-            });
-            
-            infoDiv.innerHTML = `
-                <strong>🕐 Time comparison:</strong><br>
-                <span style="color: #059669;">Philippines now:</span> ${philippinesTime} | 
-                <span style="color: #2563eb;">Your time now:</span> ${userTime}<br>
-                <em style="color: #64748b;">All times below automatically converted to your timezone</em>
-            `;
-        }
-        // Add this function to your JavaScript (anywhere before the searchStudent function)
-        function maskEmail(email) {
-            if (!email || !email.includes('@')) {
-                return 'Invalid email';
-            }
-            
-            const [username, domain] = email.split('@');
-            
-            // Mask username: show first letter + asterisks
-            const maskedUsername = username.length > 1 
-                ? username[0] + '*'.repeat(Math.min(username.length - 1, 4))
-                : username;
-            
-            // Mask domain: show first letter + asterisks + .extension
-            const domainParts = domain.split('.');
-            const mainDomain = domainParts[0];
-            const extension = domainParts.slice(1).join('.');
-            
-            const maskedDomain = mainDomain.length > 1 
-                ? mainDomain[0] + '*'.repeat(Math.min(mainDomain.length - 1, 5))
-                : mainDomain;
-            
-            return `${maskedUsername}@${maskedDomain}.${extension}`;
-        }
+        // Replace with your actual Google Apps Script Web App URL
+        const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzFEN0Ial8p8bUrqZ6oxOsHQFHHW-6ppNTfvhRuyoKAG-4vgCnAO_gpQ-e2_opgVoSAbQ/exec';
 
         // Search student function
         async function searchStudent() {
-            if (!supabase && !initializeSupabase()) {
-                showError('System not ready. Please wait and try again.');
-                return;
-            }
-
             const nickname = document.getElementById('nicknameInput').value.trim();
             const searchBtn = document.getElementById('searchBtn');
             const loading = document.getElementById('searchLoading');
@@ -580,249 +829,37 @@
             studentInfo.classList.remove('show');
 
             try {
-                const { data, error } = await supabase
-                    .from('temp_students')
-                    .select('*')
-                    .eq('nickname', nickname)
-                    .single();
+                // Call Google Apps Script
+                const response = await fetch(`${GAS_WEB_APP_URL}?action=getStudent&nickname=${encodeURIComponent(nickname)}`);
+                const data = await response.json();
 
-                if (error) {
-                    if (error.code === 'PGRST116') {
-                        showError('Student profile not found. Please check your nickname or contact Shiela for assistance.');
-                    } else {
-                        throw error;
-                    }
-                    return;
-                }
-
-                if (data) {
-                    currentStudent = data;
+                if (data.success && data.student) {
+                    currentStudent = data.student;
 
                     // Update student info display
                     document.getElementById('studentName').textContent = currentStudent.name;
                     document.getElementById('studentPackage').textContent = currentStudent.package || 'Not specified';
-                    document.getElementById('remainingClasses').textContent = currentStudent.remaining_classes;
-                    document.getElementById('bookedClasses').textContent = currentStudent.booked_classes;
-                    document.getElementById('completedClasses').textContent = currentStudent.completed_classes;
-                    document.getElementById('studentEmail').textContent = document.getElementById('studentEmail').textContent = maskEmail(currentStudent.email);
+                    document.getElementById('remainingClasses').textContent = currentStudent.remainingClasses;
+                    document.getElementById('bookedClasses').textContent = currentStudent.bookedClasses;
+                    document.getElementById('completedClasses').textContent = currentStudent.completedClasses;
+                    document.getElementById('studentEmail').textContent = currentStudent.email;
 
-                    if (currentStudent.remaining_classes > 0) {
+                    // Check if student has remaining classes
+                    if (currentStudent.remainingClasses > 0) {
                         studentInfo.classList.add('show');
                     } else {
                         showError('You have no remaining classes. Please contact Shiela to purchase more sessions! 📞');
                     }
                 } else {
-                    showError('Student profile not found. Please check your nickname or contact Shiela for assistance.');
+                    showError(data.message || 'Student profile not found. Please check your nickname or contact Shiela for assistance.');
                 }
             } catch (error) {
                 console.error('Error:', error);
                 showError('Connection error. Please check your internet connection and try again.');
             } finally {
+                // Hide loading
                 searchBtn.disabled = false;
                 loading.classList.remove('show');
-            }
-        }
-
-        // Complete submitBookingRequest function with email functionality
-        // Replace your entire submitBookingRequest function with this:
-        async function submitBookingRequest() {
-            if (!currentStudent || !selectedDate || !selectedTime) {
-                showError('Please select a date and time first');
-                return;
-            }
-
-            // Check if slot is still available
-            if (isSlotBooked(selectedDate, selectedTime)) {
-                showError('Sorry, this time slot was just booked by someone else. Please select another time.');
-                loadTimeSlots(selectedDate);
-                return;
-            }
-
-            const submitBtn = event.target;
-            const originalText = submitBtn.textContent;
-            submitBtn.textContent = 'Submitting...';
-            submitBtn.disabled = true;
-
-            try {
-                const year = selectedDate.getFullYear();
-                const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
-                const day = String(selectedDate.getDate()).padStart(2, '0');
-                const dateStr = `${year}-${month}-${day}`;
-
-                // Create datetime in Philippines timezone
-                const philippinesDateTime = new Date(`${dateStr}T${selectedTime}:00+08:00`);
-                const adjustedDateTime = new Date(philippinesDateTime.getTime() + (8 * 60 * 60 * 1000));
-
-               
-                const bookingData = {
-                    student_id: currentStudent.id,
-                    student_nickname: currentStudent.nickname,
-                    student_name: currentStudent.name,
-                    student_email: currentStudent.email,
-                    scheduled_date: dateStr,
-                    scheduled_datetime: adjustedDateTime.toISOString(),
-                    requested_timezone: selectedTimezone,
-                    status: 'pending',
-                    created_at: new Date().toISOString()
-                };
-
-               
-
-                let booking;
-                let databaseSuccess = false;
-
-                if (supabase) {
-                    const { data, error } = await supabase
-                        .from('temp_bookings')
-                        .insert([bookingData])
-                        .select()
-                        .single();
-
-                    if (error) {
-                        console.error('❌ Database error:', error);
-                        throw error;
-                    }
-
-                    console.log('✅ Successfully saved to database:', data);
-                    booking = data;
-                    databaseSuccess = true;
-
-                    // Update student's booked classes count
-                    try {
-                      
-
-                        const newRemainingClasses = currentStudent.remaining_classes - 1;
-                        const newBookedClasses = currentStudent.booked_classes + 1;
-
-               
-                        const { data: updatedStudent, error: updateError } = await supabase
-                            .from('temp_students')
-                            .update({ 
-                                remaining_classes: newRemainingClasses,
-                                booked_classes: newBookedClasses
-                            })
-                            .eq('id', currentStudent.id)
-                            .select()
-                            .single();
-
-                        if (updateError) {
-                            console.error('❌ Database update failed:', updateError);
-                            throw updateError;
-                        }
-
-                        if (updatedStudent) {
-        
-                            currentStudent.remaining_classes = updatedStudent.remaining_classes;
-                            currentStudent.booked_classes = updatedStudent.booked_classes;
-                            
-                            document.getElementById('remainingClasses').textContent = currentStudent.remaining_classes;
-                            document.getElementById('bookedClasses').textContent = currentStudent.booked_classes;
-                            
-                            console.log('📊 AFTER UPDATE - Display updated');
-                        }
-
-                    } catch (updateErr) {
-                        console.error('❌ Student update error:', updateErr);
-                        showError('Booking saved but failed to update class count. Please refresh to see updated counts.');
-                    }
-
-                    // 📧 Send email notifications via Supabase Edge Function
-                    try {
-                        console.log('📧 Calling Supabase Edge Function for email notifications...');
-                        
-                        // Get display times for email
-                        const selectedTimeSlot = document.querySelector('.time-slot.selected');
-                        const userDisplayTime = selectedTimeSlot ? selectedTimeSlot.textContent.trim() : selectedTime;
-                        
-                        // Create proper Philippines time display
-                        const [hours, minutes] = selectedTime.split(':');
-                        const hour24 = parseInt(hours);
-                        const hour12 = hour24 === 0 ? 12 : hour24 > 12 ? hour24 - 12 : hour24;
-                        const ampm = hour24 < 12 ? 'AM' : 'PM';
-                        const philippinesDisplayTime = `${hour12}:${minutes} ${ampm}`;
-                        
-                        const formattedDate = selectedDate.toLocaleDateString('en-US', {
-                            weekday: 'long',
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric'
-                        });
-
-                        // Call the Edge Function
-                        const { data: emailResult, error: emailError } = await supabase.functions.invoke('send-booking-notification', {
-                            body: {
-                                booking: booking,
-                                student: currentStudent,
-                                selectedDate: formattedDate,
-                                userDisplayTime: userDisplayTime,
-                                philippinesDisplayTime: philippinesDisplayTime,
-                                timezone: selectedTimezone
-                            }
-                        });
-
-                        if (emailError) {
-                            console.error('❌ Edge Function error:', emailError);
-                            showSuccess('✅ Booking saved successfully! (Email notifications may have failed - please contact Shiela via WhatsApp)');
-                        } else {
-                            console.log('✅ Email notification result:', emailResult);
-                            
-                            if (emailResult.success) {
-                                if (emailResult.teacherNotified && emailResult.studentNotified) {
-                                    showSuccess('✅ Booking saved and email notifications sent to both you and Shiela!');
-                                } else if (emailResult.teacherNotified) {
-                                    showSuccess('✅ Booking saved and Shiela has been notified! (Your confirmation email may have failed)');
-                                } else if (emailResult.studentNotified) {
-                                    showSuccess('✅ Booking saved and confirmation sent to you! (Shiela notification may have failed)');
-                                } else {
-                                    showSuccess('✅ Booking saved successfully! (Email notifications failed - please contact Shiela directly)');
-                                }
-                            } else {
-                                showSuccess('✅ Booking saved successfully! (Email system unavailable - please contact Shiela via WhatsApp)');
-                            }
-                        }
-                        
-                    } catch (emailError) {
-                        console.error('❌ Email notification error:', emailError);
-                        showSuccess('✅ Booking saved successfully! (Email system unavailable - please contact Shiela via WhatsApp)');
-                    }
-
-                } else {
-                    throw new Error('Supabase not initialized');
-                }
-
-                // Book the slot in memory
-                bookSlot(selectedDate, selectedTime);
-                
-                // Update confirmation display
-                const selectedSlotElement = document.querySelector('.time-slot.selected');
-                const userTimeDisplay = selectedSlotElement ? selectedSlotElement.textContent : 'N/A';
-                
-                const philippinesTimeDisplay = adjustedDateTime.toLocaleTimeString('en-US', {
-                    timeZone: 'Asia/Manila',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: true,
-                    timeZoneName: 'short'
-                });
-
-                // Fill confirmation details
-                document.getElementById('finalStudentName').textContent = currentStudent.name;
-                document.getElementById('finalStudentPackage').textContent = currentStudent.package || 'Not specified';
-                document.getElementById('finalBookingDate').textContent = selectedDate.toLocaleDateString();
-                document.getElementById('finalBookingTime').textContent = userTimeDisplay;
-                document.getElementById('finalPhilippinesTime').textContent = philippinesTimeDisplay;
-                document.getElementById('finalBookingTimezone').textContent = getTimezoneName(selectedTimezone);
-                document.getElementById('finalStudentEmail').textContent = currentStudent.email;
-
-                // Go to confirmation step
-                goToStep(3);
-
-            } catch (error) {
-                console.error('❌ Critical error:', error);
-                showError(`Failed to submit booking: ${error.message}`);
-            } finally {
-                submitBtn.textContent = originalText;
-                submitBtn.disabled = false;
             }
         }
 
@@ -834,351 +871,70 @@
             setTimeout(() => errorDiv.classList.remove('show'), 8000);
         }
 
-        // Show success message
-        function showSuccess(message) {
-            const successDiv = document.getElementById('successMessage');
-            successDiv.textContent = message;
-            successDiv.classList.add('show');
-            setTimeout(() => successDiv.classList.remove('show'), 5000);
-        }
-
-        // Go to scheduler step
-        function goToScheduler() {
-            if (!currentStudent || currentStudent.remaining_classes <= 0) {
+        // Go to booking step
+        function goToBooking() {
+            if (!currentStudent || currentStudent.remainingClasses <= 0) {
                 showError('Please search for a valid student profile first');
                 return;
             }
             goToStep(2);
-            generateCalendar();
-            updateTimezoneInfo();
         }
 
-        // Generate calendar
-        function generateCalendar() {
-            const calendarGrid = document.getElementById('calendarGrid');
-            const calendarTitle = document.getElementById('calendarTitle');
-            
-            calendarGrid.innerHTML = '';
-            
-            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-                               'July', 'August', 'September', 'October', 'November', 'December'];
-            calendarTitle.textContent = `${monthNames[currentMonth]} ${currentYear}`;
-            
-            // Add day headers
-            const dayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-            dayHeaders.forEach(day => {
-                const dayHeader = document.createElement('div');
-                dayHeader.className = 'calendar-day-header';
-                dayHeader.textContent = day;
-                calendarGrid.appendChild(dayHeader);
-            });
-            
-            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            
-            // Add empty cells for previous month
-            for (let i = 0; i < firstDay; i++) {
-                const emptyDay = document.createElement('div');
-                emptyDay.className = 'calendar-day other-month';
-                calendarGrid.appendChild(emptyDay);
+        // Go to confirmation step
+        function goToConfirmation() {
+            if (!currentStudent) {
+                showError('Please complete the previous steps first');
+                return;
             }
-            
-            // Add days of current month
-            // 🔥 REPLACE the day click handler in generateCalendar:
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dayElement = document.createElement('div');
-                dayElement.className = 'calendar-day';
-                dayElement.textContent = day;
-                
-                // 🔥 FIX: Create date without timezone issues
-                const cellDate = new Date(currentYear, currentMonth, day);
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-                cellDate.setHours(0, 0, 0, 0);
-                
-                // Check if it's today
-                if (cellDate.getTime() === today.getTime()) {
-                    dayElement.classList.add('today');
-                }
-                
-                // Check if it's in the past
-                if (cellDate < today) {
-                    dayElement.classList.add('unavailable');
-                } else {
-                    // 🔥 FIX: Pass the date object directly
-                    dayElement.onclick = () => selectDate(cellDate);
-                }
-                
-                calendarGrid.appendChild(dayElement);
+
+            // Update confirmation details
+            document.getElementById('confirmedStudentName').textContent = currentStudent.name;
+            document.getElementById('confirmedStudentPackage').textContent = currentStudent.package || 'Not specified';
+            document.getElementById('confirmedStudentEmail').textContent = currentStudent.email;
+            document.getElementById('confirmedRemainingClasses').textContent = currentStudent.remainingClasses;
+            document.getElementById('confirmedBookedClasses').textContent = currentStudent.bookedClasses;
+
+            goToStep(3);
+        }
+
+        // Final confirmation with email and class update
+        async function finalConfirmation() {
+            if (!currentStudent) {
+                showError('Please complete the previous steps first');
+                return;
             }
-        }
 
-        // Change month
-        function changeMonth(direction) {
-            currentMonth += direction;
-            if (currentMonth < 0) {
-                currentMonth = 11;
-                currentYear--;
-            } else if (currentMonth > 11) {
-                currentMonth = 0;
-                currentYear++;
-            }
-            generateCalendar();
-            
-            // Clear time slots and booking details if month changed
-            clearTimeSlots();
-            document.getElementById('bookingDetails').classList.remove('show');
-        }
-
-        // Clear time slots
-        function clearTimeSlots() {
-            document.getElementById('timeSlots').innerHTML = '<h3>Available Time Slots</h3><p style="color: #64748b; margin-bottom: 1rem;">Select a date to see available times</p>';
-        }
-
-        // Enhanced selectDate function that fetches bookings
-        async function selectDate(date) {
-            // Remove previous selection
-            document.querySelectorAll('.calendar-day.selected').forEach(day => {
-                day.classList.remove('selected');
-            });
-            
-            // Add selection to clicked day
-            if (event && event.target) {
-                event.target.classList.add('selected');
-            }
-            
-            // Set selected date
-            selectedDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-            
-            console.log('🔥 Date selected:', selectedDate.toLocaleDateString());
-            console.log('🔥 Day of week:', selectedDate.toLocaleDateString('en-US', { weekday: 'long' }));
-            
-            // Load time slots for selected date (this will fetch database bookings)
-            await loadTimeSlots(selectedDate);
-        }
-
-        // Load time slots for selected date - WITH BOOKING CHECK
-        // Enhanced loadTimeSlots function with database checking
-        async function loadTimeSlots(date) {
-            const timeSlotsContainer = document.getElementById('timeSlots');
-            timeSlotsContainer.innerHTML = '<h3>Available Time Slots</h3><div class="loading show"><div class="spinner"></div><p>Loading available times...</p></div>';
-            
-            // Fetch latest bookings from database before showing slots
-            await fetchExistingBookings();
-            
-            setTimeout(() => {
-                try {
-                    let slotsHTML = '<h3>Available Time Slots</h3>';
-                    
-                    // Check timezone comparison
-                    const userTimezoneOffset = new Date().toLocaleString('en-US', {timeZone: selectedTimezone, timeZoneName: 'longOffset'});
-                    const philippinesOffset = new Date().toLocaleString('en-US', {timeZone: 'Asia/Manila', timeZoneName: 'longOffset'});
-                    const isSameTimezone = userTimezoneOffset === philippinesOffset;
-                    
-                    console.log('🔥 Loading slots for date:', date.toLocaleDateString());
-                    console.log('🔥 Timezone check:', {
-                        userTZ: selectedTimezone,
-                        isSame: isSameTimezone
-                    });
-                    
-                    let hasAvailableSlots = false;
-                    let availableCount = 0;
-                    let bookedCount = 0;
-                    
-                    for (const slot of availableSlots) {
-                        let userTime;
-                        
-                        if (isSameTimezone) {
-                            // Same timezone: convert 24h to 12h format
-                            const [hours, minutes] = slot.split(':');
-                            const hour24 = parseInt(hours);
-                            const hour12 = hour24 === 0 ? 12 : hour24 > 12 ? hour24 - 12 : hour24;
-                            const ampm = hour24 < 12 ? 'AM' : 'PM';
-                            userTime = `${hour12}:${minutes} ${ampm}`;
-                        } else {
-                            // Different timezone: convert properly
-                            const year = date.getFullYear();
-                            const month = String(date.getMonth() + 1).padStart(2, '0');
-                            const day = String(date.getDate()).padStart(2, '0');
-                            const dateStr = `${year}-${month}-${day}`;
-                            
-                            const philippinesDateTime = new Date(`${dateStr}T${slot}:00+08:00`);
-                            userTime = philippinesDateTime.toLocaleTimeString('en-US', {
-                                timeZone: selectedTimezone,
-                                hour: '2-digit',
-                                minute: '2-digit',
-                                hour12: true
-                            });
-                        }
-                        
-                        // Check if slot is already booked (now checks database too!)
-                        const isBooked = isSlotBooked(date, slot);
-                        
-                        if (isBooked) {
-                            bookedCount++;
-                            slotsHTML += `<button class="time-slot booked" disabled>${userTime} (Booked)</button>`;
-                        } else {
-                            hasAvailableSlots = true;
-                            availableCount++;
-                            slotsHTML += `<button class="time-slot" onclick="selectTimeSlot('${slot}', '${userTime}')">${userTime}</button>`;
-                        }
-                    }
-                    
-                    // Add summary information
-                    if (!hasAvailableSlots) {
-                        slotsHTML += '<p style="color: #dc2626; margin-top: 1rem; font-weight: 600;">😔 No available slots for this date</p>';
-                    } else {
-                        slotsHTML += `<p style="color: #059669; margin-top: 1rem; font-size: 0.9rem;">✅ ${availableCount} available slots`;
-                        if (bookedCount > 0) {
-                            slotsHTML += `, ${bookedCount} already booked`;
-                        }
-                        slotsHTML += '</p>';
-                    }
-                    
-                    timeSlotsContainer.innerHTML = slotsHTML;
-                    
-                } catch (error) {
-                    console.error('❌ Error loading time slots:', error);
-                    timeSlotsContainer.innerHTML = '<h3>Available Time Slots</h3><p style="color: #dc2626;">Error loading time slots. Please try again.</p>';
-                }
-            }, 500);
-        }
-
-        // Get friendly timezone name
-        function getTimezoneName(timezone) {
-            const names = {
-                'Asia/Manila': 'Philippines Time',
-                'America/New_York': 'Eastern Time',
-                'America/Los_Angeles': 'Pacific Time',
-                'Europe/London': 'London Time',
-                'Asia/Tokyo': 'Japan Time',
-                'Australia/Sydney': 'Sydney Time',
-                'Europe/Paris': 'Paris Time',
-                'Asia/Singapore': 'Singapore Time',
-                'Asia/Taipei': 'Taipei Time',
-                'America/Chicago': 'Central Time',
-                'Asia/Dubai': 'Dubai Time',
-                'Europe/Berlin': 'Berlin Time'
-            };
-            return names[timezone] || timezone;
-        }
-
-        // Function to manually refresh bookings (call this if needed)
-        async function refreshBookings() {
-            console.log('🔄 Manually refreshing bookings from database...');
-            await fetchExistingBookings();
-            
-            // Reload time slots if a date is selected
-            if (selectedDate) {
-                await loadTimeSlots(selectedDate);
-            }
-            
-            showSuccess('✅ Booking availability refreshed!');
-        }
-
-
-        // Select time slot - ENHANCED VERSION
-        // 🔥 REPLACE your selectTimeSlot function:
-        function selectTimeSlot(phpTime, userTime, userDate) {
-            // Remove previous selection
-            document.querySelectorAll('.time-slot.selected').forEach(slot => {
-                slot.classList.remove('selected');
-            });
-            
-            // Add selection to clicked slot
-            event.target.classList.add('selected');
-            selectedTime = phpTime; // Store the Philippines time
-            
-            // Update booking details with both times
-            updateBookingDetails(userTime, phpTime, userDate);
-        }
-
-        // Update booking details - ENHANCED VERSION
-        // 🔥 REPLACE your updateBookingDetails function:
-        function updateBookingDetails(userTime, phpTime, userDate) {
-            if (!currentStudent || !selectedDate || !selectedTime) return;
-            
-            // Create the proper Philippines datetime
-            const philippinesDateTime = createPhilippinesDateTime(selectedDate, phpTime);
-            
-            // Format Philippines time display
-            const philippinesTimeDisplay = philippinesDateTime.toLocaleString('en-US', {
-                timeZone: 'Asia/Manila',
-                weekday: 'short',
-                month: 'short',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: true,
-                timeZoneName: 'short'
-            });
-            
-            // Format user time display with date if different
-            let userTimeDisplay = userTime;
-            if (userDate && userDate !== selectedDate.toLocaleDateString('en-US', {weekday: 'short', month: 'short', day: 'numeric'})) {
-                userTimeDisplay += ` (${userDate})`;
-            }
-            
-            document.getElementById('bookingStudentName').textContent = currentStudent.name;
-            document.getElementById('bookingDate').textContent = selectedDate.toLocaleDateString('en-US', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
-            document.getElementById('bookingTime').textContent = userTimeDisplay;
-            document.getElementById('bookingTimezone').textContent = getTimezoneName(selectedTimezone);
-            document.getElementById('bookingPhilippinesTime').textContent = philippinesTimeDisplay;
-            
-            document.getElementById('bookingDetails').classList.add('show');
-        }
-
-        // Update time slots when timezone changes
-        function updateTimeSlots() {
-            selectedTimezone = document.getElementById('timezoneSelect').value;
-            updateTimezoneInfo();
-            if (selectedDate) {
-                loadTimeSlots(selectedDate);
-                // Update booking details if a time is already selected
-                if (selectedTime) {
-                    const selectedSlot = document.querySelector('.time-slot.selected');
-                    if (selectedSlot) {
-                        const phpDateTime = new Date(`${selectedDate.toISOString().split('T')[0]}T${selectedTime}:00+08:00`);
-                        const userTime = phpDateTime.toLocaleTimeString('en-US', {
-                            timeZone: selectedTimezone,
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            hour12: true
-                        });
-                        updateBookingDetails(userTime, selectedTime);
-                    }
-                }
-            }
-        }
-
-        
-
-        // Send booking notification (placeholder)
-        async function sendBookingNotification(booking) {
             try {
-                // This would call a Supabase Edge Function to send email
-                const { data, error } = await supabase.functions.invoke('send-booking-notification', {
-                    body: {
-                        booking: booking,
-                        student: currentStudent,
-                        selectedDate: selectedDate.toLocaleDateString(),
-                        selectedTime: document.querySelector('.time-slot.selected')?.textContent || 'N/A',
-                        timezone: selectedTimezone
-                    }
-                });
+                // Show loading state
+                const confirmBtn = event.target;
+                const originalText = confirmBtn.textContent;
+                confirmBtn.textContent = 'Processing...';
+                confirmBtn.disabled = true;
 
-                if (error) {
-                    console.error('Email notification error:', error);
+                // Update student classes and send confirmation email
+                const response = await fetch(`${GAS_WEB_APP_URL}?action=confirmBooking&nickname=${encodeURIComponent(currentStudent.nickname)}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    // Update final confirmation details
+                    document.getElementById('finalStudentName').textContent = currentStudent.name;
+                    document.getElementById('finalStudentPackage').textContent = currentStudent.package || 'Not specified';
+                    document.getElementById('finalStudentEmail').textContent = currentStudent.email;
+                    document.getElementById('finalRemainingClasses').textContent = currentStudent.remainingClasses - 1;
+                    document.getElementById('finalBookedClasses').textContent = currentStudent.bookedClasses + 1;
+
+                    // Go to final step
+                    goToStep(4);
+                } else {
+                    showError(data.message || 'Failed to confirm booking. Please try again.');
+                    confirmBtn.textContent = originalText;
+                    confirmBtn.disabled = false;
                 }
             } catch (error) {
-                console.error('Email notification error:', error);
+                console.error('Error:', error);
+                showError('Connection error. Please try again.');
+                confirmBtn.textContent = originalText;
+                confirmBtn.disabled = false;
             }
         }
 
@@ -1198,7 +954,7 @@
             document.getElementById(`step${stepNumber}`).classList.add('active');
 
             // Update step indicators
-            for (let i = 1; i <= 3; i++) {
+            for (let i = 1; i <= 4; i++) {
                 const indicator = document.getElementById(`step${i}Indicator`);
                 if (i < stepNumber) {
                     indicator.classList.add('completed');
@@ -1213,79 +969,24 @@
         // Restart booking process
         function restartBooking() {
             currentStudent = null;
-            selectedDate = null;
-            selectedTime = null;
             document.getElementById('nicknameInput').value = '';
             document.getElementById('studentInfo').classList.remove('show');
-            document.getElementById('bookingDetails').classList.remove('show');
             document.getElementById('errorMessage').classList.remove('show');
-            document.getElementById('successMessage').classList.remove('show');
-            
-            // Reset calendar to current month
-            currentMonth = new Date().getMonth();
-            currentYear = new Date().getFullYear();
-            
-            clearTimeSlots();
             goToStep(1);
         }
 
-        // Add this temporary function to debug the database update:
-        async function debugDatabaseUpdate() {
-            if (!currentStudent) {
-                console.log('❌ No current student');
-                return;
-            }
-            
-           
-            
-            try {
-                // Try a simple update
-                const { data, error } = await supabase
-                    .from('temp_students')
-                    .update({ 
-                        remaining_classes: currentStudent.remaining_classes - 1,
-                        booked_classes: currentStudent.booked_classes + 1
-                    })
-                    .eq('id', currentStudent.id)
-                    .select();
-                    
-                if (error) {
-                    console.error('❌ Update error:', error);
-                } else {
-                    console.log('✅ Update successful:', data);
-                }
-            } catch (err) {
-                console.error('❌ Update exception:', err);
-            }
-        }
-
-        // 🔥 REPLACE this function in your original code:
-        function createPhilippinesDateTime(date, timeString) {
-            // Get the date in YYYY-MM-DD format
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            
-            // Create the datetime string in Philippines timezone
-            const dateTimeString = `${year}-${month}-${day}T${timeString}:00`;
-            
-            // Create a Date object and manually set it to Philippines time
-            const philippinesDate = new Date(dateTimeString + '+08:00');
-            
-            return philippinesDate;
-        }
-    
-
         // Enter key support for search
-        document.addEventListener('DOMContentLoaded', function() {
-            const nicknameInput = document.getElementById('nicknameInput');
-            if (nicknameInput) {
-                nicknameInput.addEventListener('keypress', function (e) {
-                    if (e.key === 'Enter') {
-                        searchStudent();
-                    }
-                });
+        document.getElementById('nicknameInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                searchStudent();
             }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('🚀 Code & Conquer Booking System Ready!');
+            console.log('📝 Updated to include BookedClasses and Package fields');
+            console.log('📋 New column structure: Nickname, Name, RemainingClasses, BookedClasses, CompletedClasses, Package, Email');
         });
     </script>
 </body>
