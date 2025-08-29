@@ -725,9 +725,9 @@
                             <button class="restart-btn" onclick="goToStep(2)" style="background: #64748b;">
                                 Back to Google Calendar
                             </button>
-                            <button class="continue-btn" onclick="finalConfirmation()" style="width: auto;">
-                                Yes, I've booked my session
-                            </button>
+                            <!-- <button class="continue-btn" onclick="finalConfirmation()" style="width: auto;">
+                                Finished!
+                            </button> -->
                         </div>
                     </div>
                 </div>
@@ -893,8 +893,9 @@
             document.getElementById('confirmedStudentEmail').textContent = currentStudent.email;
             document.getElementById('confirmedRemainingClasses').textContent = currentStudent.remainingClasses;
             document.getElementById('confirmedBookedClasses').textContent = currentStudent.bookedClasses;
-
+            finalConfirmation()
             goToStep(3);
+            
         }
 
         // Final confirmation with email and class update
