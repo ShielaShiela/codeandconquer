@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>Python 條件語句排序練習 - Conditional Statements Ordering Practice</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+  <style>
+    body {
+      font-family: "Microsoft JhengHei", Arial, sans-serif;
+      background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+      padding: 30px;
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    }
+    
+    h1 {
+      text-align: center;
+      color: #1976d2;
+      margin-bottom: 10px;
+    }
+    
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 30px;
+      font-style: italic;
+    }
+    
+    .problem {
+      margin-bottom: 40px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 10px;
+      border-left: 4px solid #2196f3;
+    }
+    
+    .problem-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #1976d2;
+      margin-bottom: 15px;
+    }
+    
+    .instruction {
+      margin-bottom: 15px;
+      padding: 10px;
+      background: #e8f4f8;
+      border-radius: 5px;
+    }
+    
+    .chinese {
+      font-weight: bold;
+      color: #333;
+    }
+    
+    .english {
+      color: #666;
+      font-style: italic;
+      margin-top: 5px;
+    }
+    
+    .expected-output {
+      background: #fff3e0;
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px 0;
+      border-left: 3px solid #ff9800;
+    }
+    
+    .code-list {
+      list-style: none;
+      padding: 0;
+      margin: 20px 0;
+    }
+    
+    .code-list li {
+      background: #fff;
+      margin: 8px 0;
+      padding: 12px 15px;
+      border-radius: 8px;
+      border: 2px solid #e0e0e0;
+      cursor: grab;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+    
+    .code-list li:hover {
+      border-color: #2196f3;
+      background: #f5f5f5;
+    }
+    
+    .code-list li:active {
+      cursor: grabbing;
+    }
+    
+    .check-btn {
+      margin: 20px 10px 20px 0;
+      padding: 12px 25px;
+      border: none;
+      background: #4caf50;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.2s ease;
+    }
+    
+    .check-btn:hover {
+      background: #45a049;
+    }
+    
+    .reset-btn {
+      padding: 12px 25px;
+      border: none;
+      background: #ff9800;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.2s ease;
+    }
+    
+    .reset-btn:hover {
+      background: #f57c00;
+    }
+    
+    .result {
+      margin-top: 15px;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    
+    .score {
+      text-align: center;
+      background: #e8f5e8;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 20px 0;
+      font-size: 18px;
+      font-weight: bold;
+      color: #2e7d32;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Python 條件語句排序練習</h1>
+  <p class="subtitle">Python Conditional Statements - Code Ordering Practice</p>
+  
+  <div class="score">
+    <span class="chinese">總分數 (Total Score): </span>
+    <span id="total-score">0/3</span>
+  </div>
+
+  <!-- Problem 1: Water Temperature Check -->
+  <div class="problem">
+    <div class="problem-title">問題 1: 水溫檢測系統 (Problem 1: Water Temperature Detection System)</div>
+    
+    <div class="instruction">
+      <div class="chinese">
+        排列以下程式碼，建立一個檢查水溫是否適合飲用的系統。
+      </div>
+      <div class="english">
+        Arrange the following code to create a system that checks if water temperature is suitable for drinking.
+      </div>
+    </div>
+    
+    <div class="expected-output">
+      <strong>預期輸出範例 (Expected Output Example):</strong><br>
+      請輸入水溫 (攝氏度): 45<br>
+      水溫適中，可以飲用！<br>
+      (Enter water temperature in Celsius: 45<br>
+      Water temperature is suitable for drinking!)
+    </div>
+    
+    <ul class="code-list" id="code-list-1">
+      <li>print("水溫過熱，請等待冷卻！")</li>
+      <li>if temperature < 10:</li>
+      <li>temperature = int(input("請輸入水溫 (攝氏度): "))</li>
+      <li>elif temperature > 60:</li>
+      <li>else:</li>
+      <li>print("水溫適中，可以飲用！")</li>
+      <li>print("水溫過冷，不建議飲用！")</li>
+    </ul>
+    
+    <button class="check-btn" onclick="checkOrder(1)">檢查順序 (Check Order)</button>
+    <button class="reset-btn" onclick="resetOrder(1)">重置 (Reset)</button>
+    <p class="result" id="result-1"></p>
+  </div>
+
+  <!-- Problem 2: Water Quality Check -->
+  <div class="problem">
+    <div class="problem-title">問題 2: 水質檢測系統 (Problem 2: Water Quality Detection System)</div>
+    
+    <div class="instruction">
+      <div class="chinese">
+        排列以下程式碼，建立一個根據pH值判斷水質的系統。
+      </div>
+      <div class="english">
+        Arrange the following code to create a system that determines water quality based on pH level.
+      </div>
+    </div>
+    
+    <div class="expected-output">
+      <strong>預期輸出範例 (Expected Output Example):</strong><br>
+      請輸入水的pH值: 7.2<br>
+      水質正常，可以安全使用。<br>
+      (Enter water pH level: 7.2<br>
+      Water quality is normal, safe to use.)
+    </div>
+    
+    <ul class="code-list" id="code-list-2">
+      <li>print("水質正常，可以安全使用。")</li>
+      <li>elif ph_value > 8.5:</li>
+      <li>print("水質過酸，需要處理！")</li>
+      <li>ph_value = float(input("請輸入水的pH值: "))</li>
+      <li>if ph_value < 6.5:</li>
+      <li>else:</li>
+      <li>print("水質過鹼，需要處理！")</li>
+    </ul>
+    
+    <button class="check-btn" onclick="checkOrder(2)">檢查順序 (Check Order)</button>
+    <button class="reset-btn" onclick="resetOrder(2)">重置 (Reset)</button>
+    <p class="result" id="result-2"></p>
+  </div>
+
+  <!-- Problem 3: Room Temperature Check -->
+  <div class="problem">
+    <div class="problem-title">問題 3: 室溫控制系統 (Problem 3: Room Temperature Control System)</div>
+    
+    <div class="instruction">
+      <div class="chinese">
+        排列以下程式碼，建立一個智能溫度控制系統，根據室溫提供建議。
+      </div>
+      <div class="english">
+        Arrange the following code to create a smart temperature control system that provides suggestions based on room temperature.
+      </div>
+    </div>
+    
+    <div class="expected-output">
+      <strong>預期輸出範例 (Expected Output Example):</strong><br>
+      請輸入當前室溫 (攝氏度): 22<br>
+      溫度剛好，很舒適！<br>
+      (Enter current room temperature in Celsius: 22<br>
+      Perfect temperature, very comfortable!)
+    </div>
+    
+    <ul class="code-list" id="code-list-3">
+      <li>print("溫度剛好，很舒適！")</li>
+      <li>room_temp = int(input("請輸入當前室溫 (攝氏度): "))</li>
+      <li>print("建議開啟暖氣")</li>
+      <li>elif room_temp > 26:</li>
+      <li>if room_temp < 18:</li>
+      <li>else:</li>
+      <li>print("建議開啟冷氣")</li>
+    </ul>
+    
+    <button class="check-btn" onclick="checkOrder(3)">檢查順序 (Check Order)</button>
+    <button class="reset-btn" onclick="resetOrder(3)">重置 (Reset)</button>
+    <p class="result" id="result-3"></p>
+  </div>
+</div>
+
+<script>
+  // Enable drag & drop for all problems
+  new Sortable(document.getElementById('code-list-1'), { animation: 150 });
+  new Sortable(document.getElementById('code-list-2'), { animation: 150 });
+  new Sortable(document.getElementById('code-list-3'), { animation: 150 });
+
+  // Correct orders for each problem
+  const correctOrders = {
+    1: [
+      'temperature = int(input("請輸入水溫 (攝氏度): "))',
+      'if temperature < 10:',
+      'print("水溫過冷，不建議飲用！")',
+      'elif temperature > 60:',
+      'print("水溫過熱，請等待冷卻！")',
+      'else:',
+      'print("水溫適中，可以飲用！")'
+    ],
+    2: [
+      'ph_value = float(input("請輸入水的pH值: "))',
+      'if ph_value < 6.5:',
+      'print("水質過酸，需要處理！")',
+      'elif ph_value > 8.5:',
+      'print("水質過鹼，需要處理！")',
+      'else:',
+      'print("水質正常，可以安全使用。")'
+    ],
+    3: [
+      'room_temp = int(input("請輸入當前室溫 (攝氏度): "))',
+      'if room_temp < 18:',
+      'print("建議開啟暖氣")',
+      'elif room_temp > 26:',
+      'print("建議開啟冷氣")',
+      'else:',
+      'print("溫度剛好，很舒適！")'
+    ]
+  };
+
+  // Original orders for reset functionality
+  const originalOrders = {
+    1: [
+      'print("水溫過熱，請等待冷卻！")',
+      'if temperature < 10:',
+      'temperature = int(input("請輸入水溫 (攝氏度): "))',
+      'elif temperature > 60:',
+      'else:',
+      'print("水溫適中，可以飲用！")',
+      'print("水溫過冷，不建議飲用！")'
+    ],
+    2: [
+      'print("水質正常，可以安全使用。")',
+      'elif ph_value > 8.5:',
+      'print("水質過酸，需要處理！")',
+      'ph_value = float(input("請輸入水的pH值: "))',
+      'if ph_value < 6.5:',
+      'else:',
+      'print("水質過鹼，需要處理！")'
+    ],
+    3: [
+      'print("溫度剛好，很舒適！")',
+      'room_temp = int(input("請輸入當前室溫 (攝氏度): "))',
+      'print("建議開啟暖氣")',
+      'elif room_temp > 26:',
+      'if room_temp < 18:',
+      'else:',
+      'print("建議開啟冷氣")'
+    ]
+  };
+
+  let scores = { 1: false, 2: false, 3: false };
+
+  function checkOrder(problemNum) {
+    const items = Array.from(document.querySelectorAll(`#code-list-${problemNum} li`))
+                      .map(li => li.textContent.trim());
+    let result = document.getElementById(`result-${problemNum}`);
+    
+    if (JSON.stringify(items) === JSON.stringify(correctOrders[problemNum])) {
+      result.textContent = "✅ 正確！做得很好！(Correct! Well done!)";
+      result.style.color = "green";
+      scores[problemNum] = true;
+    } else {
+      result.textContent = "❌ 順序不正確，請再試一次！(Incorrect order, please try again!)";
+      result.style.color = "red";
+      scores[problemNum] = false;
+    }
+    
+    updateTotalScore();
+  }
+
+  function resetOrder(problemNum) {
+    const codeList = document.getElementById(`code-list-${problemNum}`);
+    codeList.innerHTML = '';
+    
+    originalOrders[problemNum].forEach(code => {
+      const li = document.createElement('li');
+      li.textContent = code;
+      codeList.appendChild(li);
+    });
+    
+    document.getElementById(`result-${problemNum}`).textContent = '';
+    scores[problemNum] = false;
+    updateTotalScore();
+  }
+
+  function updateTotalScore() {
+    const totalCorrect = Object.values(scores).filter(score => score).length;
+    document.getElementById('total-score').textContent = `${totalCorrect}/3`;
+  }
+</script>
+
+</body>
+</html>

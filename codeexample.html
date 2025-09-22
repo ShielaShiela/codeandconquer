@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Order the Python Code</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      padding: 30px;
+    }
+    h2 {
+      margin-bottom: 20px;
+    }
+    #code-list {
+      list-style: none;
+      padding: 0;
+      max-width: 400px;
+    }
+    #code-list li {
+      background: #fff;
+      margin: 8px 0;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      cursor: grab;
+      font-family: monospace;
+    }
+    #check-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      border: none;
+      background: #4CAF50;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    #result {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Arrange the Python code in correct order:</h2>
+  <ul id="code-list">
+    <li>print("Hello, " + name)</li>
+    <li>name = input("Enter your name: ")</li>
+    <li>print("Welcome!")</li>
+  </ul>
+
+  <button id="check-btn">Check Order</button>
+  <p id="result"></p>
+
+  <script>
+    // Enable drag & drop
+    new Sortable(document.getElementById('code-list'), { animation: 150 });
+
+    // Correct order
+    const correct = [
+      'name = input("Enter your name: ")',
+      'print("Hello, " + name)',
+      'print("Welcome!")'
+    ];
+
+    document.getElementById('check-btn').addEventListener('click', () => {
+      const items = Array.from(document.querySelectorAll('#code-list li')).map(li => li.textContent.trim());
+      let result = document.getElementById('result');
+      if (JSON.stringify(items) === JSON.stringify(correct)) {
+        result.textContent = "✅ Correct order!";
+        result.style.color = "green";
+      } else {
+        result.textContent = "❌ Try again!";
+        result.style.color = "red";
+      }
+    });
+  </script>
+
+</body>
+</html>
