@@ -1,0 +1,710 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding Python - Code & Conquer with Shiela</title>
+    <style>
+        /* CSS CUSTOM PROPERTIES - Matching your main site */
+        :root {
+            --primary-blue: #2563eb;
+            --primary-blue-dark: #1e40af;
+            --primary-cyan: #06b6d4;
+            --primary-cyan-dark: #0891b2;
+            --success-green: #059669;
+            --text-dark: #1e293b;
+            --text-gray: #64748b;
+            --text-light: #9ca3af;
+            --bg-light: #f8fafc;
+            --bg-white: #ffffff;
+            --border-light: #e5e7eb;
+            --border-gray: #d1d5db;
+            --border-radius: 8px;
+            --border-radius-lg: 12px;
+            --border-radius-xl: 20px;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 30px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 40px rgba(0,0,0,0.3);
+            --transition-normal: 0.3s ease;
+            --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* HEADER */
+        header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-dark));
+            color: white;
+            padding: 1rem 0;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .breadcrumb {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .breadcrumb a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            opacity: 0.8;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            opacity: 0.95;
+        }
+
+        .hero-chinese {
+            font-size: 1.2rem;
+            opacity: 0.85;
+            margin-bottom: 2rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header h2 {
+            color: #7f8c8d;
+            font-size: 1.2rem;
+            font-weight: normal;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            margin-bottom: 25px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .section-header:hover {
+            background: linear-gradient(135deg, #2980b9, #1f5f8b);
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .toggle-icon {
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .section-content {
+            padding: 25px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .section-content.active {
+            display: block;
+        }
+
+        .section.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .concept-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 5px solid #3498db;
+            transition: all 0.3s ease;
+        }
+
+        .concept-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .concept-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .concept-chinese {
+            font-size: 0.95rem;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            white-space: pre; /* This preserves line breaks and spaces */
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+
+        .code-highlight {
+            background: #e74c3c;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .explanation {
+            background: #e8f6ff;
+            border: 1px solid #b3d9ff;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .syntax-rules {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .example-section {
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            background: #fafafa;
+        }
+
+        .interactive-demo {
+            background: linear-gradient(135deg, #00b894, #00a085);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .demo-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .access-btn {
+            padding: 8px 16px;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+        }
+
+        .access-btn:hover {
+            background: var(--primary-blue-dark);
+            transform: translateY(-2px);
+        }
+
+        .coming-soon {
+            background: var(--text-light);
+            cursor: not-allowed;
+        }
+
+        .coming-soon:hover {
+            transform: none;
+            background: var(--text-light);
+        }
+
+        .keyword { color: #e74c3c; font-weight: bold; }
+        .string { color: #27ae60; }
+        .number { color: #f39c12; }
+        .comment { color: #95a5a6; font-style: italic; }
+        .function { color: #8e44ad; }
+    </style>
+</head>
+<body>
+    <body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">Code & Conquer with Shiela</div>
+                <div class="breadcrumb">
+                    <a href="index.html">Class Notes</a> / Understanding Python
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="header">
+            <h1>🐍 Python Programming Guide</h1>
+            <h2>Python 程式設計語法與語義指南</h2>
+        </div>
+
+        <!-- Basic Syntax Section -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div>
+                    <div class="section-title">Basic Syntax 基本語法</div>
+                    <div class="section-subtitle">Understanding Python's fundamental structure</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-content">
+                <div class="concept-grid">
+                    <div class="concept-card">
+                        <div class="concept-title">Indentation 縮排</div>
+                        <div class="concept-chinese">Python uses indentation to define code blocks</div>
+                        <div class="code-block">
+<span class="keyword">if</span> condition:
+    <span class="comment"># This is indented (4 spaces)</span>
+    <span class="keyword">print</span>(<span class="string">"Hello"</span>)
+    <span class="keyword">print</span>(<span class="string">"World"</span>)</div>
+                        <div class="explanation">
+                            <strong>English:</strong> Python uses indentation (spaces/tabs) instead of braces {} to group statements.<br>
+                            <strong>繁體中文:</strong> Python 使用縮排（空格/制表符）而不是大括號來組織程式碼區塊。
+                        </div>
+                    </div>
+
+                    <div class="concept-card">
+                        <div class="concept-title">Comments 註解</div>
+                        <div class="concept-chinese">Adding explanatory text to your code</div>
+                        <div class="code-block">
+<span class="comment"># This is a single-line comment 單行註解</span>
+<span class="keyword">print</span>(<span class="string">"Hello"</span>)  <span class="comment"># Comment after code 行末註解</span>
+
+<span class="string">"""
+This is a multi-line comment 多行註解
+Used for documentation 用於文件說明
+"""</span></div>
+                        <div class="syntax-rules">
+                            <strong>Rules 規則:</strong><br>
+                            • Single-line: # symbol 單行註解用 # 符號<br>
+                            • Multi-line: """ or ''' 多行註解用三引號
+                        </div>
+                    </div>
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🎯 Interactive Example: Basic Structure</div>
+                    <div class="code-block">
+<span class="comment"># Python program structure Python程式結構</span>
+<span class="keyword">def</span> <span class="function">greet</span>(name):
+    <span class="string">"""Function to greet someone 問候函數"""</span>
+    <span class="keyword">if</span> name:
+        <span class="keyword">print</span>(<span class="string">f"Hello, {name}!"</span>)
+    <span class="keyword">else</span>:
+        <span class="keyword">print</span>(<span class="string">"Hello, World!"</span>)
+
+<span class="comment"># Main program 主程式</span>
+<span class="function">greet</span>(<span class="string">"Python Learner"</span>)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Variables and Data Types -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div>
+                    <div class="section-title">Variables & Data Types 變數與資料型態</div>
+                    <div class="section-subtitle">Storing and organizing different types of data</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-content">
+                <div class="concept-grid">
+                    <div class="concept-card">
+                        <div class="concept-title">Variable Assignment 變數賦值</div>
+                        <div class="concept-chinese">How to store values in memory</div>
+                        <div class="code-block">
+<span class="comment"># Variable assignment 變數賦值</span>
+name = <span class="string">"Alice"</span>        <span class="comment"># String 字串</span>
+age = <span class="number">25</span>             <span class="comment"># Integer 整數</span>
+height = <span class="number">5.6</span>         <span class="comment"># Float 浮點數</span>
+is_student = <span class="keyword">True</span>   <span class="comment"># Boolean 布林值</span></div>
+                        <div class="explanation">
+                            <strong>English:</strong> Variables are containers that store data values.<br>
+                            <strong>繁體中文:</strong> 變數是儲存資料值的容器。
+                        </div>
+                    </div>
+
+                    <div class="concept-card">
+                        <div class="concept-title">Data Types 資料型態</div>
+                        <div class="concept-chinese">Different kinds of data Python can handle</div>
+                        <div class="code-block">
+<span class="comment"># Basic data types 基本資料型態</span>
+text = <span class="string">"Hello World"</span>     <span class="comment"># str (string)</span>
+number = <span class="number">42</span>              <span class="comment"># int (integer)</span>
+decimal = <span class="number">3.14</span>           <span class="comment"># float</span>
+is_true = <span class="keyword">True</span>          <span class="comment"># bool (boolean)</span>
+nothing = <span class="keyword">None</span>          <span class="comment"># NoneType</span></div>
+                        <div class="syntax-rules">
+                            <strong>Type Checking 型態檢查:</strong><br>
+                            Use <span class="code-highlight">type(variable)</span> to check data type<br>
+                            使用 type() 函數檢查資料型態
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example-section">
+                    <h3>🔍 Practical Example 實用範例</h3>
+                    <div class="code-block">
+<span class="comment"># Student information system 學生資訊系統</span>
+student_name = <span class="string">"張三"</span>
+student_id = <span class="number">20230001</span>
+gpa = <span class="number">3.85</span>
+is_graduated = <span class="keyword">False</span>
+
+<span class="keyword">print</span>(<span class="string">f"Student: {student_name}"</span>)
+<span class="keyword">print</span>(<span class="string">f"ID: {student_id}"</span>)
+<span class="keyword">print</span>(<span class="string">f"GPA: {gpa}"</span>)
+<span class="keyword">print</span>(<span class="string">f"Graduated: {is_graduated}"</span>)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Control Structures -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div>
+                    <div class="section-title">Control Structures 控制結構</div>
+                    <div class="section-subtitle">Making decisions and repeating actions</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-content">
+                <div class="concept-grid">
+                    <div class="concept-card">
+                        <div class="concept-title">Conditional Statements 條件陳述式</div>
+                        <div class="concept-chinese">Making decisions in your program</div>
+                        <div class="code-block">
+<span class="comment"># If-elif-else structure</span>
+score = <span class="number">85</span>
+
+<span class="keyword">if</span> score >= <span class="number">90</span>:
+    grade = <span class="string">"A"</span>
+<span class="keyword">elif</span> score >= <span class="number">80</span>:
+    grade = <span class="string">"B"</span>
+<span class="keyword">elif</span> score >= <span class="number">70</span>:
+    grade = <span class="string">"C"</span>
+<span class="keyword">else</span>:
+    grade = <span class="string">"F"</span>
+
+<span class="keyword">print</span>(<span class="string">f"Your grade is: {grade}"</span>)</div>
+                        <div class="explanation">
+                            <strong>English:</strong> Use if/elif/else to make decisions based on conditions.<br>
+                            <strong>繁體中文:</strong> 使用 if/elif/else 根據條件做出決策。
+                        </div>
+                    </div>
+
+                    <div class="concept-card">
+                        <div class="concept-title">Loops 迴圈</div>
+                        <div class="concept-chinese">Repeating actions multiple times</div>
+                        <div class="code-block">
+<span class="comment"># For loop 計數迴圈</span>
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">5</span>):
+    <span class="keyword">print</span>(<span class="string">f"Count: {i}"</span>)
+
+<span class="comment"># While loop 條件迴圈</span>
+count = <span class="number">0</span>
+<span class="keyword">while</span> count < <span class="number">3</span>:
+    <span class="keyword">print</span>(<span class="string">f"While loop: {count}"</span>)
+    count += <span class="number">1</span></div>
+                        <div class="syntax-rules">
+                            <strong>Loop Types 迴圈類型:</strong><br>
+                            • <strong>for:</strong> Known number of iterations 已知迭代次數<br>
+                            • <strong>while:</strong> Condition-based repetition 基於條件的重複
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Functions -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div>
+                    <div class="section-title">Functions 函數</div>
+                    <div class="section-subtitle">Organizing code into reusable blocks</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-content">
+                <div class="concept-card">
+                    <div class="concept-title">Function Definition 函數定義</div>
+                    <div class="concept-chinese">Creating reusable code blocks</div>
+                    <div class="code-block">
+<span class="comment"># Function definition 函數定義</span>
+<span class="keyword">def</span> <span class="function">calculate_area</span>(length, width):
+    <span class="string">"""
+    Calculate the area of a rectangle
+    計算矩形面積
+    """</span>
+    area = length * width
+    <span class="keyword">return</span> area
+
+<span class="comment"># Function call 函數呼叫</span>
+result = <span class="function">calculate_area</span>(<span class="number">5</span>, <span class="number">3</span>)
+<span class="keyword">print</span>(<span class="string">f"Area: {result}"</span>)</div>
+                    <div class="explanation">
+                        <strong>Function Structure 函數結構:</strong><br>
+                        • <strong>def:</strong> keyword to define function 定義函數的關鍵字<br>
+                        • <strong>Parameters:</strong> input values 輸入參數<br>
+                        • <strong>return:</strong> output value 回傳值<br>
+                        • <strong>Docstring:</strong> function documentation 函數說明
+                    </div>
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🎯 Complete Example: Temperature Converter</div>
+                    <div class="code-block">
+<span class="keyword">def</span> <span class="function">celsius_to_fahrenheit</span>(celsius):
+    <span class="string">"""Convert Celsius to Fahrenheit 攝氏度轉華氏度"""</span>
+    fahrenheit = (celsius * <span class="number">9</span>/<span class="number">5</span>) + <span class="number">32</span>
+    <span class="keyword">return</span> fahrenheit
+
+<span class="keyword">def</span> <span class="function">fahrenheit_to_celsius</span>(fahrenheit):
+    <span class="string">"""Convert Fahrenheit to Celsius 華氏度轉攝氏度"""</span>
+    celsius = (fahrenheit - <span class="number">32</span>) * <span class="number">5</span>/<span class="number">9</span>
+    <span class="keyword">return</span> celsius
+
+<span class="comment"># Usage examples 使用範例</span>
+temp_c = <span class="number">25</span>
+temp_f = <span class="function">celsius_to_fahrenheit</span>(temp_c)
+<span class="keyword">print</span>(<span class="string">f"{temp_c}°C = {temp_f}°F"</span>)
+
+temp_f = <span class="number">77</span>
+temp_c = <span class="function">fahrenheit_to_celsius</span>(temp_f)
+<span class="keyword">print</span>(<span class="string">f"{temp_f}°F = {temp_c:.1f}°C"</span>)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Best Practices -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div>
+                    <div class="section-title">Best Practices 最佳實務</div>
+                    <div class="section-subtitle">Writing clean and readable Python code</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-content">
+                <div class="concept-grid">
+                    <div class="concept-card">
+                        <div class="concept-title">Naming Conventions 命名慣例</div>
+                        <div class="concept-chinese">How to name variables and functions properly</div>
+                        <div class="code-block">
+<span class="comment"># Good naming 好的命名</span>
+student_name = <span class="string">"Alice"</span>      <span class="comment"># snake_case for variables</span>
+total_score = <span class="number">100</span>          <span class="comment"># descriptive names</span>
+
+<span class="keyword">def</span> <span class="function">calculate_average</span>(scores):  <span class="comment"># function names</span>
+    <span class="keyword">return</span> <span class="function">sum</span>(scores) / <span class="function">len</span>(scores)
+
+<span class="comment"># Bad naming 不好的命名</span>
+<span class="comment"># n = "Alice"              # unclear</span>
+<span class="comment"># x = 100                  # meaningless</span></div>
+                        <div class="syntax-rules">
+                            <strong>Python Naming Rules Python命名規則:</strong><br>
+                            • Variables: snake_case 變數使用底線命名<br>
+                            • Functions: snake_case 函數使用底線命名<br>
+                            • Constants: UPPER_CASE 常數使用大寫<br>
+                            • Classes: PascalCase 類別使用帕斯卡命名
+                        </div>
+                    </div>
+
+                    <div class="concept-card">
+                        <div class="concept-title">Code Organization 程式碼組織</div>
+                        <div class="concept-chinese">Structuring your Python programs</div>
+                        <div class="code-block">
+<span class="comment"># Import statements at the top 匯入語句放在頂部</span>
+<span class="keyword">import</span> math
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime
+
+<span class="comment"># Constants 常數定義</span>
+PI = <span class="number">3.14159</span>
+MAX_STUDENTS = <span class="number">30</span>
+
+<span class="comment"># Function definitions 函數定義</span>
+<span class="keyword">def</span> <span class="function">main</span>():
+    <span class="string">"""Main program logic 主程式邏輯"""</span>
+    <span class="keyword">print</span>(<span class="string">"Program started"</span>)
+    
+<span class="comment"># Program entry point 程式進入點</span>
+<span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:
+    <span class="function">main</span>()</div>
+                        <div class="explanation">
+                            <strong>English:</strong> Organize code logically with imports, constants, functions, and main execution.<br>
+                            <strong>繁體中文:</strong> 邏輯性地組織程式碼，包括匯入、常數、函數和主程式執行。
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSection(header) {
+            const section = header.parentElement;
+            const content = section.querySelector('.section-content');
+            
+            // Toggle active class
+            section.classList.toggle('active');
+            content.classList.toggle('active');
+            
+            // Close other sections (optional - remove if you want multiple sections open)
+            const allSections = document.querySelectorAll('.section');
+            allSections.forEach(sec => {
+                if (sec !== section) {
+                    sec.classList.remove('active');
+                    sec.querySelector('.section-content').classList.remove('active');
+                }
+            });
+        }
+
+        // Auto-open first section
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstSection = document.querySelector('.section');
+            if (firstSection) {
+                toggleSection(firstSection.querySelector('.section-header'));
+            }
+        });
+
+        // Add smooth scrolling for better UX
+        document.querySelectorAll('.section-header').forEach(header => {
+            header.addEventListener('click', function() {
+                setTimeout(() => {
+                    this.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 300);
+            });
+        });
+    </script>
+</body>
+</html>

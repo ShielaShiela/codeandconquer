@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coming Soon - Code & Conquer with Shiela</title>
+    <style>
+        /* CSS CUSTOM PROPERTIES (VARIABLES) - Matching your existing styles */
+        :root {
+            /* Colors */
+            --primary-blue: #2563eb;
+            --primary-blue-dark: #1e40af;
+            --primary-cyan: #06b6d4;
+            --primary-cyan-dark: #0891b2;
+            --success-green: #059669;
+            --text-dark: #1e293b;
+            --text-gray: #64748b;
+            --text-light: #9ca3af;
+            --bg-light: #f8fafc;
+            --bg-white: #ffffff;
+            --border-light: #e5e7eb;
+            --border-gray: #d1d5db;
+            
+            /* Spacing */
+            --section-padding: 80px 0;
+            --container-padding: 0 20px;
+            --border-radius: 8px;
+            --border-radius-lg: 12px;
+            --border-radius-xl: 20px;
+            
+            /* Shadows */
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 30px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 40px rgba(0,0,0,0.3);
+            
+            /* Transitions */
+            --transition-fast: 0.2s ease;
+            --transition-normal: 0.3s ease;
+            --transition-slow: 0.5s ease;
+            
+            /* Typography */
+            --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --line-height: 1.6;
+        }
+
+        /* RESET AND BASE STYLES */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-family);
+            line-height: var(--line-height);
+            color: #333;
+            background: var(--bg-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--container-padding);
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        /* HEADER */
+        header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-dark));
+            color: white;
+            padding: 1rem 0;
+            box-shadow: var(--shadow-md);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            transition: opacity var(--transition-normal);
+        }
+
+        nav a:hover {
+            opacity: 0.8;
+        }
+
+        /* MAIN CONTENT */
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 0;
+        }
+
+        .coming-soon-container {
+            text-align: center;
+            background: white;
+            padding: 4rem 3rem;
+            border-radius: var(--border-radius-xl);
+            box-shadow: var(--shadow-xl);
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .coming-soon-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--primary-cyan));
+        }
+
+        .coming-soon-icon {
+            font-size: 6rem;
+            margin-bottom: 2rem;
+            animation: float 3s ease-in-out infinite;
+            display: block;
+        }
+
+        .coming-soon-title {
+            font-size: 3rem;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .coming-soon-subtitle {
+            font-size: 1.3rem;
+            color: var(--text-gray);
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        .course-preview {
+            background: var(--bg-light);
+            padding: 2rem;
+            border-radius: var(--border-radius-lg);
+            margin: 2rem 0;
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .course-preview h3 {
+            color: var(--primary-blue);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .course-preview p {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .features-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .features-list li {
+            background: white;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            transition: transform var(--transition-normal);
+        }
+
+        .features-list li:hover {
+            transform: translateY(-2px);
+        }
+
+        .feature-icon {
+            font-size: 1.5rem;
+            width: 40px;
+            text-align: center;
+        }
+
+        /* PROGRESS BAR */
+        .progress-section {
+            margin: 2rem 0;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: var(--border-light);
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-blue), var(--primary-cyan));
+            border-radius: 6px;
+            transition: width 2s ease-out;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, 
+                transparent 25%, 
+                rgba(255,255,255,0.3) 25%, 
+                rgba(255,255,255,0.3) 50%, 
+                transparent 50%, 
+                transparent 75%, 
+                rgba(255,255,255,0.3) 75%);
+            background-size: 20px 20px;
+            animation: progress-stripe 1s linear infinite;
+        }
+
+        @keyframes progress-stripe {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 20px 0;
+            }
+        }
+
+        /* BUTTONS */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            transition: all var(--transition-normal);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            margin: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-cyan);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-cyan-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-blue);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* NOTIFICATION SIGNUP */
+        .notification-signup {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05), rgba(30, 64, 175, 0.05));
+            padding: 2rem;
+            border-radius: var(--border-radius-lg);
+            margin: 2rem 0;
+            border: 1px solid var(--border-light);
+        }
+
+        .notification-signup h4 {
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .signup-form {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .email-input {
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-light);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            min-width: 250px;
+            transition: border-color var(--transition-normal);
+        }
+
+        .email-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        /* FOOTER */
+        footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 2rem 0 1rem;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            color: var(--text-light);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .coming-soon-container {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+            }
+
+            .coming-soon-title {
+                font-size: 2.2rem;
+            }
+
+            .coming-soon-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .coming-soon-icon {
+                font-size: 4rem;
+            }
+
+            .features-list {
+                grid-template-columns: 1fr;
+            }
+
+            .signup-form {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .email-input {
+                width: 100%;
+                min-width: auto;
+            }
+
+            nav {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .coming-soon-title {
+                font-size: 1.8rem;
+            }
+
+            .coming-soon-container {
+                padding: 1.5rem 1rem;
+            }
+
+            .btn {
+                width: 100%;
+                margin: 0.25rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">Code & Conquer with Shiela</div>
+                <nav>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="class-notes.html">Class Notes</a></li>
+                        <li><a href="index.html#about">About</a></li>
+                        <li><a href="booking.html">Book A Class</a></li>
+                        <li><a href="index.html#contact">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <div class="coming-soon-container animate-fade-in">
+                <div class="coming-soon-icon">🚧</div>
+                <h1 class="coming-soon-title">Coming Soon</h1>
+                <p class="coming-soon-subtitle">We're working hard to bring you amazing course materials!</p>
+
+                <div class="course-preview">
+                    <h3>What's Being Prepared</h3>
+                    <p>Our team is currently developing comprehensive course notes and resources that will help you master programming concepts effectively. Each course will include detailed explanations, code examples, and practical exercises.</p>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="progress-section">
+                    <div class="progress-label">
+                        <span>Course Development Progress</span>
+                        <span id="progressPercent">75%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 75%"></div>
+                    </div>
+                </div>
+
+                <!-- What to Expect -->
+                <ul class="features-list">
+                    <li>
+                        <div class="feature-icon">📚</div>
+                        <div>
+                            <strong>Comprehensive Notes</strong><br>
+                            <small>Detailed explanations and examples</small>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="feature-icon">💻</div>
+                        <div>
+                            <strong>Code Examples</strong><br>
+                            <small>Practical, runnable code snippets</small>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="feature-icon">🎯</div>
+                        <div>
+                            <strong>Practice Exercises</strong><br>
+                            <small>Hands-on activities and challenges</small>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="feature-icon">📱</div>
+                        <div>
+                            <strong>Mobile-Friendly</strong><br>
+                            <small>Access notes anywhere, anytime</small>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="feature-icon">🔄</div>
+                        <div>
+                            <strong>Regular Updates</strong><br>
+                            <small>Content stays current and relevant</small>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="feature-icon">💬</div>
+                        <div>
+                            <strong>Interactive Learning</strong><br>
+                            <small>Questions and discussion points</small>
+                        </div>
+                    </li>
+                </ul>
+
+                <!-- Notification Signup -->
+                <div class="notification-signup">
+                    <h4>🔔 Get Notified When Ready</h4>
+                    <p>Be the first to know when these course materials are available!</p>
+                    <form class="signup-form" id="notifyForm">
+                        <input type="email" class="email-input" placeholder="Enter your email address" required id="emailInput">
+                        <button type="submit" class="btn btn-primary">Notify Me</button>
+                    </form>
+                    <div id="signupMessage" style="margin-top: 1rem; display: none; padding: 1rem; border-radius: 6px;"></div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div style="margin-top: 2rem;">
+                    <a href="class-notes.html" class="btn btn-secondary">← Back to Available Notes</a>
+                    <a href="index.html#contact" class="btn btn-primary">Book a Trial Class</a>
+                </div>
+
+                <!-- Expected Timeline -->
+                <div style="margin-top: 2rem; padding: 1rem; background: var(--bg-light); border-radius: var(--border-radius); border-left: 4px solid var(--success-green);">
+                    <p style="color: var(--text-gray); margin: 0;">
+                        <strong style="color: var(--success-green);">Expected Release:</strong> 
+                        Course materials will be available within the next 2-4 weeks. Thank you for your patience!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2025 Code & Conquer with Shiela. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Progress bar animation
+        window.addEventListener('load', function() {
+            const progressFill = document.getElementById('progressFill');
+            const progressPercent = document.getElementById('progressPercent');
+            
+            // Animate progress bar
+            setTimeout(() => {
+                progressFill.style.width = '75%';
+            }, 500);
+        });
+
+        // Notification signup form
+        document.getElementById('notifyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('emailInput').value;
+            const messageDiv = document.getElementById('signupMessage');
+            
+            if (email) {
+                // Simulate form submission
+                messageDiv.style.display = 'block';
+                messageDiv.style.background = '#d4edda';
+                messageDiv.style.color = '#155724';
+                messageDiv.style.border = '1px solid #c3e6cb';
+                messageDiv.innerHTML = `
+                    <strong>Success!</strong> We'll notify you at <strong>${email}</strong> when the course materials are ready.
+                `;
+                
+                // Clear the form
+                document.getElementById('emailInput').value = '';
+                
+                // In a real implementation, you would send this to your backend
+                console.log('Email subscription:', email);
+                
+                // Hide message after 5 seconds
+                setTimeout(() => {
+                    messageDiv.style.display = 'none';
+                }, 5000);
+            }
+        });
+
+        // Animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for animation
+        document.querySelectorAll('.features-list li').forEach(item => {
+            observer.observe(item);
+        });
+    </script>
+</body>
+</html>

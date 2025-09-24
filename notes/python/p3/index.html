@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding Python - Code & Conquer with Shiela</title>
+    <style>
+        /* CSS CUSTOM PROPERTIES - Matching your main site */
+        :root {
+            --primary-blue: #2563eb;
+            --primary-blue-dark: #1e40af;
+            --primary-cyan: #06b6d4;
+            --primary-cyan-dark: #0891b2;
+            --success-green: #059669;
+            --text-dark: #1e293b;
+            --text-gray: #64748b;
+            --text-light: #9ca3af;
+            --bg-light: #f8fafc;
+            --bg-white: #ffffff;
+            --border-light: #e5e7eb;
+            --border-gray: #d1d5db;
+            --border-radius: 8px;
+            --border-radius-lg: 12px;
+            --border-radius-xl: 20px;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 30px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 40px rgba(0,0,0,0.3);
+            --transition-normal: 0.3s ease;
+            --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* HEADER */
+        header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-dark));
+            color: white;
+            padding: 1rem 0;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .breadcrumb {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .breadcrumb a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            opacity: 0.8;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            opacity: 0.95;
+        }
+
+        .hero-chinese {
+            font-size: 1.2rem;
+            opacity: 0.85;
+            margin-bottom: 2rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* MAIN CONTENT GRID */
+        .main-content {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--text-dark);
+        }
+
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .topic-card {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            transition: all var(--transition-normal);
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary-blue);
+        }
+
+        .topic-header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-cyan));
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .topic-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .topic-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .topic-chinese {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .topic-content {
+            padding: 2rem;
+        }
+
+        .topic-description {
+            color: var(--text-gray);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .topic-features {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .topic-features li {
+            padding: 0.3rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+            color: var(--text-gray);
+        }
+
+        .topic-features li::before {
+            content: "✓";
+            color: var(--success-green);
+            font-weight: bold;
+        }
+
+        .difficulty-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 1rem;
+        }
+
+        .difficulty-beginner {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .difficulty-intermediate {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .topic-action {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: var(--primary-blue);
+            color: white;
+            text-decoration: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            transition: all var(--transition-normal);
+        }
+
+        .btn:hover {
+            background: var(--primary-blue-dark);
+            transform: translateY(-2px);
+        }
+
+        /* PROGRESS SECTION */
+        .progress-section {
+            background: white;
+            padding: 3rem;
+            border-radius: var(--border-radius-xl);
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .progress-title {
+            font-size: 1.8rem;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+        }
+
+        .progress-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .progress-item {
+            text-align: center;
+        }
+
+        .progress-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-cyan));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .progress-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-description {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+        }
+        .access-btn {
+            padding: 8px 16px;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+        }
+
+        .access-btn:hover {
+            background: var(--primary-blue-dark);
+            transform: translateY(-2px);
+        }
+
+        .coming-soon {
+            background: var(--text-light);
+            cursor: not-allowed;
+        }
+
+        .coming-soon:hover {
+            transform: none;
+            background: var(--text-light);
+        }
+
+        /* FOOTER */
+        footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .topics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .progress-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .topic-header {
+                padding: 1.5rem;
+            }
+
+            .topic-content {
+                padding: 1.5rem;
+            }
+
+            .progress-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeInUp 0.8s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">Code & Conquer with Shiela</div>
+                <div class="breadcrumb">
+                    <a href="../../index.html">Class Notes</a> / Understanding Python
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">🐍 Understanding Python</h1>
+                <p class="hero-subtitle">Comprehensive Python Programming Guide</p>
+                <p class="hero-chinese">Python 程式語法與語義指南</p>
+                
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">6</span>
+                        <span class="stat-label">Core Topics</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">50+</span>
+                        <span class="stat-label">Code Examples</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">双语</span>
+                        <span class="stat-label">Bilingual Support</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="main-content">
+        <div class="container">
+            <h2 class="section-title">Learning Topics 學習主題</h2>
+            
+            <div class="topics-grid">
+
+                <div class="topic-card" onclick="navigateToTopic('lesson0')">
+                    <div class="topic-header">
+                        <div class="topic-icon">📝</div>
+                        <div class="topic-title">Lesson 0</div>
+                        <div class="topic-chinese">Python 摘要筆記</div>
+                    </div>
+                    <div class="topic-content">
+                        <div class="difficulty-badge difficulty-beginner">Beginner</div>
+                        <p class="topic-description">
+                            這是一份關於 Python 基本程式結構的完整摘要。
+                        </p>
+                        <ul class="topic-features">
+                            <li>基本語法</li>
+                            <li>變數與資料型態</li>
+                            <li>控制結構</li>
+                            <li>函式</li>
+                        </ul>
+                        <div class="topic-action">
+                            <span class="btn">Start Learning →</span>
+                            
+                        </div>
+                    </div>
+                </div>
+      
+
+                <!-- Basic Syntax -->
+                <div class="topic-card" onclick="navigateToTopic('basic-syntax')">
+                    <div class="topic-header">
+                        <div class="topic-icon">📝</div>
+                        <div class="topic-title">Basic Syntax</div>
+                        <div class="topic-chinese">基本語法</div>
+                    </div>
+                    <div class="topic-content">
+                        <div class="difficulty-badge difficulty-beginner">Beginner</div>
+                        <p class="topic-description">
+                            掌握Python的基礎架構，包括縮排、註解和基本程式組織。學習每個Python程式的建構要素。
+                        </p>
+                        <ul class="topic-features">
+                            <li>縮排規則與最佳實務</li>
+                            <li>單行與多行註解</li>
+                            <li>程式結構與組織</li>
+                            <li>程式碼可讀性原則</li>
+                        </ul>
+                        <div class="topic-action">
+                            <!-- <span class="btn">Start Learning →</span> -->
+                             <button class="access-btn coming-soon">Coming Soon</button>
+                            <span class="status-indicator status-coming-soon">Coming Soon</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Variables & Data Types -->
+                <div class="topic-card" onclick="navigateToTopic('variables-datatypes')">
+                    <div class="topic-header">
+                        <div class="topic-icon">🏷️</div>
+                        <div class="topic-title">Variables & Data Types</div>
+                        <div class="topic-chinese">變數與資料型態</div>
+                    </div>
+                    <div class="topic-content">
+                        <div class="difficulty-badge difficulty-beginner">Beginner</div>
+                        <p class="topic-description">
+                            了解如何在Python中儲存和組織不同類型的資料。學習字串、數字、布林值等資料型態。
+                        </p>
+                        <ul class="topic-features">
+                            <li>變數指派與命名規則</li>
+                            <li>字串、整數、浮點數、布林值</li>
+                            <li>型態檢查與轉換</li>
+                            <li>記憶體管理基礎</li>
+                        </ul>
+                        <div class="topic-action">
+                            <!-- <span class="btn">Start Learning →</span> -->
+                             <button class="access-btn coming-soon">Coming Soon</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Control Structures -->
+                <div class="topic-card" onclick="navigateToTopic('control-structures')">
+                    <div class="topic-header">
+                        <div class="topic-icon">🔀</div>
+                        <div class="topic-title">Control Structures</div>
+                        <div class="topic-chinese">控制結構</div>
+                    </div>
+                    <div class="topic-content">
+                        <div class="difficulty-badge difficulty-intermediate">Intermediate</div>
+                        <p class="topic-description">
+                            學習在程式中進行決策並重複執行動作，使用if陳述式、迴圈和條件邏輯。
+                        </p>
+                        <ul class="topic-features">
+                            <li>If、elif、else陳述式</li>
+                            <li>For迴圈和while迴圈</li>
+                            <li>Break和continue關鍵字</li>
+                            <li>巢狀控制結構</li>
+                        </ul>
+                        <div class="topic-action">
+                            <!-- <span class="btn">Start Learning →</span> -->
+                             <button class="access-btn coming-soon">Coming Soon</button>
+                            <!-- <span class="status-indicator status-coming-soon">Coming Soon</span> -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Functions -->
+                <div class="topic-card" onclick="navigateToTopic('functions')">
+                    <div class="topic-header">
+                        <div class="topic-icon">⚡</div>
+                        <div class="topic-title">Functions</div>
+                        <div class="topic-chinese">函式</div>
+                    </div>
+                    <div class="topic-content">
+                        <div class="difficulty-badge difficulty-intermediate">Intermediate</div>
+                        <p class="topic-description">
+                            將程式碼組織成可重複使用的區塊。學習如何建立、呼叫和最佳化函式，以改善程式碼結構。
+                        </p>
+                        <ul class="topic-features">
+                            <li>函式定義與呼叫</li>
+                            <li>參數與回傳值</li>
+                            <li>作用域與區域變數</li>
+                            <li>文件註解與說明字串</li>
+                        </ul>
+                        <div class="topic-action">
+                            <!-- <span class="btn">Start Learning →</span> -->
+                            <button class="access-btn coming-soon">Coming Soon</button>
+                            <!-- <span class="status-indicator status-coming-soon">Coming Soon</span> -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Structures -->
+                <div class="topic-card" onclick="navigateToTopic('data-structures')">
+                    <div class="topic-header">
+                        <div class="topic-icon">📚</div>
+                        <div class="topic-title">Data Structures</div>
+                        <div class="topic-chinese">資料結構</div>
+                    </div>
+                    <div class="topic-content">
+                        <div class="difficulty-badge difficulty-intermediate">Intermediate</div>
+                        <p class="topic-description">
+                            精通Python的內建資料結構：串列、字典、元組和集合。學習何時以及如何有效使用每種資料結構。
+                        </p>
+                        <ul class="topic-features">
+                            <li>串列與串列方法</li>
+                            <li>字典與鍵值配對</li>
+                            <li>元組與不可變性</li>
+                            <li>集合與唯一值收集</li>
+                        </ul>
+                        <div class="topic-action">
+                            <!-- <span class="btn">Start Learning →</span> -->
+                            <button class="access-btn coming-soon">Coming Soon</button>
+                            <!-- <span class="status-indicator status-coming-soon">Coming Soon</span> -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Best Practices -->
+                <div class="topic-card" onclick="navigateToTopic('best-practices')">
+                    <div class="topic-header">
+                        <div class="topic-icon">⭐</div>
+                        <div class="topic-title">Best Practices</div>
+                        <div class="topic-chinese">最佳實務</div>
+                    </div>
+                    <div class="topic-content">
+                        <div class="difficulty-badge difficulty-intermediate">Intermediate</div>
+                        <p class="topic-description">
+                            撰寫整潔、可讀性高且易於維護的Python程式碼。學習業界標準和專業程式設計實務。
+                        </p>
+                        <ul class="topic-features">
+                            <li>命名慣例與程式碼風格</li>
+                            <li>程式碼組織模式</li>
+                            <li>錯誤處理基礎</li>
+                            <li>效能考量因素</li>
+                        </ul>
+                        <div class="topic-action">
+                            <!-- <span class="btn">Start Learning →</span> -->
+                            <button class="access-btn coming-soon">Coming Soon</button>
+                            <!-- <span class="status-indicator status-coming-soon">Coming Soon</span> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Learning Progress -->
+            <div class="progress-section">
+                <h3 class="progress-title">Your Learning Journey 學習進度</h3>
+                <div class="progress-grid">
+                    <div class="progress-item">
+                        <div class="progress-circle">1</div>
+                        <div class="progress-label">開始學習</div>
+                        <div class="progress-description">從基本語法開始</div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-circle">2</div>
+                        <div class="progress-label">建立基礎</div>
+                        <div class="progress-description">變數與資料型態</div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-circle">3</div>
+                        <div class="progress-label">加入邏輯</div>
+                        <div class="progress-description">控制結構</div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-circle">4</div>
+                        <div class="progress-label">組織程式碼</div>
+                        <div class="progress-description">函式與最佳實務</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Code & Conquer with Shiela. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function navigateToTopic(topicId) {
+            // Navigate to detailed topic pages
+            const topicUrls = {
+                'lesson0': 'lesson0.html',
+                'basic-syntax': 'coming-soon.html',
+                'variables-datatypes': 'coming-soon.html',
+                'control-structures': 'coming-soon.html',
+                'functions': 'coming-soon.html',
+                'data-structures': 'coming-soon.html',
+                'best-practices': 'coming-soon.html'
+            };
+            
+          
+            // For courses that redirect to coming-soon page, you might want to pass the course info
+            if (topicUrls[topicId] === 'coming-soon.html') {
+                // Add course parameter to coming soon page
+                window.location.href = `coming-soon.html?course=${courseId}`;
+            } else {
+                // Direct navigation to course notes
+                window.location.href = topicUrls[topicId];
+            }
+        }
+
+        // Add animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observe topic cards for animation
+        document.querySelectorAll('.topic-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Hover effects for better interaction
+        document.querySelectorAll('.topic-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>

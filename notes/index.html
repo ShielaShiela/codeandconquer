@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Notes - Code & Conquer with Shiela</title>
+    <style>
+        /* CSS CUSTOM PROPERTIES (VARIABLES) - Matching your existing styles */
+        :root {
+            /* Colors */
+            --primary-blue: #2563eb;
+            --primary-blue-dark: #1e40af;
+            --primary-cyan: #06b6d4;
+            --primary-cyan-dark: #0891b2;
+            --success-green: #059669;
+            --text-dark: #1e293b;
+            --text-gray: #64748b;
+            --text-light: #9ca3af;
+            --bg-light: #f8fafc;
+            --bg-white: #ffffff;
+            --border-light: #e5e7eb;
+            --border-gray: #d1d5db;
+            
+            /* Spacing */
+            --section-padding: 80px 0;
+            --container-padding: 0 20px;
+            --border-radius: 8px;
+            --border-radius-lg: 12px;
+            --border-radius-xl: 20px;
+            
+            /* Shadows */
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 30px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 40px rgba(0,0,0,0.3);
+            
+            /* Transitions */
+            --transition-fast: 0.2s ease;
+            --transition-normal: 0.3s ease;
+            --transition-slow: 0.5s ease;
+            
+            /* Typography */
+            --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --line-height: 1.6;
+        }
+
+        /* RESET AND BASE STYLES */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-family);
+            line-height: var(--line-height);
+            color: #333;
+            background: var(--bg-light);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--container-padding);
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        /* HEADER */
+        header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-dark));
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-md);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            transition: opacity var(--transition-normal);
+        }
+
+        nav a:hover {
+            opacity: 0.8;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            background: linear-gradient(135deg, #2980b9, #3498db);
+            color: white;
+            padding: 120px 0 60px;
+            margin-top: 70px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        /* BUTTONS */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            transition: all var(--transition-normal);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-primary {
+            background: var(--primary-cyan);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-cyan-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        /* SECTIONS */
+        .section {
+            padding: var(--section-padding);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--text-dark);
+        }
+
+        /* NOTES GRID */
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .note-card {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-lg);
+            transition: all var(--transition-normal);
+            border: 2px solid transparent;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .note-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--primary-cyan));
+        }
+
+        .note-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary-blue);
+        }
+
+        .note-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .note-card h3 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .note-description {
+            color: var(--text-gray);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .note-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .difficulty-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .difficulty-beginner {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .difficulty-elementary {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .difficulty-intermediate {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .difficulty-advanced {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .lesson-count {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .note-action {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .access-btn {
+            padding: 8px 16px;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+        }
+
+        .access-btn:hover {
+            background: var(--primary-blue-dark);
+            transform: translateY(-2px);
+        }
+
+        .coming-soon {
+            background: var(--text-light);
+            cursor: not-allowed;
+        }
+
+        .coming-soon:hover {
+            transform: none;
+            background: var(--text-light);
+        }
+
+        .status-indicator {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-available {
+            color: var(--success-green);
+        }
+
+        .status-coming-soon {
+            color: var(--text-light);
+        }
+
+        /* SEARCH AND FILTER */
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-light);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            min-width: 300px;
+            transition: border-color var(--transition-normal);
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--border-light);
+            background: white;
+            border-radius: var(--border-radius);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            border-color: var(--primary-blue);
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        /* FOOTER */
+        footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 2rem 0 1rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            color: var(--text-light);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .notes-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .search-box {
+                min-width: 100%;
+                max-width: 400px;
+            }
+
+            nav {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .note-card {
+                padding: 1.5rem;
+            }
+
+            .note-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">Code & Conquer with Shiela</div>
+                <nav>
+                    <ul>
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="index.html">Courses Notes</a></li>
+                        <li><a href="../booking.html">Book A Class</a></li>
+                        <li><a href="#reservation">Reservation</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Class Notes & Resources</h1>
+                <p class="hero-subtitle">Access comprehensive study materials, code examples, and learning resources for all your programming courses</p>
+                <a href="#notes" class="btn btn-primary">Browse Notes</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Notes Section -->
+    <section id="notes" class="section">
+        <div class="container">
+            <h2 class="section-title">Available Course Notes</h2>
+            
+            <!-- Search and Filter Controls -->
+            <div class="controls">
+                <input type="text" class="search-box" id="searchBox" placeholder="Search course notes...">
+                <button class="filter-btn active" data-filter="all">All Courses</button>
+                <button class="filter-btn" data-filter="beginner">Beginner</button>
+                <button class="filter-btn" data-filter="intermediate">Intermediate</button>
+                <button class="filter-btn" data-filter="advanced">Advanced</button>
+            </div>
+
+            <!-- Notes Grid -->
+            <div class="notes-grid" id="notesGrid">
+                <!-- Understanding Python (with Chinese Notes) -->
+                <div class="note-card" data-difficulty="intermediate" data-course="python chinese">
+                    <div class="note-icon">🐍</div>
+                    <h3>Understanding Python</h3>
+                    <p class="note-description">Comprehensive Python programming guide with bilingual explanations in English and Chinese (中文). Perfect for Chinese-speaking students learning Python fundamentals.</p>
+                    <div class="note-meta">
+                        <span class="difficulty-badge difficulty-intermediate">Beginner</span>
+                        <span class="difficulty-badge difficulty-intermediate">Intermediate</span>
+                        <span class="lesson-count">10+ Lessons</span>
+                    </div>
+                    <div class="note-action">
+                        <button class="access-btn" onclick="accessCourse('python-chinese')">Access Notes</button>
+                        <span class="status-indicator status-available">Available</span>
+                    </div>
+                </div>
+
+                <!-- APCS Reviewer -->
+                <div class="note-card" data-difficulty="advanced" data-course="apcs competitive">
+                    <div class="note-icon">🏆</div>
+                    <h3>APCS Reviewer</h3>
+                    <p class="note-description">Advanced Placement Computer Science review materials covering algorithms, data structures, and problem-solving strategies for competitive programming.</p>
+                    <div class="note-meta">
+                        <span class="difficulty-badge difficulty-advanced">Advanced</span>
+                        <span class="lesson-count">20+ Topics</span>
+                    </div>
+                    <div class="note-action">
+                        <button class="access-btn coming-soon">Coming Soon</button>
+                        <span class="status-indicator status-coming-soon">Coming Soon</span>
+                    </div>
+                </div>
+
+                <!-- Python Elementary -->
+                <div class="note-card" data-difficulty="elementary" data-course="python basics">
+                    <div class="note-icon">🐍📚</div>
+                    <h3>Python Elementary</h3>
+                    <p class="note-description">Elementary-level Python programming course designed for beginners. Learn basic syntax, variables, loops, and functions step by step.</p>
+                    <div class="note-meta">
+                        <span class="difficulty-badge difficulty-elementary">Elementary</span>
+                        <span class="lesson-count">12+ Lessons</span>
+                    </div>
+                    <div class="note-action">
+                        <button class="access-btn coming-soon">Coming Soon</button>
+                        <span class="status-indicator status-coming-soon">Coming Soon</span>
+                    </div>
+                </div>
+
+                <!-- Scratch for Kids -->
+                <div class="note-card" data-difficulty="beginner" data-course="scratch kids">
+                    <div class="note-icon">🧒🎨</div>
+                    <h3>Scratch for Kids</h3>
+                    <p class="note-description">Visual programming course for children using Scratch. Create games, animations, and interactive stories while learning programming concepts.</p>
+                    <div class="note-meta">
+                        <span class="difficulty-badge difficulty-beginner">Beginner</span>
+                        <span class="lesson-count">10+ Projects</span>
+                    </div>
+                    <div class="note-action">
+                        <button class="access-btn coming-soon">Coming Soon</button>
+                        <span class="status-indicator status-coming-soon">Coming Soon</span>
+                    </div>
+                </div>
+
+                <!-- C/C++ -->
+                <div class="note-card" data-difficulty="intermediate" data-course="cpp programming">
+                    <div class="note-icon">⚡</div>
+                    <h3>C/C++ Programming</h3>
+                    <p class="note-description">Comprehensive C and C++ programming course covering fundamentals to advanced topics including pointers, memory management, and object-oriented programming.</p>
+                    <div class="note-meta">
+                        <span class="difficulty-badge difficulty-intermediate">Intermediate</span>
+                        <span class="lesson-count">18+ Lessons</span>
+                    </div>
+                    <div class="note-action">
+                        <button class="access-btn coming-soon">Coming Soon</button>
+                        <span class="status-indicator status-coming-soon">Coming Soon</span>
+                    </div>
+                </div>
+
+                <!-- Pygame -->
+                <div class="note-card" data-difficulty="intermediate" data-course="pygame games">
+                    <div class="note-icon">🎮</div>
+                    <h3>Pygame Game Development</h3>
+                    <p class="note-description">Learn game development with Python using Pygame library. Create 2D games, handle sprites, collision detection, and game mechanics.</p>
+                    <div class="note-meta">
+                        <span class="difficulty-badge difficulty-intermediate">Intermediate</span>
+                        <span class="lesson-count">8+ Projects</span>
+                    </div>
+                    <div class="note-action">
+                        <button class="access-btn coming-soon">Coming Soon</button>
+                        <span class="status-indicator status-coming-soon">Coming Soon</span>
+                    </div>
+                </div>
+
+                <!-- Microsoft Office Tools -->
+                <div class="note-card" data-difficulty="beginner" data-course="office microsoft">
+                    <div class="note-icon">💼</div>
+                    <h3>Microsoft Office Tools</h3>
+                    <p class="note-description">Master Microsoft Office Suite including Word, Excel, and PowerPoint. Learn advanced features, formulas, and professional presentation skills.</p>
+                    <div class="note-meta">
+                        <span class="difficulty-badge difficulty-beginner">Beginner</span>
+                        <span class="lesson-count">25+ Tutorials</span>
+                    </div>
+                    <div class="note-action">
+                        <button class="access-btn coming-soon">Coming Soon</button>
+                        <span class="status-indicator status-coming-soon">Coming Soon</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2025 Code & Conquer with Shiela. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Search functionality
+        const searchBox = document.getElementById('searchBox');
+        const notesGrid = document.getElementById('notesGrid');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const noteCards = document.querySelectorAll('.note-card');
+
+        // Search filter
+        searchBox.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            filterCards(searchTerm);
+        });
+
+        // Difficulty filter
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Update active button
+                filterBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const filter = this.getAttribute('data-filter');
+                filterCardsByDifficulty(filter);
+            });
+        });
+
+        function filterCards(searchTerm) {
+            noteCards.forEach(card => {
+                const courseText = card.getAttribute('data-course');
+                const titleText = card.querySelector('h3').textContent.toLowerCase();
+                const descText = card.querySelector('.note-description').textContent.toLowerCase();
+                
+                const matches = courseText.includes(searchTerm) || 
+                               titleText.includes(searchTerm) || 
+                               descText.includes(searchTerm);
+                
+                card.style.display = matches ? 'block' : 'none';
+            });
+        }
+
+        function filterCardsByDifficulty(filter) {
+            noteCards.forEach(card => {
+                const difficulty = card.getAttribute('data-difficulty');
+                
+                if (filter === 'all' || difficulty === filter) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Access course function
+        function accessCourse(courseId) {
+            // This function will be called when a user clicks "Access Notes"
+            // You can customize this to redirect to specific course pages
+            
+            const courseUrls = {
+                'python-chinese': 'python/p3/index.html',
+                'apcs-reviewer': 'notes/coming-soon.html',
+                'python-elementary': 'notes/coming-soon.html',
+                'scratch-kids': 'notes/coming-soon.html',
+                'cpp-programming': 'notes/coming-soon.html',
+                'pygame-games': 'notes/coming-soon.html',
+                'office-tools': 'notes/coming-soon.html'
+            };
+            
+            // Check if course URL exists
+            if (courseUrls[courseId]) {
+                // For courses that redirect to coming-soon page, you might want to pass the course info
+                if (courseUrls[courseId] === 'coming-soon.html') {
+                    // Add course parameter to coming soon page
+                    window.location.href = `coming-soon.html?course=${courseId}`;
+                } else {
+                    // Direct navigation to course notes
+                    window.location.href = courseUrls[courseId];
+                }
+            } else {
+                // Fallback for unknown course IDs
+                console.error('Course not found:', courseId);
+                window.location.href = 'coming-soon.html';
+            }
+        }
+
+        // Animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all note cards for animation
+        document.querySelectorAll('.note-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

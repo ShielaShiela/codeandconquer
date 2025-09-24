@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Loops - APCS Review</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .progress-container {
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 4px;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            height: 20px;
+            background: linear-gradient(90deg, #4facfe, #00f2fe);
+            border-radius: 16px;
+            width: 0%;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .question-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .question-number {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            overflow-x: auto;
+            border-left: 4px solid #4facfe;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .option {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .option:hover {
+            border-color: #4facfe;
+            background: #ebf8ff;
+        }
+
+        .option.selected {
+            background: #4facfe;
+            color: white;
+            border-color: #4facfe;
+        }
+
+        .option.correct {
+            background: #48bb78;
+            color: white;
+            border-color: #48bb78;
+        }
+
+        .option.incorrect {
+            background: #f56565;
+            color: white;
+            border-color: #f56565;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.correct {
+            background: #c6f6d5;
+            color: #22543d;
+            border-left: 4px solid #48bb78;
+        }
+
+        .feedback.incorrect {
+            background: #fed7d7;
+            color: #742a2a;
+            border-left: 4px solid #f56565;
+        }
+
+        .score-display {
+            background: rgba(255,255,255,0.9);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .filter-tags {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tag {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tag:hover, .tag.active {
+            background: white;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐍 Python Loops Review</h1>
+            <p>Master for loops, while loops, and nested loops for AP Computer Science</p>
+        </div>
+
+        <div class="filter-tags">
+            <div class="tag active" data-filter="all">All Questions</div>
+            <div class="tag" data-filter="for">For Loops</div>
+            <div class="tag" data-filter="while">While Loops</div>
+            <div class="tag" data-filter="nested">Nested Loops</div>
+            <div class="tag" data-filter="range">Range Function</div>
+        </div>
+
+        <div class="controls">
+            <button class="btn" onclick="startQuiz()">Start Quiz</button>
+            <button class="btn" onclick="showRandomQuestion()">Random Question</button>
+            <button class="btn" onclick="resetQuiz()">Reset All</button>
+            <button class="btn" onclick="showAnswers()">Show All Answers</button>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar">
+                <div class="progress-text" id="progressText">0/20</div>
+            </div>
+        </div>
+
+        <div class="score-display" id="scoreDisplay">
+            <strong>Score: <span id="score">0</span>/20 | Correct: <span id="correct">0</span> | Incorrect: <span id="incorrect">0</span></strong>
+        </div>
+
+        <div id="questionsContainer">
+            <!-- Questions will be populated here -->
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                id: 1,
+                category: "for",
+                question: "What will be the output of this code?",
+                code: `for i in range(5):
+    print(i, end=" ")`,
+                options: ["0 1 2 3 4", "1 2 3 4 5", "0 1 2 3 4 5", "1 2 3 4"],
+                correct: 0,
+                explanation: "range(5) generates numbers from 0 to 4 (5 is excluded). The end=' ' parameter makes print output on the same line separated by spaces."
+            },
+            {
+                id: 2,
+                category: "while",
+                question: "How many times will this while loop execute?",
+                code: `count = 0
+while count < 3:
+    print("Hello")
+    count += 1`,
+                options: ["2 times", "3 times", "4 times", "Infinite times"],
+                correct: 1,
+                explanation: "The loop runs while count < 3. Starting at 0, it executes when count is 0, 1, and 2, then stops when count becomes 3."
+            },
+            {
+                id: 3,
+                category: "for",
+                question: "What does range(2, 8, 2) generate?",
+                code: `for num in range(2, 8, 2):
+    print(num, end=" ")`,
+                options: ["2 4 6", "2 4 6 8", "2 3 4 5 6 7", "4 6 8"],
+                correct: 0,
+                explanation: "range(start, stop, step) generates numbers from 2 to 8 (exclusive) with step 2: 2, 4, 6."
+            },
+            {
+                id: 4,
+                category: "nested",
+                question: "What will be the output of this nested loop?",
+                code: `for i in range(2):
+    for j in range(3):
+        print(f"{i},{j}", end=" ")
+    print()`,
+                options: ["0,0 0,1 0,2\n1,0 1,1 1,2", "0,0 1,1 2,2", "0,1,2 1,0,1,2", "0,0 0,1 1,0 1,1"],
+                correct: 0,
+                explanation: "The outer loop runs 2 times (i=0,1), inner loop runs 3 times for each outer iteration (j=0,1,2). print() creates new lines."
+            },
+            {
+                id: 5,
+                category: "for",
+                question: "What happens when iterating over a string?",
+                code: `word = "Python"
+for char in word:
+    print(char, end="-")`,
+                options: ["P-y-t-h-o-n-", "Python-", "P y t h o n", "Error"],
+                correct: 0,
+                explanation: "When iterating over a string, each character is accessed individually. The end='-' parameter adds a dash after each character."
+            },
+            {
+                id: 6,
+                category: "while",
+                question: "What will x equal after this loop?",
+                code: `x = 10
+while x > 5:
+    x -= 2
+print(x)`,
+                options: ["4", "5", "6", "3"],
+                correct: 0,
+                explanation: "x starts at 10, becomes 8, then 6, then 4. When x=4, the condition x > 5 is false, so the loop stops."
+            },
+            {
+                id: 7,
+                category: "range",
+                question: "What does range(10, 0, -2) produce?",
+                code: `for i in range(10, 0, -2):
+    print(i, end=" ")`,
+                options: ["10 8 6 4 2", "10 8 6 4 2 0", "8 6 4 2", "10 9 8 7 6 5 4 3 2 1"],
+                correct: 0,
+                explanation: "With a negative step (-2), range counts backwards from 10 to 0 (exclusive) by 2: 10, 8, 6, 4, 2."
+            },
+            {
+                id: 8,
+                category: "for",
+                question: "How do you iterate over both index and value?",
+                code: `fruits = ['apple', 'banana', 'cherry']
+for ?, ? in enumerate(fruits):
+    print(f"{?}: {?}")`,
+                options: ["i, fruit", "index, value", "Both A and B work", "fruit, i"],
+                correct: 2,
+                explanation: "enumerate() returns tuples of (index, value). You can use any variable names like (i, fruit) or (index, value)."
+            },
+            {
+                id: 9,
+                category: "nested",
+                question: "What pattern does this code create?",
+                code: `for i in range(3):
+    for j in range(i + 1):
+        print("*", end="")
+    print()`,
+                options: ["*\n**\n***", "***\n**\n*", "*\n*\n*", "* * *\n* *\n*"],
+                correct: 0,
+                explanation: "For i=0: prints 1 star, i=1: prints 2 stars, i=2: prints 3 stars. Creates a triangle pattern."
+            },
+            {
+                id: 10,
+                category: "while",
+                question: "What's wrong with this loop?",
+                code: `num = 1
+while num <= 5:
+    print(num)
+    # Missing something here`,
+                options: ["Nothing wrong", "Missing num += 1", "Missing break", "Wrong condition"],
+                correct: 1,
+                explanation: "Without incrementing num, it stays 1 forever, creating an infinite loop. Need 'num += 1' to eventually make the condition false."
+            },
+            {
+                id: 11,
+                category: "for",
+                question: "What does this list comprehension equivalent loop do?",
+                code: `squares = []
+for x in range(5):
+    squares.append(x ** 2)
+print(squares)`,
+                options: ["[0, 1, 4, 9, 16]", "[1, 4, 9, 16, 25]", "[0, 1, 2, 3, 4]", "[1, 2, 3, 4, 5]"],
+                correct: 0,
+                explanation: "Creates squares of numbers 0-4: 0²=0, 1²=1, 2²=4, 3²=9, 4²=16."
+            },
+            {
+                id: 12,
+                category: "while",
+                question: "When should you use a while loop instead of a for loop?",
+                code: `# Example scenarios:
+# A) Counting from 1 to 10
+# B) Reading until end of file
+# C) Iterating over a list
+# D) User input validation`,
+                options: ["A and C", "B and D", "A, B, and C", "All scenarios"],
+                correct: 1,
+                explanation: "While loops are best for unknown iterations: reading files until EOF, validating input until correct. For loops are better for known ranges or collections."
+            },
+            {
+                id: 13,
+                category: "nested",
+                question: "What will this multiplication table code output for i=2?",
+                code: `for i in range(1, 4):
+    for j in range(1, 4):
+        print(f"{i} x {j} = {i*j}")
+    print("---")`,
+                options: ["2 x 1 = 2\n2 x 2 = 4\n2 x 3 = 6", "2 x 2 = 4", "1 x 2 = 2\n2 x 2 = 4\n3 x 2 = 6", "All combinations"],
+                correct: 0,
+                explanation: "When i=2, the inner loop runs with j=1,2,3, producing: 2×1=2, 2×2=4, 2×3=6."
+            },
+            {
+                id: 14,
+                category: "for",
+                question: "What happens with an empty range?",
+                code: `for i in range(5, 5):
+    print("This will print")
+print("Done")`,
+                options: ["Prints 'This will print' once", "Prints 'Done' only", "Error occurs", "Infinite loop"],
+                correct: 1,
+                explanation: "range(5, 5) is empty because start equals stop. The loop body never executes, only 'Done' prints."
+            },
+            {
+                id: 15,
+                category: "while",
+                question: "What's the output of this countdown loop?",
+                code: `count = 3
+while count > 0:
+    print(f"T-minus {count}")
+    count -= 1
+print("Blast off!")`,
+                options: ["T-minus 3\nT-minus 2\nT-minus 1\nBlast off!", "T-minus 2\nT-minus 1\nBlast off!", "T-minus 3\nBlast off!", "Infinite loop"],
+                correct: 0,
+                explanation: "Loop runs while count > 0. Prints for count=3,2,1, then stops when count=0 and prints 'Blast off!'."
+            },
+            {
+                id: 16,
+                category: "nested",
+                question: "How many times does 'Hello' print in this nested structure?",
+                code: `for x in range(2):
+    for y in range(3):
+        for z in range(2):
+            print("Hello")`,
+                options: ["7 times", "12 times", "6 times", "2 times"],
+                correct: 1,
+                explanation: "Triple nested loop: 2 × 3 × 2 = 12 total iterations. Each level multiplies the iterations."
+            },
+            {
+                id: 17,
+                category: "for",
+                question: "What does this loop with else clause do?",
+                code: `for i in range(3):
+    print(i)
+else:
+    print("Loop completed normally")`,
+                options: ["Error - else not allowed", "Prints 0,1,2 then 'Loop completed normally'", "Only prints 'Loop completed normally'", "Prints 0,1,2 only"],
+                correct: 1,
+                explanation: "The else clause executes when a for loop completes normally (not broken). It runs after all iterations."
+            },
+            {
+                id: 18,
+                category: "range",
+                question: "What's the difference between these two range calls?",
+                code: `# Version A
+for i in range(len([1,2,3,4])):
+    print(i)
+
+# Version B  
+for i in range(4):
+    print(i)`,
+                options: ["A prints indices, B prints values", "Both print 0,1,2,3", "A is dynamic, B is static", "B and C are correct"],
+                correct: 3,
+                explanation: "Both print 0,1,2,3. Version A uses len() making it dynamic (adjusts to list size), Version B is hardcoded."
+            },
+            {
+                id: 19,
+                category: "while",
+                question: "What's a common mistake in this input validation?",
+                code: `password = input("Enter password: ")
+while password != "secret":
+    print("Wrong password")
+    # What's missing here?
+print("Access granted")`,
+                options: ["Nothing missing", "Missing password = input()", "Missing break statement", "Wrong comparison operator"],
+                correct: 1,
+                explanation: "Without asking for new input inside the loop, it becomes infinite if the first password is wrong. Need 'password = input()' in the loop."
+            },
+            {
+                id: 20,
+                category: "nested",
+                question: "What pattern does this code create?",
+                code: `size = 3
+for i in range(size):
+    for j in range(size):
+        if i == j:
+            print("X", end=" ")
+        else:
+            print("O", end=" ")
+    print()`,
+                options: ["X O O\nO X O\nO O X", "X X X\nO O O\nX X X", "O O O\nO O O\nO O O", "X O X\nO X O\nX O X"],
+                correct: 0,
+                explanation: "Creates a 3x3 grid where diagonal positions (i==j) are 'X' and others are 'O'. This forms an identity matrix pattern."
+            }
+        ];
+
+        let currentFilter = 'all';
+        let userAnswers = {};
+        let quizMode = false;
+
+        function initializeQuiz() {
+            renderQuestions();
+            updateProgress();
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            const filteredQuestions = currentFilter === 'all' 
+                ? questions 
+                : questions.filter(q => q.category === currentFilter);
+            
+            container.innerHTML = filteredQuestions.map(q => `
+                <div class="question-card" data-id="${q.id}">
+                    <div class="question-number">${q.id}</div>
+                    <div class="question-text">${q.question}</div>
+                    <div class="code-block">${q.code}</div>
+                    <div class="options">
+                        ${q.options.map((option, index) => `
+                            <div class="option" data-question="${q.id}" data-option="${index}">
+                                ${String.fromCharCode(65 + index)}) ${option}
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="feedback" id="feedback-${q.id}">
+                        <strong>Explanation:</strong> ${q.explanation}
+                    </div>
+                </div>
+            `).join('');
+
+            // Add click handlers
+            document.querySelectorAll('.option').forEach(option => {
+                option.addEventListener('click', handleAnswer);
+            });
+        }
+
+        function handleAnswer(e) {
+            const questionId = parseInt(e.target.dataset.question);
+            const selectedOption = parseInt(e.target.dataset.option);
+            const question = questions.find(q => q.id === questionId);
+            
+            // Remove previous selections
+            document.querySelectorAll(`[data-question="${questionId}"]`).forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Mark selection
+            e.target.classList.add('selected');
+            userAnswers[questionId] = selectedOption;
+            
+            // Show correct answer and feedback
+            const isCorrect = selectedOption === question.correct;
+            e.target.classList.add(isCorrect ? 'correct' : 'incorrect');
+            
+            if (!isCorrect) {
+                document.querySelector(`[data-question="${questionId}"][data-option="${question.correct}"]`)
+                    .classList.add('correct');
+            }
+            
+            const feedback = document.getElementById(`feedback-${questionId}`);
+            feedback.classList.add('show', isCorrect ? 'correct' : 'incorrect');
+            
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const answered = Object.keys(userAnswers).length;
+            const total = questions.length;
+            const percentage = (answered / total) * 100;
+            
+            document.getElementById('progressBar').style.width = `${percentage}%`;
+            document.getElementById('progressText').textContent = `${answered}/${total}`;
+            
+            const correct = Object.entries(userAnswers).filter(([qId, answer]) => 
+                questions.find(q => q.id === parseInt(qId)).correct === answer
+            ).length;
+            const incorrect = answered - correct;
+            
+            document.getElementById('score').textContent = correct;
+            document.getElementById('correct').textContent = correct;
+            document.getElementById('incorrect').textContent = incorrect;
+        }
+
+        function startQuiz() {
+            quizMode = true;
+            resetQuiz();
+            alert('Quiz mode activated! Answer all questions to see your final score.');
+        }
+
+        function showRandomQuestion() {
+            const randomQ = questions[Math.floor(Math.random() * questions.length)];
+            document.querySelector(`[data-id="${randomQ.id}"]`).scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+        }
+
+        function resetQuiz() {
+            userAnswers = {};
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            document.querySelectorAll('.feedback').forEach(fb => {
+                fb.classList.remove('show', 'correct', 'incorrect');
+            });
+            updateProgress();
+        }
+
+        function showAnswers() {
+            questions.forEach(q => {
+                const correctOption = document.querySelector(`[data-question="${q.id}"][data-option="${q.correct}"]`);
+                correctOption.classList.add('correct');
+                const feedback = document.getElementById(`feedback-${q.id}`);
+                feedback.classList.add('show', 'correct');
+            });
+        }
+
+        // Filter functionality
+        document.querySelectorAll('.tag').forEach(tag => {
+            tag.addEventListener('click', (e) => {
+                document.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
+                e.target.classList.add('active');
+                currentFilter = e.target.dataset.filter;
+                renderQuestions();
+            });
+        });
+
+        // Initialize on load
+        initializeQuiz();
+    </script>
+</body>
+</html>
