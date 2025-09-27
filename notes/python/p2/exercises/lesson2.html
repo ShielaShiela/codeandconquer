@@ -93,15 +93,50 @@
         }
 
         .code-box {
-            background: #2d3436;
-            color: #00ff88;
+            background: #ffffff;
+            color: #000000;
             padding: 20px;
-            border-radius: 10px;
-            font-family: monospace;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
             font-size: 1.1rem;
             margin: 15px 0;
             white-space: pre-wrap;
-            border: 3px solid #6b73ff;
+            border: 2px solid #c0c0c0;
+            box-shadow: inset 1px 1px 3px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .code-box::before {
+            content: "🐍 Python IDLE";
+            position: absolute;
+            top: -15px;
+            left: 15px;
+            background: #f0f0f0;
+            padding: 5px 15px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #333;
+            border: 1px solid #c0c0c0;
+        }
+
+        .python-prompt {
+            color: #000080;
+            font-weight: bold;
+        }
+
+        .python-string {
+            color: #008000;
+        }
+
+        .python-keyword {
+            color: #ff7700;
+            font-weight: bold;
+        }
+
+        .python-comment {
+            color: #dd0000;
+            font-style: italic;
         }
 
         .answer-section {
@@ -285,10 +320,11 @@
         <div id="section0" class="section active">
             <div class="question" data-answer="+">
                 <h3>🧮 Question 1: Adding numbers together</h3>
-                <div class="code-box">I have 5 apples and I get 3 more apples.
-How many apples do I have now?
+                <div class="code-box"><span class="python-comment"># I have 5 apples and I get 3 more apples.
+# How many apples do I have now?</span>
 
-apples = 5 _____ 3</div>
+<span class="python-prompt">>>> </span>apples = 5 _____ 3
+<span class="python-prompt">>>> </span><span class="python-keyword">print</span>(apples)</div>
                 <div class="answer-section">
                     <label>What goes in the blank? (Hint: We're adding!)</label>
                     <input type="text" class="answer-input" placeholder="Type here">
@@ -298,10 +334,11 @@ apples = 5 _____ 3</div>
 
             <div class="question" data-answer="-">
                 <h3>🍪 Question 2: Taking away</h3>
-                <div class="code-box">I had 10 cookies and ate 4 cookies.
-How many cookies are left?
+                <div class="code-box"><span class="python-comment"># I had 10 cookies and ate 4 cookies.
+# How many cookies are left?</span>
 
-cookies = 10 _____ 4</div>
+<span class="python-prompt">>>> </span>cookies = 10 _____ 4
+<span class="python-prompt">>>> </span><span class="python-keyword">print</span>(cookies)</div>
                 <div class="answer-section">
                     <label>What goes in the blank? (Hint: We're taking away!)</label>
                     <input type="text" class="answer-input" placeholder="Type here">
@@ -311,10 +348,11 @@ cookies = 10 _____ 4</div>
 
             <div class="question" data-answer="*">
                 <h3>🎁 Question 3: Groups of things</h3>
-                <div class="code-box">I have 4 boxes and each box has 3 toys.
-How many toys do I have in total?
+                <div class="code-box"><span class="python-comment"># I have 4 boxes and each box has 3 toys.
+# How many toys do I have in total?</span>
 
-toys = 4 _____ 3</div>
+<span class="python-prompt">>>> </span>toys = 4 _____ 3
+<span class="python-prompt">>>> </span><span class="python-keyword">print</span>(toys)</div>
                 <div class="answer-section">
                     <label>What goes in the blank? (Hint: Use * for "times"!)</label>
                     <input type="text" class="answer-input" placeholder="Type here">
@@ -324,9 +362,10 @@ toys = 4 _____ 3</div>
 
             <div class="question" data-answer=">">
                 <h3>📏 Question 4: Which is bigger?</h3>
-                <div class="code-box">Is 8 bigger than 5?
+                <div class="code-box"><span class="python-comment"># Is 8 bigger than 5?</span>
 
-result = 8 _____ 5</div>
+<span class="python-prompt">>>> </span>result = 8 _____ 5
+<span class="python-prompt">>>> </span><span class="python-keyword">print</span>(result)</div>
                 <div class="answer-section">
                     <label>What goes in the blank? (Hint: Which way does the mouth point?)</label>
                     <input type="text" class="answer-input" placeholder="Type here">
@@ -336,9 +375,10 @@ result = 8 _____ 5</div>
 
             <div class="question" data-answer="<">
                 <h3>📐 Question 5: Which is smaller?</h3>
-                <div class="code-box">Is 3 smaller than 7?
+                <div class="code-box"><span class="python-comment"># Is 3 smaller than 7?</span>
 
-result = 3 _____ 7</div>
+<span class="python-prompt">>>> </span>result = 3 _____ 7
+<span class="python-prompt">>>> </span><span class="python-keyword">print</span>(result)</div>
                 <div class="answer-section">
                     <label>What goes in the blank? (Hint: The mouth points to the bigger number!)</label>
                     <input type="text" class="answer-input" placeholder="Type here">
@@ -348,9 +388,10 @@ result = 3 _____ 7</div>
 
             <div class="question" data-answer="==">
                 <h3>⚖️ Question 6: Are they the same?</h3>
-                <div class="code-box">Are these two numbers the same?
+                <div class="code-box"><span class="python-comment"># Are these two numbers the same?</span>
 
-result = 6 _____ 6</div>
+<span class="python-prompt">>>> </span>result = 6 _____ 6
+<span class="python-prompt">>>> </span><span class="python-keyword">print</span>(result)</div>
                 <div class="answer-section">
                     <label>What goes in the blank? (Hint: Use == for "equal"!)</label>
                     <input type="text" class="answer-input" placeholder="Type here">
@@ -363,9 +404,9 @@ result = 6 _____ 6</div>
         <div id="section1" class="section">
             <div class="question" data-answer="if">
                 <h3>🌦️ Question 7: If it's sunny...</h3>
-                <div class="code-box">_____ (weather == "sunny") {
-    console.log("Let's go to the park!");
-}</div>
+                <div class="code-box"><span class="python-prompt">>>> </span>_____ weather == <span class="python-string">"sunny"</span>:
+<span class="python-prompt">... </span>    <span class="python-keyword">print</span>(<span class="python-string">"Let's go to the park!"</span>)
+<span class="python-prompt">... </span></div>
                 <div class="answer-section">
                     <label>What word starts the decision? (Hint: It's a 2-letter word!)</label>
                     <input type="text" class="answer-input" placeholder="Type here">
@@ -375,11 +416,11 @@ result = 6 _____ 6</div>
 
             <div class="question" data-answer="else">
                 <h3>🎮 Question 8: What if not?</h3>
-                <div class="code-box">if (homework == "done") {
-    console.log("You can play games!");
-} _____ {
-    console.log("Finish homework first!");
-}</div>
+                <div class="code-box"><span class="python-prompt">>>> </span><span class="python-keyword">if</span> homework == <span class="python-string">"done"</span>:
+<span class="python-prompt">... </span>    <span class="python-keyword">print</span>(<span class="python-string">"You can play games!"</span>)
+<span class="python-prompt">... </span>_____:
+<span class="python-prompt">... </span>    <span class="python-keyword">print</span>(<span class="python-string">"Finish homework first!"</span>)
+<span class="python-prompt">... </span></div>
                 <div class="answer-section">
                     <label>What word means "if not"? (Hint: 4 letters!)</label>
                     <input type="text" class="answer-input" placeholder="Type here">
@@ -387,15 +428,15 @@ result = 6 _____ 6</div>
                 <div class="feedback" style="display: none;"></div>
             </div>
 
-            <div class="question" data-answer="if">
+            <div class="question" data-answer="elif">
                 <h3>🍦 Question 9: Another choice</h3>
-                <div class="code-box">if (age > 12) {
-    console.log("You're a teenager!");
-} else _____ (age > 5) {
-    console.log("You're a kid!");
-}</div>
+                <div class="code-box"><span class="python-prompt">>>> </span><span class="python-keyword">if</span> age > 12:
+<span class="python-prompt">... </span>    <span class="python-keyword">print</span>(<span class="python-string">"You're a teenager!"</span>)
+<span class="python-prompt">... </span>_____ age > 5:
+<span class="python-prompt">... </span>    <span class="python-keyword">print</span>(<span class="python-string">"You're a kid!"</span>)
+<span class="python-prompt">... </span></div>
                 <div class="answer-section">
-                    <label>What word makes another choice? (Same as question 7!)</label>
+                    <label>What word makes another choice? (Hint: It's "else if" together!)</label>
                     <input type="text" class="answer-input" placeholder="Type here">
                 </div>
                 <div class="feedback" style="display: none;"></div>
@@ -403,11 +444,10 @@ result = 6 _____ 6</div>
 
             <div class="question" data-answer="if">
                 <h3>🏠 Question 10: Inside another choice</h3>
-                <div class="code-box">if (day == "Saturday") {
-    _____ (weather == "nice") {
-        console.log("Perfect day for fun!");
-    }
-}</div>
+                <div class="code-box"><span class="python-prompt">>>> </span><span class="python-keyword">if</span> day == <span class="python-string">"Saturday"</span>:
+<span class="python-prompt">... </span>    _____ weather == <span class="python-string">"nice"</span>:
+<span class="python-prompt">... </span>        <span class="python-keyword">print</span>(<span class="python-string">"Perfect day for fun!"</span>)
+<span class="python-prompt">... </span></div>
                 <div class="answer-section">
                     <label>What word do we use inside? (Same word again!)</label>
                     <input type="text" class="answer-input" placeholder="Type here">
@@ -415,25 +455,25 @@ result = 6 _____ 6</div>
                 <div class="feedback" style="display: none;"></div>
             </div>
 
-            <div class="question" data-answer="&&">
+            <div class="question" data-answer="and">
                 <h3>🎂 Question 11: Both things must be true</h3>
-                <div class="code-box">if (age >= 8 _____ age <= 12) {
-    console.log("You're in elementary school!");
-}</div>
+                <div class="code-box"><span class="python-prompt">>>> </span><span class="python-keyword">if</span> age >= 8 _____ age <= 12:
+<span class="python-prompt">... </span>    <span class="python-keyword">print</span>(<span class="python-string">"You're in elementary school!"</span>)
+<span class="python-prompt">... </span></div>
                 <div class="answer-section">
-                    <label>What symbol means "AND"? (Hint: && means both must be true!)</label>
+                    <label>What word means "AND"? (Hint: Both must be true!)</label>
                     <input type="text" class="answer-input" placeholder="Type here">
                 </div>
                 <div class="feedback" style="display: none;"></div>
             </div>
 
-            <div class="question" data-answer="||">
+            <div class="question" data-answer="or">
                 <h3>🎉 Question 12: Either thing can be true</h3>
-                <div class="code-box">if (day == "Saturday" _____ day == "Sunday") {
-    console.log("It's the weekend!");
-}</div>
+                <div class="code-box"><span class="python-prompt">>>> </span><span class="python-keyword">if</span> day == <span class="python-string">"Saturday"</span> _____ day == <span class="python-string">"Sunday"</span>:
+<span class="python-prompt">... </span>    <span class="python-keyword">print</span>(<span class="python-string">"It's the weekend!"</span>)
+<span class="python-prompt">... </span></div>
                 <div class="answer-section">
-                    <label>What symbol means "OR"? (Hint: || means either can be true!)</label>
+                    <label>What word means "OR"? (Hint: Either can be true!)</label>
                     <input type="text" class="answer-input" placeholder="Type here">
                 </div>
                 <div class="feedback" style="display: none;"></div>
@@ -461,7 +501,7 @@ result = 6 _____ 6</div>
                 <li>Use the hints to help you!</li>
                 <li>Click "Check My Answers" when you're done</li>
                 <li>For math: + (plus), - (minus), * (times), > (bigger), < (smaller), == (equal)</li>
-                <li>For decisions: if, else, && (and), || (or)</li>
+                <li>For decisions: if, else, elif, and, or</li>
             </ul>
         </div>
     </div>
