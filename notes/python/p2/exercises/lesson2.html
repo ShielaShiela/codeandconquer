@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fun Coding Adventure for Kids!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #6b73ff;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .section-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            background: #6b73ff;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .question {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .question h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #2d3436;
+        }
+
+        .code-box {
+            background: #2d3436;
+            color: #00ff88;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 1.1rem;
+            margin: 15px 0;
+            white-space: pre-wrap;
+            border: 3px solid #6b73ff;
+        }
+
+        .answer-section {
+            margin: 20px 0;
+        }
+
+        .answer-section label {
+            display: block;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2d3436;
+        }
+
+        .answer-input {
+            padding: 12px 20px;
+            font-size: 1.2rem;
+            border: 3px solid #ddd;
+            border-radius: 10px;
+            width: 200px;
+            text-align: center;
+            font-weight: bold;
+            background: #fff;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: #6b73ff;
+            box-shadow: 0 0 10px rgba(107, 115, 255, 0.3);
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .correct {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+
+        .incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+        }
+
+        .btn-check {
+            background: #00b894;
+            color: white;
+        }
+
+        .btn-check:hover {
+            background: #00a085;
+            transform: scale(1.05);
+        }
+
+        .btn-reset {
+            background: #e17055;
+            color: white;
+        }
+
+        .btn-reset:hover {
+            background: #d63031;
+            transform: scale(1.05);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .score {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding: 20px;
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .emoji {
+            font-size: 2rem;
+            margin: 0 10px;
+        }
+
+        .instructions {
+            background: #e8f4f8;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 30px;
+            border-left: 5px solid #74b9ff;
+        }
+
+        .instructions h3 {
+            color: #0984e3;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .instructions ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .instructions li {
+            margin: 8px 0;
+            font-size: 1.1rem;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .instructions li:before {
+            content: "🎯";
+            position: absolute;
+            left: 0;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+                margin: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .tab {
+                padding: 10px 15px;
+                font-size: 1rem;
+            }
+            
+            .answer-input {
+                width: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Fun Coding Adventure! 🚀</h1>
+            <p>Help the computer understand what to do by filling in the missing pieces!</p>
+        </div>
+
+        <div class="section-tabs">
+            <button class="tab active" onclick="showSection(0)">
+                🔢 Numbers & Comparing
+            </button>
+            <button class="tab" onclick="showSection(1)">
+                🤔 Making Decisions
+            </button>
+        </div>
+
+        <!-- Section 1: Numbers and Comparing -->
+        <div id="section0" class="section active">
+            <div class="question" data-answer="+">
+                <h3>🧮 Question 1: Adding numbers together</h3>
+                <div class="code-box">I have 5 apples and I get 3 more apples.
+How many apples do I have now?
+
+apples = 5 _____ 3</div>
+                <div class="answer-section">
+                    <label>What goes in the blank? (Hint: We're adding!)</label>
+                    <input type="text" class="answer-input" placeholder="Type here">
+                </div>
+                <div class="feedback" style="display: none;"></div>
+            </div>
+
+            <div class="question" data-answer="-">
+                <h3>🍪 Question 2: Taking away</h3>
+                <div class="code-box">I had 10 cookies and ate 4 cookies.
+How many cookies are left?
+
+cookies = 10 _____ 4</div>
+                <div class="answer-section">
+                    <label>What goes in the blank? (Hint: We're taking away!)</label>
+                    <input type="text" class="answer-input" placeholder="Type here">
+                </div>
+                <div class="feedback" style="display: none;"></div>
+            </div>
+
+            <div class="question" data-answer="*">
+                <h3>🎁 Question 3: Groups of things</h3>
+                <div class="code-box">I have 4 boxes and each box has 3 toys.
+How many toys do I have in total?
+
+toys = 4 _____ 3</div>
+                <div class="answer-section">
+                    <label>What goes in the blank? (Hint: Use * for "times"!)</label>
+                    <input type="text" class="answer-input" placeholder="Type here">
+                </div>
+                <div class="feedback" style="display: none;"></div>
+            </div>
+
+            <div class="question" data-answer=">">
+                <h3>📏 Question 4: Which is bigger?</h3>
+                <div class="code-box">Is 8 bigger than 5?
+
+result = 8 _____ 5</div>
+                <div class="answer-section">
+                    <label>What goes in the blank? (Hint: Which way does the mouth point?)</label>
+                    <input type="text" class="answer-input" placeholder="Type here">
+                </div>
+                <div class="feedback" style="display: none;"></div>
+            </div>
+
+            <div class="question" data-answer="<">
+                <h3>📐 Question 5: Which is smaller?</h3>
+                <div class="code-box">Is 3 smaller than 7?
+
+result = 3 _____ 7</div>
+                <div class="answer-section">
+                    <label>What goes in the blank? (Hint: The mouth points to the bigger number!)</label>
+                    <input type="text" class="answer-input" placeholder="Type here">
+                </div>
+                <div class="feedback" style="display: none;"></div>
+            </div>
+
+            <div class="question" data-answer="==">
+                <h3>⚖️ Question 6: Are they the same?</h3>
+                <div class="code-box">Are these two numbers the same?
+
+result = 6 _____ 6</div>
+                <div class="answer-section">
+                    <label>What goes in the blank? (Hint: Use == for "equal"!)</label>
+                    <input type="text" class="answer-input" placeholder="Type here">
+                </div>
+                <div class="feedback" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- Section 2: Making Decisions -->
+        <div id="section1" class="section">
+            <div class="question" data-answer="if">
+                <h3>🌦️ Question 7: If it's sunny...</h3>
+                <div class="code-box">_____ (weather == "sunny") {
+    console.log("Let's go to the park!");
+}</div>
+                <div class="answer-section">
+                    <label>What word starts the decision? (Hint: It's a 2-letter word!)</label>
+                    <input type="text" class="answer-input" placeholder="Type here">
+                </div>
+                <div class="feedback" style="display: none;"></div>
+            </div>
+
+            <div class="question" data-answer="else">
+                <h3>🎮 Question 8: What if not?</h3>
+                <div class="code-box">if (homework == "done") {
+    console.log("You can play games!");
+} _____ {
+    console.log("Finish homework first!");
+}</div>
+                <div class="answer-section">
+                    <label>What word means "if not"? (Hint: 4 letters!)</label>
+                    <input type="text" class="answer-input" placeholder="Type here">
+                </div>
+                <div class="feedback" style="display: none;"></div>
+            </div>
+
+            <div class="question" data-answer="if">
+                <h3>🍦 Question 9: Another choice</h3>
+                <div class="code-box">if (age > 12) {
+    console.log("You're a teenager!");
+} else _____ (age > 5) {
+    console.log("You're a kid!");
+}</div>
+                <div class="answer-section">
+                    <label>What word makes another choice? (Same as question 7!)</label>
+                    <input type="text" class="answer-input" placeholder="Type here">
+                </div>
+                <div class="feedback" style="display: none;"></div>
+            </div>
+
+            <div class="question" data-answer="if">
+                <h3>🏠 Question 10: Inside another choice</h3>
+                <div class="code-box">if (day == "Saturday") {
+    _____ (weather == "nice") {
+        console.log("Perfect day for fun!");
+    }
+}</div>
+                <div class="answer-section">
+                    <label>What word do we use inside? (Same word again!)</label>
+                    <input type="text" class="answer-input" placeholder="Type here">
+                </div>
+                <div class="feedback" style="display: none;"></div>
+            </div>
+
+            <div class="question" data-answer="&&">
+                <h3>🎂 Question 11: Both things must be true</h3>
+                <div class="code-box">if (age >= 8 _____ age <= 12) {
+    console.log("You're in elementary school!");
+}</div>
+                <div class="answer-section">
+                    <label>What symbol means "AND"? (Hint: && means both must be true!)</label>
+                    <input type="text" class="answer-input" placeholder="Type here">
+                </div>
+                <div class="feedback" style="display: none;"></div>
+            </div>
+
+            <div class="question" data-answer="||">
+                <h3>🎉 Question 12: Either thing can be true</h3>
+                <div class="code-box">if (day == "Saturday" _____ day == "Sunday") {
+    console.log("It's the weekend!");
+}</div>
+                <div class="answer-section">
+                    <label>What symbol means "OR"? (Hint: || means either can be true!)</label>
+                    <input type="text" class="answer-input" placeholder="Type here">
+                </div>
+                <div class="feedback" style="display: none;"></div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-check" onclick="checkAnswers()">
+                ✨ Check My Answers! ✨
+            </button>
+            <button class="btn btn-reset" onclick="resetSection()">
+                🔄 Try Again
+            </button>
+        </div>
+
+        <div id="scoreDisplay" class="score" style="display: none;"></div>
+
+        <div class="instructions">
+            <h3>🎯 How to Play</h3>
+            <ul>
+                <li>Read each story or problem carefully</li>
+                <li>Look at the code and find the blank (_____)</li>
+                <li>Think about what symbol or word should go there</li>
+                <li>Type your answer in the box</li>
+                <li>Use the hints to help you!</li>
+                <li>Click "Check My Answers" when you're done</li>
+                <li>For math: + (plus), - (minus), * (times), > (bigger), < (smaller), == (equal)</li>
+                <li>For decisions: if, else, && (and), || (or)</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        let currentSection = 0;
+        let showingResults = false;
+
+        function showSection(sectionIndex) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            const tabs = document.querySelectorAll('.tab');
+            
+            sections.forEach(section => section.classList.remove('active'));
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected section
+            document.getElementById('section' + sectionIndex).classList.add('active');
+            tabs[sectionIndex].classList.add('active');
+            
+            currentSection = sectionIndex;
+            
+            // Reset when switching sections
+            if (showingResults) {
+                resetSection();
+            }
+        }
+
+        function checkAnswers() {
+            const currentQuestions = document.querySelectorAll('#section' + currentSection + ' .question');
+            let score = 0;
+            let total = currentQuestions.length;
+
+            currentQuestions.forEach(question => {
+                const input = question.querySelector('.answer-input');
+                const feedback = question.querySelector('.feedback');
+                const correctAnswer = question.getAttribute('data-answer');
+                const userAnswer = input.value.trim();
+
+                feedback.style.display = 'block';
+
+                if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+                    score++;
+                    feedback.className = 'feedback correct';
+                    feedback.innerHTML = '🎉 Awesome! You got it right! The answer is <strong>' + correctAnswer + '</strong>';
+                } else {
+                    feedback.className = 'feedback incorrect';
+                    feedback.innerHTML = '🤔 Not quite! The correct answer is <strong>' + correctAnswer + '</strong>. Try to remember this one!';
+                }
+                
+                input.disabled = true;
+            });
+
+            // Show score
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            scoreDisplay.style.display = 'block';
+            
+            let message = '';
+            if (score === total) {
+                message = '🌟 PERFECT SCORE! 🌟<br>You got all ' + score + ' out of ' + total + ' correct!<br>🎊 You\'re a coding superstar! 🎊';
+            } else if (score >= total * 0.8) {
+                message = '🎯 Great job! 🎯<br>You got ' + score + ' out of ' + total + ' correct!<br>🚀 You\'re almost there! 🚀';
+            } else if (score >= total * 0.5) {
+                message = '👍 Good try! 👍<br>You got ' + score + ' out of ' + total + ' correct!<br>💪 Keep practicing! 💪';
+            } else {
+                message = '🌱 Nice effort! 🌱<br>You got ' + score + ' out of ' + total + ' correct!<br>🎯 Don\'t give up, you\'re learning! 🎯';
+            }
+            
+            scoreDisplay.innerHTML = message;
+
+            // Disable check button
+            document.querySelector('.btn-check').disabled = true;
+            showingResults = true;
+        }
+
+        function resetSection() {
+            const currentQuestions = document.querySelectorAll('#section' + currentSection + ' .question');
+            
+            currentQuestions.forEach(question => {
+                const input = question.querySelector('.answer-input');
+                const feedback = question.querySelector('.feedback');
+                
+                input.value = '';
+                input.disabled = false;
+                feedback.style.display = 'none';
+            });
+
+            document.getElementById('scoreDisplay').style.display = 'none';
+            document.querySelector('.btn-check').disabled = false;
+            showingResults = false;
+        }
+
+        // Add some fun interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('.answer-input');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.style.transform = 'scale(1.05)';
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
