@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Programming Exam - Variables and Loops</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .exam-content {
+            padding: 30px;
+        }
+
+        .question-container {
+            margin-bottom: 30px;
+            padding: 25px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+
+        .question-container:hover {
+            border-color: #3498db;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.1);
+        }
+
+        .question-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .question-number {
+            background: #3498db;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .question-type {
+            background: #e74c3c;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .question-type.fill-blank {
+            background: #f39c12;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            white-space: pre;
+            margin: 10px 0;
+            overflow-x: auto;
+            border-left: 4px solid #3498db;
+        }
+
+        .options {
+            display: grid;
+            gap: 10px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .option:hover {
+            border-color: #3498db;
+            background: #f8f9fa;
+        }
+
+        .option.selected {
+            border-color: #3498db;
+            background: #e3f2fd;
+        }
+
+        .option.correct {
+            border-color: #27ae60;
+            background: #d5f4e6;
+        }
+
+        .option.incorrect {
+            border-color: #e74c3c;
+            background: #fdeaea;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .fill-blank-input {
+            padding: 8px 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            width: 150px;
+            margin: 0 5px;
+        }
+
+        .fill-blank-input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .fill-blank-input.correct {
+            border-color: #27ae60;
+            background: #d5f4e6;
+        }
+
+        .fill-blank-input.incorrect {
+            border-color: #e74c3c;
+            background: #fdeaea;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-submit:hover {
+            background: #219a52;
+            transform: translateY(-2px);
+        }
+
+        .btn-reset {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-reset:hover {
+            background: #7f8c8d;
+            transform: translateY(-2px);
+        }
+
+        .results {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .results.show {
+            background: #d5f4e6;
+            border: 2px solid #27ae60;
+            color: #27ae60;
+        }
+
+        .explanation {
+            margin-top: 15px;
+            padding: 15px;
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #856404;
+            display: none;
+        }
+
+        .explanation.show {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .exam-content {
+                padding: 20px;
+            }
+            
+            .question-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>☕ Java Programming Exam</h1>
+            <p>Variables and Loops Assessment</p>
+        </div>
+
+        <div class="exam-content">
+            <!-- Question 1: Multiple Choice -->
+            <div class="question-container" data-question="1">
+                <div class="question-header">
+                    <div class="question-number">1</div>
+                    <div class="question-type">Multiple Choice</div>
+                </div>
+                <div class="question-text">Which of the following is the correct way to declare an integer variable in Java?</div>
+                <div class="options">
+                    <div class="option" data-value="a">
+                        <input type="radio" name="q1" value="a">
+                        <span>integer x = 10;</span>
+                    </div>
+                    <div class="option" data-value="b">
+                        <input type="radio" name="q1" value="b">
+                        <span>int x = 10;</span>
+                    </div>
+                    <div class="option" data-value="c">
+                        <input type="radio" name="q1" value="c">
+                        <span>Integer x = 10;</span>
+                    </div>
+                    <div class="option" data-value="d">
+                        <input type="radio" name="q1" value="d">
+                        <span>var x = 10;</span>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <strong>Explanation:</strong> In Java, 'int' is the primitive data type for integers. While 'Integer' is the wrapper class and 'var' can be used for type inference (Java 10+), 'int x = 10;' is the most direct and common way to declare an integer variable.
+                </div>
+            </div>
+
+            <!-- Question 2: Fill in the blank -->
+            <div class="question-container" data-question="2">
+                <div class="question-header">
+                    <div class="question-number">2</div>
+                    <div class="question-type fill-blank">Fill in the Blank</div>
+                </div>
+                <div class="question-text">Complete the for loop to print numbers from 1 to 5:</div>
+                <div class="code-block">
+for (<input type="text" class="fill-blank-input" data-answer="int i = 1" placeholder="initialization">;
+     <input type="text" class="fill-blank-input" data-answer="i <= 5" placeholder="condition">;
+     <input type="text" class="fill-blank-input" data-answer="i++" placeholder="increment">) {
+    System.out.println(i);
+}
+                </div>
+                <div class="explanation">
+                    <strong>Explanation:</strong> A for loop has three parts: initialization (int i = 1), condition (i <= 5), and increment/decrement (i++). The initialization sets the starting value, the condition determines when to stop, and the increment updates the variable after each iteration.
+                </div>
+            </div>
+
+            <!-- Question 3: Multiple Choice -->
+            <div class="question-container" data-question="3">
+                <div class="question-header">
+                    <div class="question-number">3</div>
+                    <div class="question-type">Multiple Choice</div>
+                </div>
+                <div class="question-text">What will be the output of the following code?</div>
+                <div class="code-block">
+int x = 5;
+int y = ++x;
+System.out.println("x = " + x + ", y = " + y);
+                </div>
+                <div class="options">
+                    <div class="option" data-value="a">
+                        <input type="radio" name="q3" value="a">
+                        <span>x = 5, y = 5</span>
+                    </div>
+                    <div class="option" data-value="b">
+                        <input type="radio" name="q3" value="b">
+                        <span>x = 6, y = 6</span>
+                    </div>
+                    <div class="option" data-value="c">
+                        <input type="radio" name="q3" value="c">
+                        <span>x = 6, y = 5</span>
+                    </div>
+                    <div class="option" data-value="d">
+                        <input type="radio" name="q3" value="d">
+                        <span>x = 5, y = 6</span>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <strong>Explanation:</strong> The pre-increment operator (++x) increments x first, then returns the new value. So x becomes 6, and y gets the value 6. If it were post-increment (x++), then y would get the old value of x before incrementing.
+                </div>
+            </div>
+
+            <!-- Question 4: Fill in the blank -->
+            <div class="question-container" data-question="4">
+                <div class="question-header">
+                    <div class="question-number">4</div>
+                    <div class="question-type fill-blank">Fill in the Blank</div>
+                </div>
+                <div class="question-text">Complete the while loop to count down from 10 to 1:</div>
+                <div class="code-block">
+int count = <input type="text" class="fill-blank-input" data-answer="10" placeholder="start value">;
+<input type="text" class="fill-blank-input" data-answer="while" placeholder="loop type"> (count >= <input type="text" class="fill-blank-input" data-answer="1" placeholder="end value">) {
+    System.out.println(count);
+    <input type="text" class="fill-blank-input" data-answer="count--" placeholder="decrement">;
+}
+                </div>
+                <div class="explanation">
+                    <strong>Explanation:</strong> A while loop continues as long as the condition is true. Here we start with count = 10, check if count >= 1, print the value, then decrement count using count-- or --count.
+                </div>
+            </div>
+
+            <!-- Question 5: Multiple Choice -->
+            <div class="question-container" data-question="5">
+                <div class="question-header">
+                    <div class="question-number">5</div>
+                    <div class="question-type">Multiple Choice</div>
+                </div>
+                <div class="question-text">Which loop will execute at least once, even if the condition is false from the beginning?</div>
+                <div class="options">
+                    <div class="option" data-value="a">
+                        <input type="radio" name="q5" value="a">
+                        <span>for loop</span>
+                    </div>
+                    <div class="option" data-value="b">
+                        <input type="radio" name="q5" value="b">
+                        <span>while loop</span>
+                    </div>
+                    <div class="option" data-value="c">
+                        <input type="radio" name="q5" value="c">
+                        <span>do-while loop</span>
+                    </div>
+                    <div class="option" data-value="d">
+                        <input type="radio" name="q5" value="d">
+                        <span>enhanced for loop</span>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <strong>Explanation:</strong> A do-while loop checks the condition after executing the loop body, ensuring it runs at least once. Other loops check the condition before executing, so they might not run at all if the condition is initially false.
+                </div>
+            </div>
+
+            <!-- Question 6: Fill in the blank -->
+            <div class="question-container" data-question="6">
+                <div class="question-header">
+                    <div class="question-number">6</div>
+                    <div class="question-type fill-blank">Fill in the Blank</div>
+                </div>
+                <div class="question-text">Declare and initialize a double variable with the value 3.14159:</div>
+                <div class="code-block">
+<input type="text" class="fill-blank-input" data-answer="double" placeholder="data type"> pi = <input type="text" class="fill-blank-input" data-answer="3.14159" placeholder="value">;
+                </div>
+                <div class="explanation">
+                    <strong>Explanation:</strong> 'double' is used for double-precision floating-point numbers in Java. It can store decimal values with high precision, making it suitable for mathematical constants like pi.
+                </div>
+            </div>
+
+            <!-- Question 7: Multiple Choice -->
+            <div class="question-container" data-question="7">
+                <div class="question-header">
+                    <div class="question-number">7</div>
+                    <div class="question-type">Multiple Choice</div>
+                </div>
+                <div class="question-text">How many times will this loop execute?</div>
+                <div class="code-block">
+for (int i = 0; i < 10; i += 2) {
+    System.out.println(i);
+}
+                </div>
+                <div class="options">
+                    <div class="option" data-value="a">
+                        <input type="radio" name="q7" value="a">
+                        <span>5 times</span>
+                    </div>
+                    <div class="option" data-value="b">
+                        <input type="radio" name="q7" value="b">
+                        <span>10 times</span>
+                    </div>
+                    <div class="option" data-value="c">
+                        <input type="radio" name="q7" value="c">
+                        <span>4 times</span>
+                    </div>
+                    <div class="option" data-value="d">
+                        <input type="radio" name="q7" value="d">
+                        <span>6 times</span>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <strong>Explanation:</strong> The loop starts with i = 0 and increments by 2 each time (i += 2). It will execute for i = 0, 2, 4, 6, 8 (5 iterations). When i becomes 10, the condition i < 10 becomes false.
+                </div>
+            </div>
+
+            <!-- Question 8: Fill in the blank -->
+            <div class="question-container" data-question="8">
+                <div class="question-header">
+                    <div class="question-number">8</div>
+                    <div class="question-type fill-blank">Fill in the Blank</div>
+                </div>
+                <div class="question-text">Complete the variable declarations with appropriate data types:</div>
+                <div class="code-block">
+<input type="text" class="fill-blank-input" data-answer="String" placeholder="text type"> name = "Java";
+<input type="text" class="fill-blank-input" data-answer="boolean" placeholder="true/false type"> isActive = true;
+<input type="text" class="fill-blank-input" data-answer="char" placeholder="single character type"> grade = 'A';
+                </div>
+                <div class="explanation">
+                    <strong>Explanation:</strong> String is used for text/sequences of characters, boolean for true/false values, and char for single characters. Note that String starts with capital S (it's a class), while boolean and char are primitive types.
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-submit" onclick="submitExam()">Submit Exam</button>
+                <button class="btn btn-reset" onclick="resetExam()">Reset</button>
+            </div>
+
+            <div class="results" id="results"></div>
+        </div>
+    </div>
+
+    <script>
+        const answers = {
+            q1: 'b',
+            q3: 'b',
+            q5: 'c',
+            q7: 'a'
+        };
+
+        const fillBlankAnswers = {
+            2: ['int i = 1', 'i <= 5', 'i++'],
+            4: ['10', 'while', '1', 'count--'],
+            6: ['double', '3.14159'],
+            8: ['String', 'boolean', 'char']
+        };
+
+        // Handle option selection
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.option')) {
+                const option = e.target.closest('.option');
+                const questionContainer = option.closest('.question-container');
+                const radioInput = option.querySelector('input[type="radio"]');
+                
+                // Clear previous selections
+                questionContainer.querySelectorAll('.option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                // Select current option
+                option.classList.add('selected');
+                radioInput.checked = true;
+            }
+        });
+
+        function submitExam() {
+            let score = 0;
+            let totalQuestions = 8;
+            
+            // Check multiple choice questions
+            Object.keys(answers).forEach(questionId => {
+                const selectedOption = document.querySelector(`input[name="${questionId}"]:checked`);
+                const questionContainer = document.querySelector(`[data-question="${questionId.slice(1)}"]`);
+                const options = questionContainer.querySelectorAll('.option');
+                
+                options.forEach(option => {
+                    const value = option.dataset.value;
+                    if (value === answers[questionId]) {
+                        option.classList.add('correct');
+                    } else if (selectedOption && option.querySelector('input').checked && value !== answers[questionId]) {
+                        option.classList.add('incorrect');
+                    }
+                });
+                
+                if (selectedOption && selectedOption.value === answers[questionId]) {
+                    score++;
+                }
+            });
+            
+            // Check fill-in-the-blank questions
+            Object.keys(fillBlankAnswers).forEach(questionNum => {
+                const questionContainer = document.querySelector(`[data-question="${questionNum}"]`);
+                const inputs = questionContainer.querySelectorAll('.fill-blank-input');
+                const correctAnswers = fillBlankAnswers[questionNum];
+                let allCorrect = true;
+                
+                inputs.forEach((input, index) => {
+                    const userAnswer = input.value.trim();
+                    const correctAnswer = correctAnswers[index];
+                    
+                    // Flexible checking for common variations
+                    const isCorrect = checkAnswer(userAnswer, correctAnswer);
+                    
+                    if (isCorrect) {
+                        input.classList.add('correct');
+                    } else {
+                        input.classList.add('incorrect');
+                        allCorrect = false;
+                    }
+                });
+                
+                if (allCorrect) {
+                    score++;
+                }
+            });
+            
+            // Show results
+            const percentage = Math.round((score / totalQuestions) * 100);
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.classList.add('show');
+            resultsDiv.innerHTML = `
+                <div>Your Score: ${score}/${totalQuestions} (${percentage}%)</div>
+                <div style="margin-top: 10px; font-size: 1rem;">
+                    ${percentage >= 80 ? '🎉 Excellent work!' : 
+                      percentage >= 60 ? '👍 Good job!' : 
+                      '📚 Keep practicing!'}
+                </div>
+            `;
+            
+            // Show explanations
+            document.querySelectorAll('.explanation').forEach(exp => {
+                exp.classList.add('show');
+            });
+            
+            // Scroll to results
+            resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function checkAnswer(userAnswer, correctAnswer) {
+            // Normalize answers for comparison
+            const normalize = (str) => str.toLowerCase().replace(/\s+/g, '').replace(/[;]/g, '');
+            
+            const normalizedUser = normalize(userAnswer);
+            const normalizedCorrect = normalize(correctAnswer);
+            
+            // Check for exact match or common variations
+            if (normalizedUser === normalizedCorrect) return true;
+            
+            // Special cases for common variations
+            if (correctAnswer === 'i++' && (userAnswer === '++i' || userAnswer === 'i += 1' || userAnswer === 'i = i + 1')) return true;
+            if (correctAnswer === 'count--' && (userAnswer === '--count' || userAnswer === 'count -= 1' || userAnswer === 'count = count - 1')) return true;
+            if (correctAnswer === 'int i = 1' && normalize(userAnswer) === normalize('i = 1')) return true;
+            
+            return false;
+        }
+
+        function resetExam() {
+            // Clear all selections and inputs
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.checked = false;
+            });
+            
+            document.querySelectorAll('.fill-blank-input').forEach(input => {
+                input.value = '';
+                input.classList.remove('correct', 'incorrect');
+            });
+            
+            document.querySelectorAll('.option').forEach(option => {
+                option.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Hide results and explanations
+            document.getElementById('results').classList.remove('show');
+            document.getElementById('results').innerHTML = '';
+            
+            document.querySelectorAll('.explanation').forEach(exp => {
+                exp.classList.remove('show');
+            });
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

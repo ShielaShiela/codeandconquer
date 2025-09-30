@@ -1,0 +1,490 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Loop Debugging Exercise</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: none;
+        }
+
+        .question-card.active {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .question-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .code-block {
+            background: #f5f5f5;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+
+        .code-line {
+            line-height: 1.6;
+        }
+
+        .options {
+            display: grid;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .option {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.05em;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: #e8eeff;
+        }
+
+        .option.correct {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        .option.incorrect {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            color: #155724;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            color: #721c24;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            justify-content: space-between;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.05em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-submit:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-next {
+            background: #28a745;
+            color: white;
+            display: none;
+        }
+
+        .btn-next:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .progress-bar {
+            background: white;
+            border-radius: 20px;
+            height: 30px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #28a745, #20c997);
+            height: 100%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .results {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            display: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .results.show {
+            display: block;
+        }
+
+        .results h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .score {
+            font-size: 4em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 20px 0;
+        }
+
+        .btn-restart {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-top: 20px;
+        }
+
+        .btn-restart:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐛 Java Loop Debugging Challenge</h1>
+            <p>Find and fix the bugs in these for and while loops!</p>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar">0 / 5</div>
+        </div>
+
+        <div id="questionsContainer"></div>
+
+        <div class="results" id="results">
+            <h2>🎉 Quiz Complete!</h2>
+            <div class="score" id="finalScore"></div>
+            <p style="font-size: 1.2em; color: #666; margin-top: 20px;">Great job debugging those loops!</p>
+            <button class="btn btn-restart" onclick="restartQuiz()">Try Again</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "What's wrong with this for loop that should print numbers 1 to 5?",
+                code: `for (int i = 1; i <= 5; i--) {
+    System.out.println(i);
+}`,
+                options: [
+                    "i-- should be i++",
+                    "i <= 5 should be i < 5",
+                    "int i = 1 should be int i = 0",
+                    "Nothing is wrong"
+                ],
+                correct: 0,
+                explanation: "The loop uses i--, which decrements i instead of incrementing it. This creates an infinite loop going backwards. It should be i++ to increment and print 1 through 5."
+            },
+            {
+                question: "This while loop should print numbers 0 to 4. What's the bug?",
+                code: `int i = 0;
+while (i < 5) {
+    System.out.println(i);
+}`,
+                options: [
+                    "while (i < 5) should be while (i <= 5)",
+                    "Missing i++ inside the loop",
+                    "int i = 0 should be int i = 1",
+                    "System.out.println(i) should be System.out.print(i)"
+                ],
+                correct: 1,
+                explanation: "The loop never increments i, so it will run infinitely printing 0. We need to add i++ inside the loop body to increment the counter."
+            },
+            {
+                question: "This for loop should sum numbers 1 to 10. What's incorrect?",
+                code: `int sum = 0;
+for (int i = 1; i < 10; i++) {
+    sum += i;
+}
+System.out.println(sum);`,
+                options: [
+                    "sum += i should be sum = sum + 1",
+                    "i < 10 should be i <= 10",
+                    "int i = 1 should be int i = 0",
+                    "The code is correct"
+                ],
+                correct: 1,
+                explanation: "The condition i < 10 stops before 10, so it only sums 1 through 9. To include 10, we need i <= 10."
+            },
+            {
+                question: "What's wrong with this while loop that counts down from 5 to 1?",
+                code: `int count = 5;
+while (count > 0) {
+    System.out.println(count);
+    count++;
+}`,
+                options: [
+                    "count++ should be count--",
+                    "count > 0 should be count >= 0",
+                    "int count = 5 should be int count = 0",
+                    "while should be changed to for"
+                ],
+                correct: 0,
+                explanation: "To count down, we need to decrement count, not increment it. count++ increases the value, creating an infinite loop. It should be count--."
+            },
+            {
+                question: "This for loop should print even numbers from 0 to 10. What's the bug?",
+                code: `for (int i = 0; i <= 10; i++) {
+    if (i % 2 = 0) {
+        System.out.println(i);
+    }
+}`,
+                options: [
+                    "i <= 10 should be i < 10",
+                    "i % 2 = 0 should be i % 2 == 0",
+                    "i++ should be i += 2",
+                    "if should be while"
+                ],
+                correct: 1,
+                explanation: "The condition uses = (assignment) instead of == (comparison). i % 2 = 0 tries to assign 0 to i % 2, which is invalid. It should be i % 2 == 0 to check if i is even."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let selectedAnswer = null;
+
+        function initQuiz() {
+            const container = document.getElementById('questionsContainer');
+            questions.forEach((q, index) => {
+                const card = document.createElement('div');
+                card.className = 'question-card';
+                card.id = `question-${index}`;
+                if (index === 0) card.classList.add('active');
+
+                card.innerHTML = `
+                    <div class="question-number">Question ${index + 1} of ${questions.length}</div>
+                    <div class="question-text">${q.question}</div>
+                    <div class="code-block">${q.code.split('\n').map(line => 
+                        `<div class="code-line">${line}</div>`
+                    ).join('')}</div>
+                    <div class="options" id="options-${index}">
+                        ${q.options.map((opt, i) => 
+                            `<div class="option" onclick="selectOption(${index}, ${i})">${opt}</div>`
+                        ).join('')}
+                    </div>
+                    <div class="feedback" id="feedback-${index}"></div>
+                    <div class="buttons">
+                        <button class="btn btn-submit" id="submit-${index}" onclick="submitAnswer(${index})">Submit Answer</button>
+                        <button class="btn btn-next" id="next-${index}" onclick="nextQuestion()">Next Question</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function selectOption(questionIndex, optionIndex) {
+            if (document.getElementById(`feedback-${questionIndex}`).classList.contains('show')) {
+                return;
+            }
+
+            const options = document.querySelectorAll(`#options-${questionIndex} .option`);
+            options.forEach(opt => opt.classList.remove('selected'));
+            options[optionIndex].classList.add('selected');
+            selectedAnswer = optionIndex;
+            document.getElementById(`submit-${questionIndex}`).disabled = false;
+        }
+
+        function submitAnswer(questionIndex) {
+            if (selectedAnswer === null) return;
+
+            const question = questions[questionIndex];
+            const feedback = document.getElementById(`feedback-${questionIndex}`);
+            const options = document.querySelectorAll(`#options-${questionIndex} .option`);
+            const submitBtn = document.getElementById(`submit-${questionIndex}`);
+            const nextBtn = document.getElementById(`next-${questionIndex}`);
+
+            options.forEach(opt => opt.style.pointerEvents = 'none');
+            submitBtn.style.display = 'none';
+
+            if (selectedAnswer === question.correct) {
+                score++;
+                feedback.className = 'feedback correct show';
+                feedback.innerHTML = `<strong>✓ Correct!</strong><br>${question.explanation}`;
+                options[selectedAnswer].classList.add('correct');
+            } else {
+                feedback.className = 'feedback incorrect show';
+                feedback.innerHTML = `<strong>✗ Incorrect.</strong><br>${question.explanation}`;
+                options[selectedAnswer].classList.add('incorrect');
+                options[question.correct].classList.add('correct');
+            }
+
+            if (questionIndex < questions.length - 1) {
+                nextBtn.style.display = 'block';
+            } else {
+                nextBtn.textContent = 'See Results';
+                nextBtn.style.display = 'block';
+            }
+        }
+
+        function nextQuestion() {
+            document.getElementById(`question-${currentQuestion}`).classList.remove('active');
+            currentQuestion++;
+            
+            if (currentQuestion < questions.length) {
+                document.getElementById(`question-${currentQuestion}`).classList.add('active');
+                selectedAnswer = null;
+                updateProgress();
+            } else {
+                showResults();
+            }
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion) / questions.length) * 100;
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = progress + '%';
+            progressBar.textContent = `${currentQuestion} / ${questions.length}`;
+        }
+
+        function showResults() {
+            document.getElementById('questionsContainer').style.display = 'none';
+            document.querySelector('.progress-bar').style.display = 'none';
+            const results = document.getElementById('results');
+            const finalScore = document.getElementById('finalScore');
+            
+            finalScore.textContent = `${score} / ${questions.length}`;
+            results.classList.add('show');
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            selectedAnswer = null;
+            
+            document.getElementById('results').classList.remove('show');
+            document.getElementById('questionsContainer').style.display = 'block';
+            document.querySelector('.progress-bar').style.display = 'block';
+            
+            document.getElementById('questionsContainer').innerHTML = '';
+            initQuiz();
+            updateProgress();
+        }
+
+        initQuiz();
+        updateProgress();
+    </script>
+</body>
+</html>
