@@ -5,268 +5,351 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Java Programming Exam - Variables and Loops</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #2980b9, #3498db);
+    min-height: 100vh;
+    padding: 20px;
+}
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    overflow: hidden;
+}
 
-        .header {
-            background: linear-gradient(135deg, #2c3e50, #3498db);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
+.header {
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    color: white;
+    padding: 30px;
+    text-align: center;
+    position: relative;
+}
 
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
+.back-button {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
 
-        .header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
+.back-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-50%) translateX(-3px);
+}
 
-        .exam-content {
-            padding: 30px;
-        }
+.back-arrow {
+    font-size: 1.2rem;
+}
 
-        .question-container {
-            margin-bottom: 30px;
-            padding: 25px;
-            border: 2px solid #e9ecef;
-            border-radius: 10px;
-            background: #f8f9fa;
-            transition: all 0.3s ease;
-        }
+.header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
 
-        .question-container:hover {
-            border-color: #3498db;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.1);
-        }
+.header p {
+    font-size: 1.1rem;
+    opacity: 0.95;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
 
-        .question-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
+.exam-content {
+    padding: 30px;
+}
 
-        .question-number {
-            background: #3498db;
-            color: white;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            margin-right: 15px;
-        }
+.question-container {
+    margin-bottom: 30px;
+    padding: 25px;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    background: #f8fafc;
+    transition: all 0.3s ease;
+}
 
-        .question-type {
-            background: #e74c3c;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
+.question-container:hover {
+    border-color: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
 
-        .question-type.fill-blank {
-            background: #f39c12;
-        }
+.question-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
 
-        .question-text {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: #2c3e50;
-        }
+.question-number {
+    background: #2563eb;
+    color: white;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 15px;
+}
 
-        .code-block {
-            background: #2c3e50;
-            color: #ecf0f1;
-            padding: 15px;
-            border-radius: 8px;
-            font-family: 'Courier New', monospace;
-            white-space: pre;
-            margin: 10px 0;
-            overflow-x: auto;
-            border-left: 4px solid #3498db;
-        }
+.question-type {
+    background: #e74c3c;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
 
-        .options {
-            display: grid;
-            gap: 10px;
-        }
+.question-type.fill-blank {
+    background: #f39c12;
+}
 
-        .option {
-            display: flex;
-            align-items: center;
-            padding: 12px;
-            border: 2px solid #dee2e6;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: white;
-        }
+.question-text {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #1e293b;
+}
 
-        .option:hover {
-            border-color: #3498db;
-            background: #f8f9fa;
-        }
+.code-block {
+    background: #1e293b;
+    color: #ecf0f1;
+    padding: 15px;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    white-space: pre;
+    margin: 10px 0;
+    overflow-x: auto;
+    border-left: 4px solid #2563eb;
+}
 
-        .option.selected {
-            border-color: #3498db;
-            background: #e3f2fd;
-        }
+.options {
+    display: grid;
+    gap: 10px;
+}
 
-        .option.correct {
-            border-color: #27ae60;
-            background: #d5f4e6;
-        }
+.option {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: white;
+}
 
-        .option.incorrect {
-            border-color: #e74c3c;
-            background: #fdeaea;
-        }
+.option:hover {
+    border-color: #2563eb;
+    background: #f8fafc;
+}
 
-        .option input[type="radio"] {
-            margin-right: 10px;
-            transform: scale(1.2);
-        }
+.option.selected {
+    border-color: #2563eb;
+    background: #e0f2fe;
+}
 
-        .fill-blank-input {
-            padding: 8px 12px;
-            border: 2px solid #dee2e6;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-            font-size: 1rem;
-            width: 150px;
-            margin: 0 5px;
-        }
+.option.correct {
+    border-color: #059669;
+    background: #d1fae5;
+}
 
-        .fill-blank-input:focus {
-            outline: none;
-            border-color: #3498db;
-        }
+.option.incorrect {
+    border-color: #e74c3c;
+    background: #fdeaea;
+}
 
-        .fill-blank-input.correct {
-            border-color: #27ae60;
-            background: #d5f4e6;
-        }
+.option input[type="radio"] {
+    margin-right: 10px;
+    transform: scale(1.2);
+    cursor: pointer;
+}
 
-        .fill-blank-input.incorrect {
-            border-color: #e74c3c;
-            background: #fdeaea;
-        }
+.fill-blank-input {
+    padding: 8px 12px;
+    border: 2px solid #e5e7eb;
+    border-radius: 5px;
+    font-family: 'Courier New', monospace;
+    font-size: 1rem;
+    width: 150px;
+    margin: 0 5px;
+}
 
-        .controls {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 2px solid #e9ecef;
-        }
+.fill-blank-input:focus {
+    outline: none;
+    border-color: #2563eb;
+}
 
-        .btn {
-            padding: 12px 30px;
-            border: none;
-            border-radius: 25px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+.fill-blank-input.correct {
+    border-color: #059669;
+    background: #d1fae5;
+}
 
-        .btn-submit {
-            background: #27ae60;
-            color: white;
-        }
+.fill-blank-input.incorrect {
+    border-color: #e74c3c;
+    background: #fdeaea;
+}
 
-        .btn-submit:hover {
-            background: #219a52;
-            transform: translateY(-2px);
-        }
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid #e5e7eb;
+    flex-wrap: wrap;
+}
 
-        .btn-reset {
-            background: #95a5a6;
-            color: white;
-        }
+.btn {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
 
-        .btn-reset:hover {
-            background: #7f8c8d;
-            transform: translateY(-2px);
-        }
+.btn-submit {
+    background: #059669;
+    color: white;
+}
 
-        .results {
-            margin-top: 20px;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
+.btn-submit:hover {
+    background: #047857;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
 
-        .results.show {
-            background: #d5f4e6;
-            border: 2px solid #27ae60;
-            color: #27ae60;
-        }
+.btn-reset {
+    background: #64748b;
+    color: white;
+}
 
-        .explanation {
-            margin-top: 15px;
-            padding: 15px;
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            color: #856404;
-            display: none;
-        }
+.btn-reset:hover {
+    background: #475569;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
 
-        .explanation.show {
-            display: block;
-        }
+.btn-back-bottom {
+    background: #2563eb;
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+}
 
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .exam-content {
-                padding: 20px;
-            }
-            
-            .question-container {
-                padding: 20px;
-            }
-        }
+.btn-back-bottom:hover {
+    background: #1e40af;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.results {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.results.show {
+    background: #d1fae5;
+    border: 2px solid #059669;
+    color: #059669;
+}
+
+.explanation {
+    margin-top: 15px;
+    padding: 15px;
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: #856404;
+    display: none;
+}
+
+.explanation.show {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .header h1 {
+        font-size: 2rem;
+    }
+
+    .header p {
+        font-size: 1rem;
+    }
+    
+    .back-button {
+        position: static;
+        transform: none;
+        margin-bottom: 15px;
+        width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .back-button:hover {
+        transform: translateX(-3px);
+    }
+
+    .header {
+        padding: 20px;
+    }
+    
+    .exam-content {
+        padding: 20px;
+    }
+    
+    .question-container {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .controls {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+    }
+}
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
+            <a href="loops.html" class="back-button">
+                <span class="back-arrow">←</span>
+                <span>Back</span>
+            </a>
             <h1>☕ Java Programming Exam</h1>
             <p>Variables and Loops Assessment</p>
         </div>
@@ -475,11 +558,20 @@ for (int i = 0; i < 10; i += 2) {
             <div class="controls">
                 <button class="btn btn-submit" onclick="submitExam()">Submit Exam</button>
                 <button class="btn btn-reset" onclick="resetExam()">Reset</button>
+                <a href="index.html" class="btn btn-back-bottom">← Back to Exercises</a>
             </div>
 
             <div class="results" id="results"></div>
         </div>
     </div>
+     <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2025 Code & Conquer with Shiela. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 
     <script>
         const answers = {

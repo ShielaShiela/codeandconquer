@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Loops - Exercises</title>
+    <style>
+        :root {
+            --primary-blue: #2563eb;
+            --primary-blue-dark: #1e40af;
+            --primary-cyan: #06b6d4;
+            --success-green: #059669;
+            --text-dark: #1e293b;
+            --text-gray: #64748b;
+            --text-light: #9ca3af;
+            --bg-light: #f8fafc;
+            --border-light: #e5e7eb;
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 30px rgba(0,0,0,0.1);
+            --transition-normal: 0.3s ease;
+            --border-radius: 8px;
+            --border-radius-lg: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: var(--bg-light);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-dark));
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-md);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-button {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all var(--transition-normal);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateX(-3px);
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #2980b9, #3498db);
+            color: white;
+            padding: 120px 0 60px;
+            margin-top: 70px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            opacity: 0.95;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .topic-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .section {
+            padding: 60px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--text-dark);
+        }
+
+        .exercises-list {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+
+        .exercise-item {
+            display: flex;
+            align-items: center;
+            padding: 20px 25px;
+            border-bottom: 1px solid var(--border-light);
+            transition: all var(--transition-normal);
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .exercise-item:last-child {
+            border-bottom: none;
+        }
+
+        .exercise-item:hover {
+            background: var(--bg-light);
+            transform: translateX(10px);
+        }
+
+        .exercise-item.available:hover {
+            background: #e0f2fe;
+        }
+
+        .exercise-number {
+            background: var(--primary-blue);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+
+        .exercise-item.coming-soon .exercise-number {
+            background: var(--text-light);
+        }
+
+        .exercise-info {
+            flex: 1;
+        }
+
+        .exercise-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .exercise-description {
+            font-size: 0.95rem;
+            color: var(--text-gray);
+        }
+
+        .exercise-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-shrink: 0;
+        }
+
+        .difficulty-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .difficulty-beginner {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .difficulty-elementary {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .difficulty-intermediate {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-available {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-coming-soon {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .arrow-icon {
+            color: var(--primary-blue);
+            font-size: 1.5rem;
+            transition: transform var(--transition-normal);
+        }
+
+        .exercise-item.coming-soon .arrow-icon {
+            color: var(--text-light);
+        }
+
+        .exercise-item:hover .arrow-icon {
+            transform: translateX(5px);
+        }
+
+        footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 2rem 0 1rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            color: var(--text-light);
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .topic-icon {
+                font-size: 3rem;
+            }
+
+            .exercise-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .exercise-meta {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .arrow-icon {
+                align-self: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="back-button">
+                    <span>←</span>
+                    <span>Back</span>
+                </a>
+                <div class="logo">Java Exercises</div>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="topic-icon">🔄</div>
+                <h1 class="hero-title">Loops</h1>
+                <p class="hero-subtitle">Master for, while, and do-while loops with hands-on exercises</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Choose an Exercise</h2>
+            
+            <div class="exercises-list" id="exercisesList">
+                <!-- Exercises will be generated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2025 Java Exercises. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const exercises = [
+            {
+                number: 1,
+                title: "Exercise 1",
+                description: "Test your knowledge with multiple choice and fill-in-the-blank questions",
+                difficulty: "beginner",
+                link: "exercise2.html",
+                available: true
+            },
+            {
+                number: 2,
+                title: "Exercise 2",
+                description: "Debugging Code",
+                difficulty: "beginner",
+                link: "exercise3.html",
+                available: true
+            },
+            // {
+            //     number: 3,
+            //     title: "While Loop Practice",
+            //     description: "Practice writing and understanding while loops",
+            //     difficulty: "beginner",
+            //     link: "while-loop-practice.html",
+            //     available: false
+            // },
+            // {
+            //     number: 4,
+            //     title: "Loop Debugging Challenge",
+            //     description: "Find and fix bugs in for and while loops",
+            //     difficulty: "elementary",
+            //     link: "loop-debugging.html",
+            //     available: true
+            // },
+            // {
+            //     number: 5,
+            //     title: "Do-While Loops",
+            //     description: "Understand when and how to use do-while loops",
+            //     difficulty: "elementary",
+            //     link: "do-while-loops.html",
+            //     available: false
+            // },
+            // {
+            //     number: 6,
+            //     title: "Nested Loops",
+            //     description: "Work with loops inside loops to create patterns",
+            //     difficulty: "intermediate",
+            //     link: "nested-loops.html",
+            //     available: false
+            // },
+            // {
+            //     number: 7,
+            //     title: "Loop Control: Break and Continue",
+            //     description: "Master break and continue statements",
+            //     difficulty: "elementary",
+            //     link: "loop-control.html",
+            //     available: false
+            // },
+            // {
+            //     number: 8,
+            //     title: "Pattern Printing",
+            //     description: "Create various patterns using nested loops",
+            //     difficulty: "intermediate",
+            //     link: "pattern-printing.html",
+            //     available: false
+            // },
+            // {
+            //     number: 9,
+            //     title: "Enhanced For Loop (For-Each)",
+            //     description: "Learn to iterate over arrays and collections",
+            //     difficulty: "elementary",
+            //     link: "enhanced-for-loop.html",
+            //     available: false
+            // },
+            // {
+            //     number: 10,
+            //     title: "Loop Performance Optimization",
+            //     description: "Write efficient loops and avoid common pitfalls",
+            //     difficulty: "intermediate",
+            //     link: "loop-optimization.html",
+            //     available: false
+            // }
+        ];
+
+        function renderExercises() {
+            const list = document.getElementById('exercisesList');
+            
+            exercises.forEach(exercise => {
+                const item = document.createElement('a');
+                item.className = `exercise-item ${exercise.available ? 'available' : 'coming-soon'}`;
+                item.href = exercise.available ? exercise.link : '#';
+                
+                if (!exercise.available) {
+                    item.style.cursor = 'not-allowed';
+                    item.onclick = (e) => e.preventDefault();
+                }
+
+                item.innerHTML = `
+                    <div class="exercise-number">${exercise.number}</div>
+                    <div class="exercise-info">
+                        <div class="exercise-title">${exercise.title}</div>
+                        <div class="exercise-description">${exercise.description}</div>
+                    </div>
+                    <div class="exercise-meta">
+                        <span class="difficulty-badge difficulty-${exercise.difficulty}">${exercise.difficulty}</span>
+                        <span class="status-badge ${exercise.available ? 'status-available' : 'status-coming-soon'}">
+                            ${exercise.available ? 'Available' : 'Coming Soon'}
+                        </span>
+                        <span class="arrow-icon">→</span>
+                    </div>
+                `;
+
+                list.appendChild(item);
+            });
+        }
+
+        renderExercises();
+    </script>
+</body>
+</html>

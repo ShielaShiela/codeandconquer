@@ -1,0 +1,1580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code & Conquer with Shiela - Sign In</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+        }
+
+        .auth-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            width: 100%;
+            max-width: 900px;
+            min-height: 600px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            position: relative;
+        }
+
+        .auth-left {
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            color: white;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-left::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .brand-logo {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            z-index: 1;
+        }
+
+        .brand-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            z-index: 1;
+        }
+
+        .brand-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            z-index: 1;
+        }
+
+        .features-list {
+            list-style: none;
+            text-align: left;
+            z-index: 1;
+        }
+
+        .features-list li {
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .features-list li::before {
+            content: '✨';
+            font-size: 1.2rem;
+        }
+
+        .auth-right {
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .auth-title {
+            font-size: 2rem;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .auth-subtitle {
+            color: #64748b;
+            font-size: 1rem;
+        }
+
+        .auth-tabs {
+            display: flex;
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 0.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 0.75rem;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        .auth-tab.active {
+            background: white;
+            color: #2563eb;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #2563eb;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-input.error {
+            border-color: #ef4444;
+            background: #fef2f2;
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .auth-button {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .auth-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+        }
+
+        .auth-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .auth-divider {
+            text-align: center;
+            margin: 1.5rem 0;
+            position: relative;
+            color: #64748b;
+        }
+
+        .auth-divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e5e7eb;
+        }
+
+        .auth-divider span {
+            background: white;
+            padding: 0 1rem;
+            position: relative;
+        }
+
+        .social-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-button {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .social-button:hover {
+            border-color: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .social-button.google:hover {
+            border-color: #ea4335;
+            color: #ea4335;
+        }
+
+        .social-button.microsoft:hover {
+            border-color: #0078d4;
+            color: #0078d4;
+        }
+
+        .forgot-password {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .forgot-password a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        .terms-privacy {
+            font-size: 0.875rem;
+            color: #64748b;
+            text-align: center;
+            margin-top: 1rem;
+            line-height: 1.5;
+        }
+
+        .terms-privacy a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .terms-privacy a:hover {
+            text-decoration: underline;
+        }
+
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ffffff;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            max-width: 400px;
+        }
+
+        .notification.show {
+            display: block;
+            animation: slideInRight 0.3s ease;
+        }
+
+        .notification.error {
+            background: #ef4444;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Role Selection */
+        .role-selection {
+            margin-bottom: 1.5rem;
+        }
+
+        .role-options {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .role-option {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+
+        .role-option.selected {
+            border-color: #2563eb;
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        .role-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .role-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .role-desc {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .auth-container {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+                margin: 1rem;
+            }
+
+            .auth-left {
+                display: none;
+            }
+
+            .auth-right {
+                padding: 2rem;
+            }
+
+            .brand-title {
+                font-size: 2rem;
+            }
+
+            .social-buttons {
+                flex-direction: column;
+            }
+
+            .role-options {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+            }
+
+            .auth-container {
+                border-radius: 0;
+                min-height: 100vh;
+            }
+
+            .auth-right {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="notification" id="notification"></div>
+
+    <!-- Authentication Container -->
+    <div class="auth-container" id="authContainer">
+        <div class="auth-left">
+            <div class="brand-logo">🎓</div>
+            <h1 class="brand-title">Code & Conquer</h1>
+            <p class="brand-subtitle">Learn Programming with Shiela</p>
+            <ul class="features-list">
+                <li>One-on-one private sessions</li>
+                <li>Flexible scheduling</li>
+                <li>Real-time class management</li>
+                <li>Progress tracking</li>
+                <li>Expert guidance</li>
+            </ul>
+        </div>
+
+        <div class="auth-right">
+            <div class="auth-header">
+                <h2 class="auth-title">Welcome Back!</h2>
+                <p class="auth-subtitle">Sign in to continue your learning journey</p>
+            </div>
+
+            <div class="auth-tabs">
+                <div class="auth-tab active" onclick="switchTab('signin')">Sign In</div>
+                <div class="auth-tab" onclick="switchTab('signup')">Sign Up</div>
+            </div>
+
+            <!-- Sign In Form -->
+            <form class="auth-form active" id="signinForm">
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-input" id="signinEmail" required 
+                           placeholder="Enter your email">
+                    <div class="error-message" id="signinEmailError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" id="signinPassword" required 
+                           placeholder="Enter your password">
+                    <div class="error-message" id="signinPasswordError"></div>
+                </div>
+
+                <button type="submit" class="auth-button" id="signinBtn">
+                    Sign In
+                </button>
+
+                <div class="forgot-password">
+                    <a href="#" onclick="forgotPassword()">Forgot your password?</a>
+                </div>
+            </form>
+
+            <!-- Sign Up Form -->
+            <form class="auth-form" id="signupForm">
+                <!-- Role Selection -->
+                <div class="role-selection">
+                    <label class="form-label">I am a:</label>
+                    <div class="role-options">
+                        <div class="role-option selected" onclick="selectRole('student')" data-role="student">
+                            <div class="role-icon">🎓</div>
+                            <div class="role-title">Student</div>
+                            <div class="role-desc">Learn programming</div>
+                        </div>
+                        <div class="role-option" onclick="selectRole('teacher')" data-role="teacher">
+                            <div class="role-icon">👨‍🏫</div>
+                            <div class="role-title">Teacher</div>
+                            <div class="role-desc">Teach students</div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="selectedRole" value="student">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">First Name</label>
+                    <input type="text" class="form-input" id="signupFirstName" required 
+                           placeholder="Enter your first name">
+                    <div class="error-message" id="signupFirstNameError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Last Name</label>
+                    <input type="text" class="form-input" id="signupLastName" required 
+                           placeholder="Enter your last name">
+                    <div class="error-message" id="signupLastNameError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-input" id="signupEmail" required 
+                           placeholder="Enter your email">
+                    <div class="error-message" id="signupEmailError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" id="signupPassword" required 
+                           placeholder="Create a password (min 6 characters)">
+                    <div class="error-message" id="signupPasswordError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Confirm Password</label>
+                    <input type="password" class="form-input" id="signupConfirmPassword" required 
+                           placeholder="Confirm your password">
+                    <div class="error-message" id="signupConfirmPasswordError"></div>
+                </div>
+
+                <button type="submit" class="auth-button" id="signupBtn">
+                    Create Account
+                </button>
+            </form>
+
+            <div class="auth-divider">
+                <span>Or continue with</span>
+            </div>
+
+            <div class="social-buttons">
+                <button class="social-button google" onclick="signInWithGoogle()">
+                    <span>📧</span>
+                    Google
+                </button>
+                <button class="social-button microsoft" onclick="signInWithMicrosoft()">
+                    <span>🔷</span>
+                    Microsoft
+                </button>
+            </div>
+
+            <div class="terms-privacy">
+                By signing up, you agree to our 
+                <a href="#" onclick="showTerms()">Terms of Service</a> and 
+                <a href="#" onclick="showPrivacy()">Privacy Policy</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://wfwlcunrpxtshsacjgjh.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indmd2xjdW5ycHh0c2hzYWNqZ2poIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ3NDA0OTEsImV4cCI6MjA3MDMxNjQ5MX0.IbWQ9YGHYkDP3P2_HUxqW5kTF2zxPj50pcLRW9EMkpw';
+        
+        let supabase = null;
+        let currentUser = null;
+
+        // Initialize Supabase and check authentication
+        window.addEventListener('load', async function() {
+            try {
+                // Initialize Supabase
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                console.log('✅ Supabase initialized');
+
+                // Check for email verification tokens in URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const accessToken = urlParams.get('access_token');
+                const refreshToken = urlParams.get('refresh_token');
+                const type = urlParams.get('type');
+
+                if (type === 'signup' && accessToken) {
+                    // User just verified their email
+                    showNotification('✅ Email verified successfully! You can now sign in.');
+                    
+                    // Clean up URL
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                    
+                    // Switch to sign in tab
+                    switchTabProgrammatically('signin');
+                    return;
+                } else if (type === 'recovery' && accessToken) {
+                    // User clicked password reset link
+                    showNotification('✅ Password reset verified! Please enter your new password.');
+                    
+                    // Clean up URL but keep tokens for password update
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                    
+                    // Show password reset form
+                    showPasswordResetForm();
+                    return;
+                }
+
+                // Check if user is already signed in
+                const { data: { session } } = await supabase.auth.getSession();
+                if (session) {
+                    await handleAuthSuccess(session.user);
+                }
+
+                // Listen for auth changes
+                supabase.auth.onAuthStateChange(async (event, session) => {
+                    console.log('Auth state changed:', event);
+                    
+                    if (event === 'SIGNED_IN' && session) {
+                        await handleAuthSuccess(session.user);
+                    } else if (event === 'SIGNED_OUT') {
+                        handleSignOut();
+                    } else if (event === 'TOKEN_REFRESHED') {
+                        console.log('Token refreshed');
+                    }
+                });
+
+            } catch (error) {
+                console.error('❌ Initialization failed:', error);
+                showNotification('Failed to initialize authentication', true);
+            }
+        });
+
+        // Handle successful authentication
+        async function handleAuthSuccess(user) {
+            currentUser = user;
+            console.log('✅ User authenticated:', user.email);
+
+            // Get user role and redirect accordingly
+            const userRole = await getUserRole(user.id);
+            console.log('User role:', userRole);
+
+            // Redirect based on role
+            redirectToDashboard(userRole);
+        }
+
+        // Get user role from database
+        async function getUserRole(userId) {
+            try {
+                const { data, error } = await supabase
+                    .from('user_roles')
+                    .select('role')
+                    .eq('user_id', userId)
+                    .single();
+
+                if (error && error.code !== 'PGRST116') {
+                    throw error;
+                }
+
+                return data?.role || 'student'; // Default to student
+            } catch (error) {
+                console.error('❌ Error getting user role:', error);
+                return 'student'; // Default fallback
+            }
+        }
+
+        // Redirect to appropriate dashboard
+        function redirectToDashboard(role) {
+            const redirectUrls = {
+                'student': 'student-dashboard.html',
+                'teacher': 'teacher-dashboard.html',
+                'admin': 'admin-dashboard.html'
+            };
+
+            const url = redirectUrls[role] || 'student-dashboard.html';
+            
+            // Check if we're in development or the file exists
+            // For now, just show the dashboard inline instead of redirecting
+            showDashboard(role);
+        }
+
+        // Show dashboard inline instead of redirecting
+        function showDashboard(role) {
+            // Hide auth container
+            document.getElementById('authContainer').style.display = 'none';
+            
+            // Create and show dashboard
+            const dashboardHtml = createDashboardHTML(role);
+            document.body.innerHTML = dashboardHtml;
+            
+            // Initialize dashboard functionality
+            initializeDashboard();
+        }
+
+        // Create dashboard HTML based on role
+        function createDashboardHTML(role) {
+            return `
+            <div class="notification" id="notification"></div>
+            
+            <!-- Dashboard -->
+            <div class="dashboard show" id="dashboard">
+                <div class="dashboard-header">
+                    <div class="dashboard-nav">
+                        <div class="dashboard-title">🎓 Code & Conquer Dashboard</div>
+                        <div class="user-menu">
+                            <div class="user-avatar" id="userAvatar">U</div>
+                            <span id="userName">User</span>
+                            <button class="logout-btn" onclick="signOut()">Sign Out</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-content">
+                    <div class="profile-setup" id="profileSetup" style="display: none;">
+                        <h3>📝 Complete Your Profile</h3>
+                        <p>To book classes, please complete your ${role} profile.</p>
+                        <button class="setup-btn" onclick="completeProfile()">Complete Profile</button>
+                    </div>
+
+                    <div class="welcome-section">
+                        <h1 class="welcome-title">Welcome to Your ${role.charAt(0).toUpperCase() + role.slice(1)} Dashboard! 🎉</h1>
+                        <p class="welcome-subtitle">
+                            ${getDashboardSubtitle(role)}
+                        </p>
+                    </div>
+
+                    <div class="quick-actions">
+                        ${getQuickActions(role)}
+                    </div>
+                </div>
+            </div>
+
+            <style>
+                .dashboard {
+                    display: none;
+                    background: #f8fafc;
+                    min-height: 100vh;
+                }
+
+                .dashboard.show {
+                    display: block;
+                }
+
+                .dashboard-header {
+                    background: linear-gradient(135deg, #2563eb, #1e40af);
+                    color: white;
+                    padding: 2rem 0;
+                    box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
+                }
+
+                .dashboard-nav {
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    padding: 0 2rem;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+
+                .dashboard-title {
+                    font-size: 2rem;
+                    font-weight: 700;
+                }
+
+                .user-menu {
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                }
+
+                .user-avatar {
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                    background: rgba(255, 255, 255, 0.2);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: 600;
+                }
+
+                .logout-btn {
+                    background: rgba(255, 255, 255, 0.2);
+                    color: white;
+                    border: none;
+                    padding: 0.5rem 1rem;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    font-weight: 500;
+                    transition: all 0.3s ease;
+                }
+
+                .logout-btn:hover {
+                    background: rgba(255, 255, 255, 0.3);
+                }
+
+                .dashboard-content {
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    padding: 2rem;
+                }
+
+                .welcome-section {
+                    background: white;
+                    border-radius: 15px;
+                    padding: 2rem;
+                    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                    margin-bottom: 2rem;
+                    text-align: center;
+                }
+
+                .welcome-title {
+                    font-size: 2.5rem;
+                    color: #1e293b;
+                    margin-bottom: 1rem;
+                }
+
+                .welcome-subtitle {
+                    color: #64748b;
+                    font-size: 1.1rem;
+                    margin-bottom: 2rem;
+                }
+
+                .quick-actions {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                    gap: 1.5rem;
+                    margin-top: 2rem;
+                }
+
+                .action-card {
+                    background: white;
+                    border-radius: 12px;
+                    padding: 2rem;
+                    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                    text-align: center;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    border: 2px solid transparent;
+                }
+
+                .action-card:hover {
+                    transform: translateY(-5px);
+                    border-color: #2563eb;
+                    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.15);
+                }
+
+                .action-icon {
+                    font-size: 3rem;
+                    margin-bottom: 1rem;
+                }
+
+                .action-title {
+                    font-size: 1.2rem;
+                    font-weight: 600;
+                    color: #1e293b;
+                    margin-bottom: 0.5rem;
+                }
+
+                .action-description {
+                    color: #64748b;
+                    font-size: 0.9rem;
+                }
+
+                .profile-setup {
+                    background: #fff7ed;
+                    border: 2px solid #f97316;
+                    border-radius: 12px;
+                    padding: 2rem;
+                    margin-bottom: 2rem;
+                    text-align: center;
+                }
+
+                .profile-setup h3 {
+                    color: #ea580c;
+                    margin-bottom: 1rem;
+                }
+
+                .profile-setup p {
+                    color: #9a3412;
+                    margin-bottom: 1.5rem;
+                }
+
+                .setup-btn {
+                    background: #f97316;
+                    color: white;
+                    border: none;
+                    padding: 1rem 2rem;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    font-weight: 600;
+                    transition: all 0.3s ease;
+                }
+
+                .setup-btn:hover {
+                    background: #ea580c;
+                    transform: translateY(-2px);
+                }
+
+                @media (max-width: 768px) {
+                    .dashboard-nav {
+                        flex-direction: column;
+                        gap: 1rem;
+                        text-align: center;
+                    }
+                    .quick-actions {
+                        grid-template-columns: 1fr;
+                    }
+                }
+            </style>
+            `;
+        }
+
+        // Get dashboard subtitle based on role
+        function getDashboardSubtitle(role) {
+            switch(role) {
+                case 'student':
+                    return 'Ready to start your programming journey? Choose an action below to get started.';
+                case 'teacher':
+                    return 'Manage your classes and students from your teacher dashboard.';
+                case 'admin':
+                    return 'Manage the entire Code & Conquer platform from here.';
+                default:
+                    return 'Welcome to your dashboard!';
+            }
+        }
+
+        // Get quick actions based on role
+        function getQuickActions(role) {
+            const actions = {
+                student: [
+                    { icon: '📅', title: 'Book a Class', desc: 'Schedule your next programming session', action: 'openBookingPage()' },
+                    { icon: '📋', title: 'My Bookings', desc: 'View and manage your scheduled classes', action: 'openBookingsPage()' },
+                    { icon: '👤', title: 'Profile', desc: 'Update your account and preferences', action: 'openProfilePage()' },
+                    { icon: '💬', title: 'Contact Shiela', desc: 'Get help or ask questions', action: 'contactSupport()' }
+                ],
+                teacher: [
+                    { icon: '📊', title: 'View Bookings', desc: 'See all student bookings', action: 'viewAllBookings()' },
+                    { icon: '👥', title: 'Manage Students', desc: 'View and manage student profiles', action: 'manageStudents()' },
+                    { icon: '📅', title: 'Schedule', desc: 'Manage your teaching schedule', action: 'manageSchedule()' },
+                    { icon: '⚙️', title: 'Settings', desc: 'Update your teaching preferences', action: 'teacherSettings()' }
+                ],
+                admin: [
+                    { icon: '👥', title: 'All Users', desc: 'Manage students, teachers, and admins', action: 'manageAllUsers()' },
+                    { icon: '📊', title: 'Analytics', desc: 'View platform analytics and reports', action: 'viewAnalytics()' },
+                    { icon: '💰', title: 'Payments', desc: 'Manage packages and payments', action: 'managePayments()' },
+                    { icon: '⚙️', title: 'System Settings', desc: 'Configure platform settings', action: 'systemSettings()' }
+                ]
+            };
+
+            return actions[role].map(action => `
+                <div class="action-card" onclick="${action.action}">
+                    <div class="action-icon">${action.icon}</div>
+                    <div class="action-title">${action.title}</div>
+                    <div class="action-description">${action.desc}</div>
+                </div>
+            `).join('');
+        }
+
+        // Initialize dashboard functionality
+        async function initializeDashboard() {
+            if (!currentUser) return;
+
+            // Update user info in dashboard
+            updateDashboardUserInfo(currentUser);
+
+            // Check if user has a complete profile
+            await checkUserProfile(currentUser);
+        }
+
+        // Handle sign out
+        function handleSignOut() {
+            currentUser = null;
+            // Stay on login page
+        }
+
+        // Role selection
+        function selectRole(role) {
+            document.querySelectorAll('.role-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            document.querySelector(`[data-role="${role}"]`).classList.add('selected');
+            document.getElementById('selectedRole').value = role;
+        }
+
+        // Tab switching
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.auth-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update forms
+            document.querySelectorAll('.auth-form').forEach(form => {
+                form.classList.remove('active');
+            });
+            document.getElementById(`${tabName}Form`).classList.add('active');
+
+            // Clear any errors
+            clearErrors();
+        }
+
+        // Programmatic tab switching (without event object)
+        function switchTabProgrammatically(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.auth-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Find and activate the correct tab
+            const tabs = document.querySelectorAll('.auth-tab');
+            tabs.forEach(tab => {
+                if (tab.textContent.toLowerCase().includes(tabName)) {
+                    tab.classList.add('active');
+                }
+            });
+
+            // Update forms
+            document.querySelectorAll('.auth-form').forEach(form => {
+                form.classList.remove('active');
+            });
+            document.getElementById(`${tabName}Form`).classList.add('active');
+
+            // Clear any errors
+            clearErrors();
+        }
+
+        // Form submissions
+        document.getElementById('signinForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            await signInWithEmail();
+        });
+
+        document.getElementById('signupForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            await signUpWithEmail();
+        });
+
+        // Sign in with email
+        async function signInWithEmail() {
+            const email = document.getElementById('signinEmail').value;
+            const password = document.getElementById('signinPassword').value;
+            const btn = document.getElementById('signinBtn');
+
+            clearErrors();
+
+            if (!email || !password) {
+                showFieldError('signinEmail', 'Please enter your email');
+                showFieldError('signinPassword', 'Please enter your password');
+                return;
+            }
+
+            try {
+                btn.disabled = true;
+                btn.innerHTML = '<div class="loading-spinner"></div>Signing in...';
+
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+
+                if (error) throw error;
+
+                showNotification('Signed in successfully!');
+
+            } catch (error) {
+                console.error('❌ Sign in error:', error);
+                
+                if (error.message.includes('Invalid login credentials')) {
+                    showFieldError('signinEmail', 'Invalid email or password');
+                    showFieldError('signinPassword', 'Invalid email or password');
+                } else {
+                    showNotification(error.message, true);
+                }
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = 'Sign In';
+            }
+        }
+
+        // Sign up with email
+        async function signUpWithEmail() {
+            const firstName = document.getElementById('signupFirstName').value;
+            const lastName = document.getElementById('signupLastName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('signupConfirmPassword').value;
+            const role = document.getElementById('selectedRole').value;
+            const btn = document.getElementById('signupBtn');
+
+            clearErrors();
+
+            // Validation
+            if (!firstName.trim()) {
+                showFieldError('signupFirstName', 'First name is required');
+                return;
+            }
+
+            if (!lastName.trim()) {
+                showFieldError('signupLastName', 'Last name is required');
+                return;
+            }
+
+            if (!email.trim()) {
+                showFieldError('signupEmail', 'Email is required');
+                return;
+            }
+
+            if (password.length < 6) {
+                showFieldError('signupPassword', 'Password must be at least 6 characters');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showFieldError('signupConfirmPassword', 'Passwords do not match');
+                return;
+            }
+
+            try {
+                btn.disabled = true;
+                btn.innerHTML = '<div class="loading-spinner"></div>Creating account...';
+
+                // Get the current page URL for redirect
+                const currentUrl = window.location.origin + window.location.pathname;
+                
+                // Create auth user with proper redirect URL
+                const { data: authData, error: authError } = await supabase.auth.signUp({
+                    email: email,
+                    password: password,
+                    options: {
+                        data: {
+                            first_name: firstName,
+                            last_name: lastName,
+                            full_name: `${firstName} ${lastName}`,
+                            role: role
+                        },
+                        emailRedirectTo: currentUrl // This ensures they come back to this page after verification
+                    }
+                });
+
+                if (authError) throw authError;
+
+                if (authData.user) {
+                    // Create user role record
+                    await createUserRole(authData.user.id, role);
+                    
+                    // Create role-specific profile
+                    await createUserProfile(authData.user, role, firstName, lastName, email);
+
+                    if (!authData.session) {
+                        showNotification('✅ Account created! Please check your email to verify your account. After verification, you can sign in.');
+                        // Switch to sign in tab after successful signup
+                        setTimeout(() => {
+                            switchTabProgrammatically('signin');
+                        }, 3000);
+                    } else {
+                        showNotification('Account created successfully!');
+                    }
+                }
+
+            } catch (error) {
+                console.error('❌ Sign up error:', error);
+                
+                if (error.message.includes('already registered')) {
+                    showFieldError('signupEmail', 'This email is already registered');
+                } else {
+                    showNotification(error.message, true);
+                }
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = 'Create Account';
+            }
+        }
+
+        // Create user role record
+        async function createUserRole(userId, role) {
+            try {
+                const { error } = await supabase
+                    .from('user_roles')
+                    .insert([{
+                        user_id: userId,
+                        role: role
+                    }]);
+
+                if (error) throw error;
+                console.log('✅ User role created:', role);
+
+            } catch (error) {
+                console.error('❌ Error creating user role:', error);
+                throw error;
+            }
+        }
+
+        // Create user profile based on role
+        async function createUserProfile(user, role, firstName, lastName, email) {
+            try {
+                if (role === 'student') {
+                    await createStudentProfile(user, firstName, lastName, email);
+                } else if (role === 'teacher') {
+                    await createTeacherProfile(user, firstName, lastName, email);
+                } else if (role === 'admin') {
+                    await createAdminProfile(user, firstName, lastName, email);
+                }
+            } catch (error) {
+                console.error('❌ Error creating user profile:', error);
+                throw error;
+            }
+        }
+
+        // Create student profile
+        async function createStudentProfile(user, firstName, lastName, email) {
+            try {
+                const { error } = await supabase
+                    .from('students')
+                    .insert([{
+                        auth_user_id: user.id,
+                        nickname: generateNickname(firstName, lastName),
+                        first_name: firstName,
+                        last_name: lastName,
+                        email: email,
+                        package_type: 'Basic Package',
+                        remaining_classes: 0,
+                        booked_classes: 0,
+                        completed_classes: 0,
+                        total_purchased_classes: 0,
+                        status: 'active'
+                    }]);
+
+                if (error) throw error;
+                console.log('✅ Student profile created');
+
+            } catch (error) {
+                console.error('❌ Error creating student profile:', error);
+                throw error;
+            }
+        }
+
+        // Create teacher profile
+        async function createTeacherProfile(user, firstName, lastName, email) {
+            try {
+                const { error } = await supabase
+                    .from('teachers')
+                    .insert([{
+                        auth_user_id: user.id,
+                        first_name: firstName,
+                        last_name: lastName,
+                        email: email,
+                        status: 'pending' // Require admin approval
+                    }]);
+
+                if (error) throw error;
+                console.log('✅ Teacher profile created');
+
+            } catch (error) {
+                console.error('❌ Error creating teacher profile:', error);
+                throw error;
+            }
+        }
+
+        // Create admin profile
+        async function createAdminProfile(user, firstName, lastName, email) {
+            try {
+                const { error } = await supabase
+                    .from('admins')
+                    .insert([{
+                        auth_user_id: user.id,
+                        first_name: firstName,
+                        last_name: lastName,
+                        email: email,
+                        permissions: ['view_bookings', 'manage_students']
+                    }]);
+
+                if (error) throw error;
+                console.log('✅ Admin profile created');
+
+            } catch (error) {
+                console.error('❌ Error creating admin profile:', error);
+                throw error;
+            }
+        }
+
+        // Social sign in functions
+        async function signInWithGoogle() {
+            try {
+                const currentUrl = window.location.origin + window.location.pathname;
+                
+                const { data, error } = await supabase.auth.signInWithOAuth({
+                    provider: 'google',
+                    options: {
+                        redirectTo: currentUrl,
+                        queryParams: {
+                            access_type: 'offline',
+                            prompt: 'consent',
+                        }
+                    }
+                });
+
+                if (error) throw error;
+
+            } catch (error) {
+                console.error('❌ Google sign in error:', error);
+                showNotification('Google sign in failed: ' + error.message, true);
+            }
+        }
+
+        async function signInWithMicrosoft() {
+            try {
+                const currentUrl = window.location.origin + window.location.pathname;
+                
+                const { data, error } = await supabase.auth.signInWithOAuth({
+                    provider: 'azure',
+                    options: {
+                        redirectTo: currentUrl,
+                        scopes: 'email'
+                    }
+                });
+
+                if (error) throw error;
+
+            } catch (error) {
+                console.error('❌ Microsoft sign in error:', error);
+                showNotification('Microsoft sign in failed: ' + error.message, true);
+            }
+        }
+
+        // Forgot password
+        async function forgotPassword() {
+            const email = document.getElementById('signinEmail').value;
+            
+            if (!email) {
+                showNotification('Please enter your email address first', true);
+                return;
+            }
+
+            try {
+                const currentUrl = window.location.origin + window.location.pathname;
+                
+                const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                    redirectTo: currentUrl
+                });
+
+                if (error) throw error;
+
+                showNotification('✅ Password reset email sent! Check your inbox and follow the instructions.');
+
+            } catch (error) {
+                console.error('❌ Password reset error:', error);
+                showNotification('Failed to send password reset email: ' + error.message, true);
+            }
+        }
+
+        // Utility functions
+        function generateNickname(firstName, lastName) {
+            const base = (firstName + lastName).toLowerCase().replace(/[^a-z]/g, '');
+            const random = Math.floor(Math.random() * 1000);
+            return base.substring(0, 8) + random;
+        }
+
+        function showFieldError(fieldId, message) {
+            const field = document.getElementById(fieldId);
+            const errorDiv = document.getElementById(fieldId + 'Error');
+            
+            field.classList.add('error');
+            errorDiv.textContent = message;
+            errorDiv.classList.add('show');
+        }
+
+        function clearErrors() {
+            document.querySelectorAll('.form-input').forEach(input => {
+                input.classList.remove('error');
+            });
+            
+            document.querySelectorAll('.error-message').forEach(error => {
+                error.classList.remove('show');
+                error.textContent = '';
+            });
+        }
+
+        function showNotification(message, isError = false) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification show ${isError ? 'error' : ''}`;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 5000);
+        }
+
+        function showTerms() {
+            alert('Terms of Service:\n\n1. Respect class schedules\n2. Be prepared for sessions\n3. Communicate any issues promptly\n4. Payment required before sessions\n5. Professional conduct expected');
+        }
+
+        function showPrivacy() {
+            alert('Privacy Policy:\n\n• We protect your personal information\n• Email used only for class communications\n• Data stored securely with Supabase\n• No sharing with third parties\n• You can request data deletion anytime');
+        }
+
+        // Show password reset form
+        function showPasswordResetForm() {
+            const authRight = document.querySelector('.auth-right');
+            authRight.innerHTML = `
+                <div class="auth-header">
+                    <h2 class="auth-title">Reset Password</h2>
+                    <p class="auth-subtitle">Enter your new password</p>
+                </div>
+
+                <form id="passwordResetForm">
+                    <div class="form-group">
+                        <label class="form-label">New Password</label>
+                        <input type="password" class="form-input" id="newPassword" required 
+                               placeholder="Enter your new password (min 6 characters)">
+                        <div class="error-message" id="newPasswordError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Confirm New Password</label>
+                        <input type="password" class="form-input" id="confirmNewPassword" required 
+                               placeholder="Confirm your new password">
+                        <div class="error-message" id="confirmNewPasswordError"></div>
+                    </div>
+
+                    <button type="submit" class="auth-button" id="resetPasswordBtn">
+                        Update Password
+                    </button>
+                </form>
+
+                <div class="terms-privacy" style="margin-top: 2rem;">
+                    <a href="#" onclick="location.reload()">← Back to Sign In</a>
+                </div>
+            `;
+
+            // Add form submission handler
+            document.getElementById('passwordResetForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                await updatePassword();
+            });
+        }
+
+        // Update password function
+        async function updatePassword() {
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmNewPassword').value;
+            const btn = document.getElementById('resetPasswordBtn');
+
+            clearErrors();
+
+            if (newPassword.length < 6) {
+                showFieldError('newPassword', 'Password must be at least 6 characters');
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                showFieldError('confirmNewPassword', 'Passwords do not match');
+                return;
+            }
+
+            try {
+                btn.disabled = true;
+                btn.innerHTML = '<div class="loading-spinner"></div>Updating password...';
+
+                const { data, error } = await supabase.auth.updateUser({
+                    password: newPassword
+                });
+
+                if (error) throw error;
+
+                showNotification('✅ Password updated successfully! You can now sign in with your new password.');
+                
+                // Reload page to show sign in form
+                setTimeout(() => {
+                    location.reload();
+                }, 2000);
+
+            } catch (error) {
+                console.error('❌ Password update error:', error);
+                showNotification('Failed to update password: ' + error.message, true);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = 'Update Password';
+            }
+        }
+        function openBookingPage() {
+            showNotification('Opening booking page...');
+            // Create booking interface inline or redirect to booking.html if it exists
+            window.location.href = 'booking.html';
+        }
+
+        function openBookingsPage() {
+            showNotification('My bookings page coming soon!');
+        }
+
+        function openProfilePage() {
+            showNotification('Profile page coming soon!');
+        }
+
+        function contactSupport() {
+            window.open('https://wa.me/639302694206', '_blank');
+        }
+
+        // Teacher actions
+        function viewAllBookings() {
+            showNotification('Teacher booking management coming soon!');
+        }
+
+        function manageStudents() {
+            showNotification('Student management coming soon!');
+        }
+
+        function manageSchedule() {
+            showNotification('Schedule management coming soon!');
+        }
+
+        function teacherSettings() {
+            showNotification('Teacher settings coming soon!');
+        }
+
+        // Admin actions
+        function manageAllUsers() {
+            showNotification('User management coming soon!');
+        }
+
+        function viewAnalytics() {
+            showNotification('Analytics dashboard coming soon!');
+        }
+
+        function managePayments() {
+            showNotification('Payment management coming soon!');
+        }
+
+        function systemSettings() {
+            showNotification('System settings coming soon!');
+        }
+
+        // Export for debugging
+        window.authSystem = {
+            supabase: () => supabase,
+            currentUser: () => currentUser,
+            signInWithEmail,
+            signUpWithEmail,
+            signInWithGoogle,
+            signInWithMicrosoft,
+            redirectToDashboard,
+            showDashboard
+        };
+    </script>
+</body>
+</html>

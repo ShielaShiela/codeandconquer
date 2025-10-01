@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Programming Exercises</title>
+    <style>
+        /* CSS CUSTOM PROPERTIES (VARIABLES) */
+        :root {
+            --primary-blue: #2563eb;
+            --primary-blue-dark: #1e40af;
+            --primary-cyan: #06b6d4;
+            --primary-cyan-dark: #0891b2;
+            --success-green: #059669;
+            --text-dark: #1e293b;
+            --text-gray: #64748b;
+            --text-light: #9ca3af;
+            --bg-light: #f8fafc;
+            --bg-white: #ffffff;
+            --border-light: #e5e7eb;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 30px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 40px rgba(0,0,0,0.3);
+            --transition-fast: 0.2s ease;
+            --transition-normal: 0.3s ease;
+            --border-radius: 8px;
+            --border-radius-lg: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: var(--bg-light);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* HEADER */
+        header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-dark));
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-md);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            transition: opacity var(--transition-normal);
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            opacity: 0.8;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            background: linear-gradient(135deg, #2980b9, #3498db);
+            color: white;
+            padding: 120px 0 60px;
+            margin-top: 70px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* SEARCH AND FILTER */
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-light);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            min-width: 300px;
+            transition: border-color var(--transition-normal);
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--border-light);
+            background: white;
+            border-radius: var(--border-radius);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            border-color: var(--primary-blue);
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        /* SECTIONS */
+        .section {
+            padding: 60px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--text-dark);
+        }
+
+        /* EXERCISES GRID */
+        .exercises-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .exercise-card {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-lg);
+            transition: all var(--transition-normal);
+            border: 2px solid transparent;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .exercise-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--primary-cyan));
+        }
+
+        .exercise-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary-blue);
+        }
+
+        .exercise-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .exercise-card h3 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .exercise-description {
+            color: var(--text-gray);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .exercise-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .difficulty-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .difficulty-beginner {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .difficulty-elementary {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .difficulty-intermediate {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .difficulty-advanced {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .exercise-count {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .exercise-action {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .start-btn {
+            padding: 10px 20px;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .start-btn:hover {
+            background: var(--primary-blue-dark);
+            transform: translateY(-2px);
+        }
+
+        .coming-soon {
+            background: var(--text-light);
+            cursor: not-allowed;
+        }
+
+        .coming-soon:hover {
+            transform: none;
+            background: var(--text-light);
+        }
+
+        .status-indicator {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-available {
+            color: var(--success-green);
+        }
+
+        .status-coming-soon {
+            color: var(--text-light);
+        }
+
+        /* FOOTER */
+        footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 2rem 0 1rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            color: var(--text-light);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .exercises-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .search-box {
+                min-width: 100%;
+                max-width: 400px;
+            }
+
+            nav {
+                display: none;
+            }
+
+            .hero-stats {
+                gap: 1.5rem;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">☕ Java Exercises</div>
+                <nav>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#exercises">Exercises</a></li>
+                        <li><a href="#about">About</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Master Java Programming</h1>
+                <p class="hero-subtitle">Practice with hands-on exercises and improve your coding skills</p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">50+</span>
+                        <span class="stat-label">Exercises</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">10+</span>
+                        <span class="stat-label">Topics</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">4</span>
+                        <span class="stat-label">Difficulty Levels</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="exercises">
+        <div class="container">
+            <h2 class="section-title">Choose Your Topic</h2>
+            
+            <div class="controls">
+                <input type="text" class="search-box" id="searchBox" placeholder="Search exercises...">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="beginner">Beginner</button>
+                <button class="filter-btn" data-filter="intermediate">Intermediate</button>
+                <button class="filter-btn" data-filter="advanced">Advanced</button>
+            </div>
+
+            <div class="exercises-grid" id="exercisesGrid">
+                <!-- Exercise cards will be generated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2025 Java Exercises. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const exercises = [
+            {
+                id: 1,
+                title: "Data Types and Variables",
+                description: "Learn about primitive data types, variable declaration, and initialization in Java.",
+                icon: "📦",
+                difficulty: "beginner",
+                exerciseCount: 15,
+                link: "", // Add your link here
+                available: true
+            },
+            {
+                id: 2,
+                title: "Operators",
+                description: "Master arithmetic, relational, logical, and bitwise operators in Java.",
+                icon: "➕",
+                difficulty: "beginner",
+                exerciseCount: 12,
+                link: "", // Add your link here
+                available: true
+            },
+            {
+                id: 3,
+                title: "Conditional Statements",
+                description: "Practice if-else, switch-case, and ternary operators for decision making.",
+                icon: "🔀",
+                difficulty: "beginner",
+                exerciseCount: 10,
+                link: "", // Add your link here
+                available: true
+            },
+            {
+                id: 4,
+                title: "Loops",
+                description: "Work with for, while, and do-while loops to master iteration in Java.",
+                icon: "🔄",
+                difficulty: "elementary",
+                exerciseCount: 18,
+                link: "loops/loops.html", // Add your link here
+                available: true
+            },
+            {
+                id: 5,
+                title: "Arrays",
+                description: "Explore single and multi-dimensional arrays, array manipulation, and algorithms.",
+                icon: "📊",
+                difficulty: "elementary",
+                exerciseCount: 20,
+                link: "", // Add your link here
+                available: false
+            },
+            {
+                id: 6,
+                title: "Methods",
+                description: "Create and use methods, understand parameters, return types, and method overloading.",
+                icon: "⚙️",
+                difficulty: "intermediate",
+                exerciseCount: 14,
+                link: "", // Add your link here
+                available: false
+            },
+            {
+                id: 7,
+                title: "Object-Oriented Programming",
+                description: "Master classes, objects, inheritance, polymorphism, and encapsulation.",
+                icon: "🎯",
+                difficulty: "intermediate",
+                exerciseCount: 25,
+                link: "", // Add your link here
+                available: false
+            },
+            {
+                id: 8,
+                title: "Strings",
+                description: "Practice string manipulation, String methods, and StringBuilder/StringBuffer.",
+                icon: "📝",
+                difficulty: "elementary",
+                exerciseCount: 16,
+                link: "", // Add your link here
+                available: false
+            },
+            {
+                id: 9,
+                title: "Exception Handling",
+                description: "Learn try-catch blocks, throwing exceptions, and creating custom exceptions.",
+                icon: "⚠️",
+                difficulty: "intermediate",
+                exerciseCount: 12,
+                link: "", // Add your link here
+                available: false
+            },
+            {
+                id: 10,
+                title: "Collections Framework",
+                description: "Work with Lists, Sets, Maps, and other collection interfaces and implementations.",
+                icon: "📚",
+                difficulty: "advanced",
+                exerciseCount: 22,
+                link: "", // Add your link here
+                available: false
+            }
+        ];
+
+        function renderExercises(filteredExercises) {
+            const grid = document.getElementById('exercisesGrid');
+            grid.innerHTML = '';
+
+            filteredExercises.forEach(exercise => {
+                const card = document.createElement('div');
+                card.className = 'exercise-card';
+                card.dataset.difficulty = exercise.difficulty;
+
+                card.innerHTML = `
+                    <span class="exercise-icon">${exercise.icon}</span>
+                    <h3>${exercise.title}</h3>
+                    <p class="exercise-description">${exercise.description}</p>
+                    <div class="exercise-meta">
+                        <span class="difficulty-badge difficulty-${exercise.difficulty}">${exercise.difficulty}</span>
+                        <span class="exercise-count">${exercise.exerciseCount} exercises</span>
+                    </div>
+                    <div class="exercise-action">
+                        <span class="status-indicator ${exercise.available ? 'status-available' : 'status-coming-soon'}">
+                            ${exercise.available ? '✓ Available' : 'Coming Soon'}
+                        </span>
+                        ${exercise.available 
+                            ? `<a href="${exercise.link || '#'}" class="start-btn">Start Exercises</a>`
+                            : '<button class="start-btn coming-soon" disabled>Coming Soon</button>'
+                        }
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+        }
+
+        // Initial render
+        renderExercises(exercises);
+
+        // Filter functionality
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const filter = btn.dataset.filter;
+                const filtered = filter === 'all' 
+                    ? exercises 
+                    : exercises.filter(ex => ex.difficulty === filter);
+                
+                renderExercises(filtered);
+            });
+        });
+
+        // Search functionality
+        const searchBox = document.getElementById('searchBox');
+        searchBox.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filtered = exercises.filter(ex => 
+                ex.title.toLowerCase().includes(searchTerm) ||
+                ex.description.toLowerCase().includes(searchTerm)
+            );
+            renderExercises(filtered);
+        });
+    </script>
+</body>
+</html>
