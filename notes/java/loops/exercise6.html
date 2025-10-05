@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Programming Problems - Loops</title>
+    <style>
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #2980b9, #3498db);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    overflow: hidden;
+}
+
+.header {
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    color: white;
+    padding: 30px;
+    text-align: center;
+    position: relative;
+}
+
+.back-button {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.back-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-50%) translateX(-3px);
+}
+
+.back-arrow {
+    font-size: 1.2rem;
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.header p {
+    font-size: 1.1rem;
+    opacity: 0.95;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+.exam-content {
+    padding: 30px;
+}
+
+.question-container {
+    margin-bottom: 40px;
+    padding: 25px;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    background: #f8fafc;
+    transition: all 0.3s ease;
+}
+
+.question-container:hover {
+    border-color: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.question-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.question-number {
+    background: #2563eb;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-right: 15px;
+}
+
+.question-type {
+    background: #8b5cf6;
+    color: white;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+.problem-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #1e293b;
+}
+
+.problem-description {
+    font-size: 1rem;
+    margin-bottom: 20px;
+    color: #475569;
+    line-height: 1.6;
+    padding: 15px;
+    background: white;
+    border-left: 4px solid #8b5cf6;
+    border-radius: 5px;
+}
+
+.code-block {
+    background: #1e293b;
+    color: #ecf0f1;
+    padding: 20px;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    white-space: pre;
+    margin: 15px 0;
+    overflow-x: auto;
+    border-left: 4px solid #2563eb;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.fill-blank-input {
+    padding: 6px 10px;
+    border: 2px solid #fbbf24;
+    border-radius: 5px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.95rem;
+    background: #fef3c7;
+    color: #92400e;
+    min-width: 150px;
+    margin: 0 3px;
+}
+
+.fill-blank-input:focus {
+    outline: none;
+    border-color: #f59e0b;
+    background: #fef3c7;
+}
+
+.fill-blank-input.correct {
+    border-color: #059669;
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.fill-blank-input.incorrect {
+    border-color: #e74c3c;
+    background: #fdeaea;
+    color: #991b1b;
+}
+
+.expected-output {
+    margin-top: 20px;
+    padding: 15px;
+    background: white;
+    border: 2px solid #10b981;
+    border-radius: 8px;
+}
+
+.expected-output-title {
+    font-weight: 700;
+    color: #065f46;
+    margin-bottom: 10px;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.output-block {
+    background: #f0fdf4;
+    padding: 12px;
+    border-radius: 5px;
+    font-family: 'Courier New', monospace;
+    white-space: pre;
+    color: #166534;
+    font-size: 0.9rem;
+    border-left: 3px solid #10b981;
+}
+
+.hint-section {
+    margin-top: 15px;
+    padding: 12px;
+    background: #dbeafe;
+    border-left: 4px solid #3b82f6;
+    border-radius: 5px;
+}
+
+.hint-title {
+    font-weight: 600;
+    color: #1e40af;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+.hint-text {
+    color: #1e3a8a;
+    font-size: 0.85rem;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid #e5e7eb;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-submit {
+    background: #059669;
+    color: white;
+}
+
+.btn-submit:hover {
+    background: #047857;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.btn-reset {
+    background: #64748b;
+    color: white;
+}
+
+.btn-reset:hover {
+    background: #475569;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.btn-back-bottom {
+    background: #2563eb;
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-back-bottom:hover {
+    background: #1e40af;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.results {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.results.show {
+    background: #d1fae5;
+    border: 2px solid #059669;
+    color: #059669;
+}
+
+.explanation {
+    margin-top: 15px;
+    padding: 15px;
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: #856404;
+    display: none;
+}
+
+.explanation.show {
+    display: block;
+}
+
+.explanation-title {
+    font-weight: 700;
+    margin-bottom: 8px;
+    font-size: 1rem;
+}
+
+footer {
+    margin-top: 30px;
+    padding: 20px;
+    text-align: center;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .header h1 {
+        font-size: 2rem;
+    }
+
+    .header p {
+        font-size: 1rem;
+    }
+    
+    .back-button {
+        position: static;
+        transform: none;
+        margin-bottom: 15px;
+        width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .back-button:hover {
+        transform: translateX(-3px);
+    }
+
+    .header {
+        padding: 20px;
+    }
+    
+    .exam-content {
+        padding: 20px;
+    }
+    
+    .question-container {
+        padding: 20px;
+    }
+    
+    .code-block {
+        font-size: 0.85rem;
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .controls {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+    }
+    
+    .fill-blank-input {
+        width: 100%;
+        min-width: unset;
+        display: block;
+        margin: 5px 0;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="loops.html" class="back-button">
+                <span class="back-arrow">←</span>
+                <span>Back</span>
+            </a>
+            <h1>💻 Java Programming Problems</h1>
+            <p>Complete the Loop Code</p>
+        </div>
+
+        <div class="exam-content">
+            <!-- Problem 1: Multiplication Table -->
+            <div class="question-container" data-question="1">
+                <div class="question-header">
+                    <div class="question-number">1</div>
+                    <div class="question-type">Programming Problem</div>
+                </div>
+                <div class="problem-title">📊 Multiplication Table Generator</div>
+                <div class="problem-description">
+                    <strong>Task:</strong> Write a program that prints the multiplication table for a given number (5 in this case). 
+                    The table should show 5 × 1 through 5 × 10.
+                </div>
+                <div class="code-block">public class MultiplicationTable {
+    public static void main(String[] args) {
+        int number = 5;
+        
+        for (<input type="text" class="fill-blank-input" data-answer="int i = 1" placeholder="initialization">; 
+             <input type="text" class="fill-blank-input" data-answer="i <= 10" placeholder="condition">; 
+             <input type="text" class="fill-blank-input" data-answer="i++" placeholder="increment">) {
+            System.out.println(number + " x " + i + " = " + (number * i));
+        }
+    }
+}</div>
+                <div class="expected-output">
+                    <div class="expected-output-title">✅ Expected Output:</div>
+                    <div class="output-block">5 x 1 = 5
+5 x 2 = 10
+5 x 3 = 15
+5 x 4 = 20
+5 x 5 = 25
+5 x 6 = 30
+5 x 7 = 35
+5 x 8 = 40
+5 x 9 = 45
+5 x 10 = 50</div>
+                </div>
+                <div class="hint-section">
+                    <div class="hint-title">💡 Hint:</div>
+                    <div class="hint-text">Use a for loop that starts from 1 and goes up to 10 (inclusive). Each iteration should multiply the number by the loop counter.</div>
+                </div>
+                <div class="explanation">
+                    <div class="explanation-title">Solution Explanation:</div>
+                    The for loop should initialize with <code>int i = 1</code>, continue while <code>i <= 10</code>, and increment with <code>i++</code>. This creates 10 iterations that multiply 5 by each number from 1 to 10.
+                </div>
+            </div>
+
+            <!-- Problem 2: Sum of Even Numbers -->
+            <div class="question-container" data-question="2">
+                <div class="question-header">
+                    <div class="question-number">2</div>
+                    <div class="question-type">Programming Problem</div>
+                </div>
+                <div class="problem-title">➕ Sum of Even Numbers</div>
+                <div class="problem-description">
+                    <strong>Task:</strong> Write a program that calculates and prints the sum of all even numbers from 2 to 20 (inclusive). 
+                    The program should also print each even number as it's being added.
+                </div>
+                <div class="code-block">public class SumEvenNumbers {
+    public static void main(String[] args) {
+        int sum = 0;
+        
+        for (<input type="text" class="fill-blank-input" data-answer="int i = 2" placeholder="initialization">; 
+             <input type="text" class="fill-blank-input" data-answer="i <= 20" placeholder="condition">; 
+             <input type="text" class="fill-blank-input" data-answer="i += 2" placeholder="increment">) {
+            System.out.println("Adding: " + i);
+            sum += i;
+        }
+        
+        System.out.println("Total sum: " + sum);
+    }
+}</div>
+                <div class="expected-output">
+                    <div class="expected-output-title">✅ Expected Output:</div>
+                    <div class="output-block">Adding: 2
+Adding: 4
+Adding: 6
+Adding: 8
+Adding: 10
+Adding: 12
+Adding: 14
+Adding: 16
+Adding: 18
+Adding: 20
+Total sum: 110</div>
+                </div>
+                <div class="hint-section">
+                    <div class="hint-title">💡 Hint:</div>
+                    <div class="hint-text">Start at 2 (the first even number) and increment by 2 each time to skip odd numbers. This is more efficient than checking every number.</div>
+                </div>
+                <div class="explanation">
+                    <div class="explanation-title">Solution Explanation:</div>
+                    Initialize with <code>int i = 2</code>, continue while <code>i <= 20</code>, and increment by <code>i += 2</code> (or <code>i = i + 2</code>). This efficiently iterates through only even numbers: 2, 4, 6, 8, 10, 12, 14, 16, 18, 20. The sum is 110.
+                </div>
+            </div>
+
+            <!-- Problem 3: Countdown Timer -->
+            <div class="question-container" data-question="3">
+                <div class="question-header">
+                    <div class="question-number">3</div>
+                    <div class="question-type">Programming Problem</div>
+                </div>
+                <div class="problem-title">⏱️ Countdown Timer</div>
+                <div class="problem-description">
+                    <strong>Task:</strong> Create a countdown timer that starts from 10 and counts down to 1, then prints "Blast Off!". 
+                    Use a while loop for this program.
+                </div>
+                <div class="code-block">public class CountdownTimer {
+    public static void main(String[] args) {
+        int count = <input type="text" class="fill-blank-input" data-answer="10" placeholder="start value">;
+        
+        while (<input type="text" class="fill-blank-input" data-answer="count >= 1" placeholder="condition">) {
+            System.out.println(count);
+            <input type="text" class="fill-blank-input" data-answer="count--" placeholder="decrement">;
+        }
+        
+        System.out.println("Blast Off!");
+    }
+}</div>
+                <div class="expected-output">
+                    <div class="expected-output-title">✅ Expected Output:</div>
+                    <div class="output-block">10
+9
+8
+7
+6
+5
+4
+3
+2
+1
+Blast Off!</div>
+                </div>
+                <div class="hint-section">
+                    <div class="hint-title">💡 Hint:</div>
+                    <div class="hint-text">Start count at 10, continue the loop while count is greater than or equal to 1, and decrease count by 1 each iteration.</div>
+                </div>
+                <div class="explanation">
+                    <div class="explanation-title">Solution Explanation:</div>
+                    Initialize count to <code>10</code>, the while loop condition should be <code>count >= 1</code> (or <code>count > 0</code>), and decrement with <code>count--</code> (or <code>--count</code> or <code>count -= 1</code>). The loop prints each number from 10 down to 1, then exits and prints "Blast Off!".
+                </div>
+            </div>
+
+            <!-- Problem 4: Number Pattern -->
+            <div class="question-container" data-question="4">
+                <div class="question-header">
+                    <div class="question-number">4</div>
+                    <div class="question-type">Programming Problem</div>
+                </div>
+                <div class="problem-title">🔢 Number Pattern Printer</div>
+                <div class="problem-description">
+                    <strong>Task:</strong> Write a program that prints a number pattern where each line contains numbers from 1 up to the line number. 
+                    For example, line 1 prints "1", line 2 prints "1 2", line 3 prints "1 2 3", etc., up to line 5.
+                </div>
+                <div class="code-block">public class NumberPattern {
+    public static void main(String[] args) {
+        for (<input type="text" class="fill-blank-input" data-answer="int i = 1" placeholder="outer initialization">; 
+             <input type="text" class="fill-blank-input" data-answer="i <= 5" placeholder="outer condition">; 
+             <input type="text" class="fill-blank-input" data-answer="i++" placeholder="outer increment">) {
+            
+            for (<input type="text" class="fill-blank-input" data-answer="int j = 1" placeholder="inner initialization">; 
+                 <input type="text" class="fill-blank-input" data-answer="j <= i" placeholder="inner condition">; 
+                 <input type="text" class="fill-blank-input" data-answer="j++" placeholder="inner increment">) {
+                System.out.print(j + " ");
+            }
+            System.out.println();
+        }
+    }
+}</div>
+                <div class="expected-output">
+                    <div class="expected-output-title">✅ Expected Output:</div>
+                    <div class="output-block">1 
+1 2 
+1 2 3 
+1 2 3 4 
+1 2 3 4 5 </div>
+                </div>
+                <div class="hint-section">
+                    <div class="hint-title">💡 Hint:</div>
+                    <div class="hint-text">This requires nested loops. The outer loop controls which line you're on (1 to 5), and the inner loop prints numbers from 1 up to the current line number.</div>
+                </div>
+                <div class="explanation">
+                    <div class="explanation-title">Solution Explanation:</div>
+                    The outer loop: <code>int i = 1; i <= 5; i++</code> controls the row (line 1 through 5). The inner loop: <code>int j = 1; j <= i; j++</code> prints numbers from 1 up to the current row number i. For example, when i=3, the inner loop prints 1, 2, 3.
+                </div>
+            </div>
+
+            <!-- Problem 5: Factorial Calculator -->
+            <div class="question-container" data-question="5">
+                <div class="question-header">
+                    <div class="question-number">5</div>
+                    <div class="question-type">Programming Problem</div>
+                </div>
+                <div class="problem-title">🔢 Factorial Calculator</div>
+                <div class="problem-description">
+                    <strong>Task:</strong> Calculate the factorial of a number (5! = 5 × 4 × 3 × 2 × 1). 
+                    The program should print the calculation process and the final result.
+                </div>
+                <div class="code-block">public class Factorial {
+    public static void main(String[] args) {
+        int number = 5;
+        int factorial = <input type="text" class="fill-blank-input" data-answer="1" placeholder="initial value">;
+        
+        for (<input type="text" class="fill-blank-input" data-answer="int i = number" placeholder="initialization">; 
+             <input type="text" class="fill-blank-input" data-answer="i >= 1" placeholder="condition">; 
+             <input type="text" class="fill-blank-input" data-answer="i--" placeholder="decrement">) {
+            System.out.println("Multiplying: " + factorial + " x " + i);
+            factorial *= i;
+        }
+        
+        System.out.println("Factorial of " + number + " is: " + factorial);
+    }
+}</div>
+                <div class="expected-output">
+                    <div class="expected-output-title">✅ Expected Output:</div>
+                    <div class="output-block">Multiplying: 1 x 5
+Multiplying: 5 x 4
+Multiplying: 20 x 3
+Multiplying: 60 x 2
+Multiplying: 120 x 1
+Factorial of 5 is: 120</div>
+                </div>
+                <div class="hint-section">
+                    <div class="hint-title">💡 Hint:</div>
+                    <div class="hint-text">Start factorial at 1 (not 0, because anything multiplied by 0 is 0). Loop from the number down to 1, multiplying factorial by each number.</div>
+                </div>
+                <div class="explanation">
+                    <div class="explanation-title">Solution Explanation:</div>
+                    Initialize factorial to <code>1</code>. The loop starts at the number (5) with <code>int i = number</code>, continues while <code>i >= 1</code> (or <code>i > 0</code>), and decrements with <code>i--</code>. Each iteration multiplies the current factorial value by i, computing 5! = 5 × 4 × 3 × 2 × 1 = 120.
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-submit" onclick="submitExam()">Check Answers</button>
+                <button class="btn btn-reset" onclick="resetExam()">Reset</button>
+                <a href="index.html" class="btn btn-back-bottom">← Back to Exercises</a>
+            </div>
+
+            <div class="results" id="results"></div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Code & Conquer with Shiela. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const fillBlankAnswers = {
+            1: ['int i = 1', 'i <= 10', 'i++'],
+            2: ['int i = 2', 'i <= 20', 'i += 2'],
+            3: ['10', 'count >= 1', 'count--'],
+            4: ['int i = 1', 'i <= 5', 'i++', 'int j = 1', 'j <= i', 'j++'],
+            5: ['1', 'int i = number', 'i >= 1', 'i--']
+        };
+
+        function submitExam() {
+            let score = 0;
+            let totalQuestions = 5;
+            
+            // Check fill-in-the-blank questions
+            Object.keys(fillBlankAnswers).forEach(questionNum => {
+                const questionContainer = document.querySelector(`[data-question="${questionNum}"]`);
+                const inputs = questionContainer.querySelectorAll('.fill-blank-input');
+                const correctAnswers = fillBlankAnswers[questionNum];
+                let allCorrect = true;
+                
+                inputs.forEach((input, index) => {
+                    const userAnswer = input.value.trim();
+                    const correctAnswer = correctAnswers[index];
+                    
+                    // Flexible checking for common variations
+                    const isCorrect = checkAnswer(userAnswer, correctAnswer);
+                    
+                    if (isCorrect) {
+                        input.classList.add('correct');
+                    } else {
+                        input.classList.add('incorrect');
+                        allCorrect = false;
+                    }
+                });
+                
+                if (allCorrect) {
+                    score++;
+                }
+            });
+            
+            // Show results
+            const percentage = Math.round((score / totalQuestions) * 100);
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.classList.add('show');
+            resultsDiv.innerHTML = `
+                <div>Your Score: ${score}/${totalQuestions} (${percentage}%)</div>
+                <div style="margin-top: 10px; font-size: 1rem;">
+                    ${percentage === 100 ? '🎉 Perfect! You\'re a loop programming master!' : 
+                      percentage >= 60 ? '👍 Good work! Review the incorrect answers below.' : 
+                      '📚 Keep practicing! Check the explanations for help.'}
+                </div>
+            `;
+            
+            // Show explanations
+            document.querySelectorAll('.explanation').forEach(exp => {
+                exp.classList.add('show');
+            });
+            
+            // Scroll to results
+            resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function checkAnswer(userAnswer, correctAnswer) {
+            // Normalize answers for comparison
+            const normalize = (str) => str.toLowerCase().replace(/\s+/g, '').replace(/[;]/g, '');
+            
+            const normalizedUser = normalize(userAnswer);
+            const normalizedCorrect = normalize(correctAnswer);
+            
+            // Check for exact match
+            if (normalizedUser === normalizedCorrect) return true;
+            
+            // Special cases for common variations
+            // Problem 1
+            if (correctAnswer === 'int i = 1' && (normalizedUser === 'inti=1' || normalize(userAnswer) === 'i=1')) return true;
+            if (correctAnswer === 'i <= 10' && (normalizedUser === 'i<=10' || userAnswer === 'i < 11' || normalizedUser === 'i<11')) return true;
+            if (correctAnswer === 'i++' && (userAnswer === '++i' || userAnswer === 'i += 1' || normalizedUser === 'i=i+1')) return true;
+            
+            // Problem 2
+            if (correctAnswer === 'int i = 2' && (normalizedUser === 'inti=2' || normalize(userAnswer) === 'i=2')) return true;
+            if (correctAnswer === 'i <= 20' && (normalizedUser === 'i<=20' || userAnswer === 'i < 21' || normalizedUser === 'i<21')) return true;
+            if (correctAnswer === 'i += 2' && (normalizedUser === 'i=i+2' || userAnswer === 'i = i + 2')) return true;
+            
+            // Problem 3
+            if (correctAnswer === '10' && userAnswer === '10') return true;
+            if (correctAnswer === 'count >= 1' && (normalizedUser === 'count>=1' || userAnswer === 'count > 0' || normalizedUser === 'count>0')) return true;
+            if (correctAnswer === 'count--' && (userAnswer === '--count' || userAnswer === 'count -= 1' || normalizedUser === 'count=count-1')) return true;
+            
+            // Problem 4
+            if (correctAnswer === 'int i = 1' && (normalizedUser === 'inti=1' || normalize(userAnswer) === 'i=1')) return true;
+            if (correctAnswer === 'i <= 5' && (normalizedUser === 'i<=5' || userAnswer === 'i < 6' || normalizedUser === 'i<6')) return true;
+            if (correctAnswer === 'int j = 1' && (normalizedUser === 'intj=1' || normalize(userAnswer) === 'j=1')) return true;
+            if (correctAnswer === 'j <= i' && (normalizedUser === 'j<=i')) return true;
+            if (correctAnswer === 'j++' && (userAnswer === '++j' || userAnswer === 'j += 1' || normalizedUser === 'j=j+1')) return true;
+            
+            // Problem 5
+            if (correctAnswer === '1' && userAnswer === '1') return true;
+            if (correctAnswer === 'int i = number' && (normalizedUser === 'inti=number' || normalize(userAnswer) === 'i=number' || normalizedUser === 'inti=5' || normalize(userAnswer) === 'i=5')) return true;
+            if (correctAnswer === 'i >= 1' && (normalizedUser === 'i>=1' || userAnswer === 'i > 0' || normalizedUser === 'i>0')) return true;
+            if (correctAnswer === 'i--' && (userAnswer === '--i' || userAnswer === 'i -= 1' || normalizedUser === 'i=i-1')) return true;
+            
+            return false;
+        }
+
+        function resetExam() {
+            // Clear all inputs
+            document.querySelectorAll('.fill-blank-input').forEach(input => {
+                input.value = '';
+                input.classList.remove('correct', 'incorrect');
+            });
+            
+            // Hide results and explanations
+            document.getElementById('results').classList.remove('show');
+            document.getElementById('results').innerHTML = '';
+            
+            document.querySelectorAll('.explanation').forEach(exp => {
+                exp.classList.remove('show');
+            });
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
