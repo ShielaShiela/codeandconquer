@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Programming Exam - Loop Debugging & Comparison</title>
+    <style>
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #2980b9, #3498db);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    overflow: hidden;
+}
+
+.header {
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    color: white;
+    padding: 30px;
+    text-align: center;
+    position: relative;
+}
+
+.back-button {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.back-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-50%) translateX(-3px);
+}
+
+.back-arrow {
+    font-size: 1.2rem;
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.header p {
+    font-size: 1.1rem;
+    opacity: 0.95;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+.exam-content {
+    padding: 30px;
+}
+
+.question-container {
+    margin-bottom: 30px;
+    padding: 25px;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    background: #f8fafc;
+    transition: all 0.3s ease;
+}
+
+.question-container:hover {
+    border-color: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.question-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.question-number {
+    background: #2563eb;
+    color: white;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 15px;
+}
+
+.question-type {
+    background: #e74c3c;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.question-type.debug {
+    background: #e67e22;
+}
+
+.question-type.compare {
+    background: #27ae60;
+}
+
+.question-type.best-practice {
+    background: #8e44ad;
+}
+
+.question-text {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #1e293b;
+}
+
+.code-block {
+    background: #1e293b;
+    color: #ecf0f1;
+    padding: 15px;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    white-space: pre;
+    margin: 10px 0;
+    overflow-x: auto;
+    border-left: 4px solid #2563eb;
+}
+
+.code-comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin: 15px 0;
+}
+
+.code-option {
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.code-label {
+    background: #64748b;
+    color: white;
+    padding: 8px 12px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.options {
+    display: grid;
+    gap: 10px;
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.option:hover {
+    border-color: #2563eb;
+    background: #f8fafc;
+}
+
+.option.selected {
+    border-color: #2563eb;
+    background: #e0f2fe;
+}
+
+.option.correct {
+    border-color: #059669;
+    background: #d1fae5;
+}
+
+.option.incorrect {
+    border-color: #e74c3c;
+    background: #fdeaea;
+}
+
+.option input[type="radio"] {
+    margin-right: 10px;
+    transform: scale(1.2);
+    cursor: pointer;
+}
+
+.fill-blank-input {
+    padding: 8px 12px;
+    border: 2px solid #e5e7eb;
+    border-radius: 5px;
+    font-family: 'Courier New', monospace;
+    font-size: 1rem;
+    width: 200px;
+    margin: 0 5px;
+}
+
+.fill-blank-input:focus {
+    outline: none;
+    border-color: #2563eb;
+}
+
+.fill-blank-input.correct {
+    border-color: #059669;
+    background: #d1fae5;
+}
+
+.fill-blank-input.incorrect {
+    border-color: #e74c3c;
+    background: #fdeaea;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid #e5e7eb;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-submit {
+    background: #059669;
+    color: white;
+}
+
+.btn-submit:hover {
+    background: #047857;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.btn-reset {
+    background: #64748b;
+    color: white;
+}
+
+.btn-reset:hover {
+    background: #475569;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.btn-back-bottom {
+    background: #2563eb;
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-back-bottom:hover {
+    background: #1e40af;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.results {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.results.show {
+    background: #d1fae5;
+    border: 2px solid #059669;
+    color: #059669;
+}
+
+.explanation {
+    margin-top: 15px;
+    padding: 15px;
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: #856404;
+    display: none;
+}
+
+.explanation.show {
+    display: block;
+}
+
+footer {
+    margin-top: 30px;
+    padding: 20px;
+    text-align: center;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .header h1 {
+        font-size: 2rem;
+    }
+
+    .header p {
+        font-size: 1rem;
+    }
+    
+    .back-button {
+        position: static;
+        transform: none;
+        margin-bottom: 15px;
+        width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .back-button:hover {
+        transform: translateX(-3px);
+    }
+
+    .header {
+        padding: 20px;
+    }
+    
+    .exam-content {
+        padding: 20px;
+    }
+    
+    .question-container {
+        padding: 20px;
+    }
+    
+    .code-comparison {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .controls {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+    }
+    
+    .fill-blank-input {
+        width: 150px;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="loops.html" class="back-button">
+                <span class="back-arrow">←</span>
+                <span>Back</span>
+            </a>
+            <h1>🐛 Java Loops Exam</h1>
+            <p>Debugging & Code Comparison</p>
+        </div>
+
+        <div class="exam-content">
+            <!-- Question 1: Spot the Error -->
+            <div class="question-container" data-question="1">
+                <div class="question-header">
+                    <div class="question-number">1</div>
+                    <div class="question-type debug">Debug</div>
+                </div>
+                <div class="question-text">What is the error in this code?</div>
+                <div class="code-block">int i = 0;
+while (i < 5); {
+    System.out.println(i);
+    i++;
+}</div>
+                <div class="options">
+                    <div class="option" data-value="a">
+                        <input type="radio" name="q1" value="a">
+                        <span>Semicolon after the while condition</span>
+                    </div>
+                    <div class="option" data-value="b">
+                        <input type="radio" name="q1" value="b">
+                        <span>Missing curly braces</span>
+                    </div>
+                    <div class="option" data-value="c">
+                        <input type="radio" name="q1" value="c">
+                        <span>Wrong increment operator</span>
+                    </div>
+                    <div class="option" data-value="d">
+                        <input type="radio" name="q1" value="d">
+                        <span>No error</span>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <strong>Explanation:</strong> The semicolon after while (i < 5); creates an infinite loop that does nothing. The curly braces block is separate and never executes. Remove the semicolon.
+                </div>
+            </div>
+
+            <!-- Question 2: Compare Loops -->
+            <div class="question-container" data-question="2">
+                <div class="question-header">
+                    <div class="question-number">2</div>
+                    <div class="question-type compare">Compare</div>
+                </div>
+                <div class="question-text">Which code is better for printing numbers 1 to 10?</div>
+                <div class="code-comparison">
+                    <div class="code-option">
+                        <div class="code-label">Code A</div>
+                        <div class="code-block">for (int i = 1; i <= 10; i++) {
+    System.out.println(i);
+}</div>
+                    </div>
+                    <div class="code-option">
+                        <div class="code-label">Code B</div>
+                        <div class="code-block">int i = 1;
+while (i <= 10) {
+    System.out.println(i);
+    i++;
+}</div>
+                    </div>
+                </div>
+                <div class="options">
+                    <div class="option" data-value="a">
+                        <input type="radio" name="q2" value="a">
+                        <span>Code A - for loop is more concise for counting</span>
+                    </div>
+                    <div class="option" data-value="b">
+                        <input type="radio" name="q2" value="b">
+                        <span>Code B - while loop is more readable</span>
+                    </div>
+                    <div class="option" data-value="c">
+                        <input type="radio" name="q2" value="c">
+                        <span>Both are equally good</span>
+                    </div>
+                    <div class="option" data-value="d">
+                        <input type="radio" name="q2" value="d">
+                        <span>Neither is correct</span>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <strong>Explanation:</strong> Code A (for loop) is better because it keeps the counter variable, condition, and increment all in one line, making it more concise and reducing the chance of forgetting to increment.
+                </div>
+            </div>
+
+            <!-- Question 3: Debug -->
+            <div class="question-container" data-question="3">
+                <div class="question-header">
+                    <div class="question-number">3</div>
+                    <div class="question-type debug">Debug</div>
+                </div>
+                <div class="question-text">Why does this loop never execute?</div>
+                <div class="code-block">for (int i = 10; i < 5; i++) {
+    System.out.println("Hello");
+}</div>
+                <div class="options">
+                    <div class="option" data-value="a">
+                        <input type="radio" name="q3" value="a">
+                        <span>Initial value is greater than the limit</span>
+                    </div>
+                    <div class="option" data-value="b">
+                        <input type="radio" name="q3" value="b">
+                        <span>Missing semicolon</span>
+                    </div>
+                    <div class="option" data-value="c">
+                        <input type="radio" name="q3" value="c">
+                        <span>Wrong increment direction</span>
+                    </div>
+                    <div class="option" data-value="d">
+                        <input type="radio" name="q3" value="d">
+                        <span>Syntax error in print statement</span>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <strong>Explanation:</strong> The initial value i = 10 is already greater than the condition i < 5, so the condition is false from the start. The loop body never executes.
+                </div>
+            </div>
+
+            <!-- Question 4: Best Practice -->
+            <div class="question-container" data-question="4">
+                <div class="question-header">
+                    <div class="question-number">4</div>
+                    <div class="question-type best-practice">Best Practice</div>
+                </div>
+                <div class="question-text">Which loop is most appropriate for reading user input until they enter "quit"?</div>
+                <div class="options">
+                    <div class="option" data-value="a">
+                        <input type="radio" name="q4" value="a">
+                        <span>for loop</span>
+                    </div>
+                    <div class="option" data-value="b">
+                        <input type="radio" name="q4" value="b">
+                        <span>while loop</span>
+                    </div>
+                    <div class="option" data-value="c">
+                        <input type="radio" name="q4" value="c">
+                        <span>do-while loop</span>
+                    </div>
+                    <div class="option" data-value="d">
+                        <input type="radio" name="q4" value="d">
+                        <span>All are equally good</span>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <strong>Explanation:</strong> A while loop (or do-while) is best when you don't know how many iterations will occur. For loops are better when you know the exact number of iterations. Since we don't know when the user will type "quit", while is most appropriate.
+                </div>
+            </div>
+
+            <!-- Question 5: Debug -->
+            <div class="question-container" data-question="5">
+                <div class="question-header">
+                    <div class="question-number">5</div>
+                    <div class="question-type debug">Debug</div>
+                </div>
+                <div class="question-text">What's wrong with this code that should print even numbers from 0 to 10?</div>
+                <div class="code-block">for (int i = 0; i <= 10; i++) {
+    if (i % 2 = 0) {
+        System.out.println(i);
+    }
+}</div>
+                <div class="options">
+                    <div class="option" data-value="a">
+                        <input type="radio" name="q5" value="a">
+                        <span>Should use == instead of = in the if condition</span>
+                    </div>
+                    <div class="option" data-value="b">
+                        <input type="radio" name="q5" value="b">
+                        <span>Wrong loop range</span>
+                    </div>
+                    <div class="option" data-value="c">
+                        <input type="radio" name="q5" value="c">
+                        <span>Missing break statement</span>
+                    </div>
+                    <div class="option" data-value="d">
+                        <input type="radio" name="q5" value="d">
+                        <span>Should use i += 2 instead</span>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <strong>Explanation:</strong> The = operator is for assignment, not comparison. Should use == for comparison. The code i % 2 = 0 tries to assign 0 to the result of i % 2, which causes a compilation error.
+                </div>
+            </div>
+
+            <!-- Question 6: Compare -->
+            <div class="question-container" data-question="6">
+                <div class="question-header">
+                    <div class="question-number">6</div>
+                    <div class="question-type compare">Compare</div>
+                </div>
+                <div class="question-text">Which approach is more efficient for printing even numbers from 0 to 100?</div>
+                <div class="code-comparison">
+                    <div class="code-option">
+                        <div class="code-label">Code A</div>
+                        <div class="code-block">for (int i = 0; i <= 100; i++) {
+    if (i % 2 == 0) {
+        System.out.println(i);
+    }
+}</div>
+                    </div>
+                    <div class="code-option">
+                        <div class="code-label">Code B</div>
+                        <div class="code-block">for (int i = 0; i <= 100; i += 2) {
+    System.out.println(i);
+}</div>
+                    </div>
+                </div>
+                <div class="options">
+                    <div class="option" data-value="a">
+                        <input type="radio" name="q6" value="a">
+                        <span>Code A - checks each number</span>
+                    </div>
+                    <div class="option" data-value="b">
+                        <input type="radio" name="q6" value="b">
+                        <span>Code B - directly iterates through even numbers</span>
+                    </div>
+                    <div class="option" data-value="c">
+                        <input type="radio" name="q6" value="c">
+                        <span>Both are equally efficient</span>
+                    </div>
+                    <div class="option" data-value="d">
+                        <input type="radio" name="q6" value="d">
+                        <span>Code A is more readable</span>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <strong>Explanation:</strong> Code B is more efficient because it only iterates 51 times (0, 2, 4...100) instead of 101 times. It avoids the if condition check and skips odd numbers entirely.
+                </div>
+            </div>
+
+            <!-- Question 7: Debug -->
+            <div class="question-container" data-question="7">
+                <div class="question-header">
+                    <div class="question-number">7</div>
+                    <div class="question-type debug">Debug</div>
+                </div>
+                <div class="question-text">Find the bug that prevents this code from stopping:</div>
+                <div class="code-block">int count = 1;
+while (count <= 5) {
+    System.out.println("Count: " + count);
+}</div>
+                <div class="options">
+                    <div class="option" data-value="a">
+                        <input type="radio" name="q7" value="a">
+                        <span>Missing increment - count never changes</span>
+                    </div>
+                    <div class="option" data-value="b">
+                        <input type="radio" name="q7" value="b">
+                        <span>Wrong condition operator</span>
+                    </div>
+                    <div class="option" data-value="c">
+                        <input type="radio" name="q7" value="c">
+                        <span>Wrong initial value</span>
+                    </div>
+                    <div class="option" data-value="d">
+                        <input type="radio" name="q7" value="d">
+                        <span>No error - code will stop</span>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <strong>Explanation:</strong> The code is missing count++ or count = count + 1. Without incrementing count, it remains 1 forever, making the condition always true, resulting in an infinite loop.
+                </div>
+            </div>
+
+            <!-- Question 8: Fill in the Blank -->
+            <div class="question-container" data-question="8">
+                <div class="question-header">
+                    <div class="question-number">8</div>
+                    <div class="question-type debug">Debug & Fix</div>
+                </div>
+                <div class="question-text">Fix this code to correctly sum numbers from 1 to 10:</div>
+                <div class="code-block">int sum = 0;
+for (int i = 1; i < 10; i++) {
+    sum += i;
+}
+System.out.println("Sum: " + sum);</div>
+                <div class="question-text" style="font-size: 0.95rem; margin-top: 10px;">What should the condition be to include 10?</div>
+                <div style="margin-top: 10px;">
+                    Correct condition: i <input type="text" class="fill-blank-input" data-answer="<= 10" placeholder="operator and value">
+                </div>
+                <div class="explanation">
+                    <strong>Explanation:</strong> The condition i < 10 stops at i = 9. To include 10, use i <= 10 or i < 11. The current code only sums 1+2+...+9 = 45, but should sum to 55.
+                </div>
+            </div>
+
+            <!-- Question 9: Compare -->
+            <div class="question-container" data-question="9">
+                <div class="question-header">
+                    <div class="question-number">9</div>
+                    <div class="question-type compare">Compare</div>
+                </div>
+                <div class="question-text">Which loop guarantees at least one execution?</div>
+                <div class="code-comparison">
+                    <div class="code-option">
+                        <div class="code-label">Code A</div>
+                        <div class="code-block">int x = 10;
+while (x < 5) {
+    System.out.println(x);
+    x++;
+}</div>
+                    </div>
+                    <div class="code-option">
+                        <div class="code-label">Code B</div>
+                        <div class="code-block">int x = 10;
+do {
+    System.out.println(x);
+    x++;
+} while (x < 5);</div>
+                    </div>
+                </div>
+                <div class="options">
+                    <div class="option" data-value="a">
+                        <input type="radio" name="q9" value="a">
+                        <span>Code A - while loop</span>
+                    </div>
+                    <div class="option" data-value="b">
+                        <input type="radio" name="q9" value="b">
+                        <span>Code B - do-while loop</span>
+                    </div>
+                    <div class="option" data-value="c">
+                        <input type="radio" name="q9" value="c">
+                        <span>Both execute at least once</span>
+                    </div>
+                    <div class="option" data-value="d">
+                        <input type="radio" name="q9" value="d">
+                        <span>Neither executes</span>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <strong>Explanation:</strong> Code B (do-while) executes at least once because it checks the condition AFTER the first execution. Code A (while) checks the condition BEFORE executing, so it never runs when x = 10.
+                </div>
+            </div>
+
+            <!-- Question 10: Debug -->
+            <div class="question-container" data-question="10">
+                <div class="question-header">
+                    <div class="question-number">10</div>
+                    <div class="question-type debug">Debug</div>
+                </div>
+                <div class="question-text">What will happen when this code runs?</div>
+                <div class="code-block">for (int i = 0; i < 10; i--) {
+    System.out.println(i);
+}</div>
+                <div class="options">
+                    <div class="option" data-value="a">
+                        <input type="radio" name="q10" value="a">
+                        <span>Infinite loop - i keeps decreasing</span>
+                    </div>
+                    <div class="option" data-value="b">
+                        <input type="radio" name="q10" value="b">
+                        <span>Prints 0 to 9</span>
+                    </div>
+                    <div class="option" data-value="c">
+                        <input type="radio" name="q10" value="c">
+                        <span>Prints 10 to 1</span>
+                    </div>
+                    <div class="option" data-value="d">
+                        <input type="radio" name="q10" value="d">
+                        <span>Compilation error</span>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <strong>Explanation:</strong> This creates an infinite loop. i starts at 0 (which is < 10), prints 0, then decrements to -1 (still < 10), prints -1, and continues forever into negative numbers.
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-submit" onclick="submitExam()">Submit Exam</button>
+                <button class="btn btn-reset" onclick="resetExam()">Reset</button>
+                <a href="index.html" class="btn btn-back-bottom">← Back to Exercises</a>
+            </div>
+
+            <div class="results" id="results"></div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Code & Conquer with Shiela. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const answers = {
+            q1: 'a',
+            q2: 'a',
+            q3: 'a',
+            q4: 'b',
+            q5: 'a',
+            q6: 'b',
+            q7: 'a',
+            q9: 'b',
+            q10: 'a'
+        };
+
+        const fillBlankAnswers = {
+            8: ['<= 10']
+        };
+
+        // Handle option selection
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.option')) {
+                const option = e.target.closest('.option');
+                const questionContainer = option.closest('.question-container');
+                const radioInput = option.querySelector('input[type="radio"]');
+                
+                // Clear previous selections
+                questionContainer.querySelectorAll('.option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                // Select current option
+                option.classList.add('selected');
+                radioInput.checked = true;
+            }
+        });
+
+        function submitExam() {
+            let score = 0;
+            let totalQuestions = 10;
+            
+            // Check multiple choice questions
+            Object.keys(answers).forEach(questionId => {
+                const selectedOption = document.querySelector(`input[name="${questionId}"]:checked`);
+                const questionContainer = document.querySelector(`[data-question="${questionId.slice(1)}"]`);
+                const options = questionContainer.querySelectorAll('.option');
+                
+                options.forEach(option => {
+                    const value = option.dataset.value;
+                    if (value === answers[questionId]) {
+                        option.classList.add('correct');
+                    } else if (selectedOption && option.querySelector('input').checked && value !== answers[questionId]) {
+                        option.classList.add('incorrect');
+                    }
+                });
+                
+                if (selectedOption && selectedOption.value === answers[questionId]) {
+                    score++;
+                }
+            });
+            
+            // Check fill-in-the-blank questions
+            Object.keys(fillBlankAnswers).forEach(questionNum => {
+                const questionContainer = document.querySelector(`[data-question="${questionNum}"]`);
+                const inputs = questionContainer.querySelectorAll('.fill-blank-input');
+                const correctAnswers = fillBlankAnswers[questionNum];
+                let allCorrect = true;
+                
+                inputs.forEach((input, index) => {
+                    const userAnswer = input.value.trim();
+                    const correctAnswer = correctAnswers[index];
+                    
+                    // Flexible checking for common variations
+                    const isCorrect = checkAnswer(userAnswer, correctAnswer);
+                    
+                    if (isCorrect) {
+                        input.classList.add('correct');
+                    } else {
+                        input.classList.add('incorrect');
+                        allCorrect = false;
+                    }
+                });
+                
+                if (allCorrect) {
+                    score++;
+                }
+            });
+            
+            // Show results
+            const percentage = Math.round((score / totalQuestions) * 100);
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.classList.add('show');
+            resultsDiv.innerHTML = `
+                <div>Your Score: ${score}/${totalQuestions} (${percentage}%)</div>
+                <div style="margin-top: 10px; font-size: 1rem;">
+                    ${percentage >= 80 ? '🎉 Excellent! You\'re a debugging master!' : 
+                      percentage >= 60 ? '👍 Good job! Keep practicing your debugging skills!' : 
+                      '📚 Keep learning! Review the explanations below.'}
+                </div>
+            `;
+            
+            // Show explanations
+            document.querySelectorAll('.explanation').forEach(exp => {
+                exp.classList.add('show');
+            });
+            
+            // Scroll to results
+            resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function checkAnswer(userAnswer, correctAnswer) {
+            // Normalize answers for comparison
+            const normalize = (str) => str.toLowerCase().replace(/\s+/g, '').replace(/[;]/g, '');
+            
+            const normalizedUser = normalize(userAnswer);
+            const normalizedCorrect = normalize(correctAnswer);
+            
+            // Check for exact match
+            if (normalizedUser === normalizedCorrect) return true;
+            
+            // Special cases for common variations
+            if (correctAnswer === '<= 10') {
+                return normalizedUser === '<=10' || userAnswer === '< 11' || normalizedUser === '<11';
+            }
+            
+            return false;
+        }
+
+        function resetExam() {
+            // Clear all selections and inputs
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.checked = false;
+            });
+            
+            document.querySelectorAll('.fill-blank-input').forEach(input => {
+                input.value = '';
+                input.classList.remove('correct', 'incorrect');
+            });
+            
+            document.querySelectorAll('.option').forEach(option => {
+                option.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Hide results and explanations
+            document.getElementById('results').classList.remove('show');
+            document.getElementById('results').innerHTML = '';
+            
+            document.querySelectorAll('.explanation').forEach(exp => {
+                exp.classList.remove('show');
+            });
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
