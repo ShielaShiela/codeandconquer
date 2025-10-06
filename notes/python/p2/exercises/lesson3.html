@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Math Adventures | Python 數學大冒險</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #5b21b6;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            color: #374151;
+        }
+
+        .lang-toggle {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .lang-btn {
+            background: white;
+            border: 3px solid #8b5cf6;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .lang-btn.active {
+            background: #8b5cf6;
+            color: white;
+        }
+
+        .lang-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .score-board {
+            background: white;
+            display: inline-block;
+            padding: 15px 30px;
+            border-radius: 50px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #7c3aed;
+        }
+
+        .exercise-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border: 4px solid #c4b5fd;
+        }
+
+        .exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 20px;
+        }
+
+        .exercise-title {
+            font-size: 1.8em;
+            color: #7c3aed;
+            margin-bottom: 8px;
+        }
+
+        .exercise-desc {
+            color: #6b7280;
+            font-size: 1.1em;
+        }
+
+        .exercise-number {
+            font-size: 2em;
+            color: #8b5cf6;
+            font-weight: bold;
+        }
+
+        .code-editor {
+            background: #1e1e1e;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+
+        .code-line {
+            color: #4ade80;
+        }
+
+        .code-comment {
+            color: #ef4444;
+        }
+
+        .code-function {
+            color: #a78bfa;
+        }
+
+        .blank-input {
+            width: 60px;
+            padding: 5px 10px;
+            margin: 0 5px;
+            border: 2px solid #60a5fa;
+            border-radius: 5px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            background: white;
+            color: #1f2937;
+        }
+
+        .blank-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .output-box {
+            background: #dbeafe;
+            border: 2px solid #60a5fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .output-title {
+            font-weight: bold;
+            color: #1e40af;
+            margin-bottom: 5px;
+        }
+
+        .output-content {
+            font-family: 'Courier New', monospace;
+            color: #374151;
+        }
+
+        .hint-box {
+            background: #fef3c7;
+            border: 2px solid #fbbf24;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #92400e;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-check {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-check:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+
+        .btn-reset {
+            background: #6b7280;
+            color: white;
+            flex: 0.5;
+        }
+
+        .btn-reset:hover {
+            background: #4b5563;
+            transform: translateY(-2px);
+        }
+
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .result.correct {
+            background: #d1fae5;
+            border: 2px solid #10b981;
+            color: #065f46;
+        }
+
+        .result.incorrect {
+            background: #fee2e2;
+            border: 2px solid #ef4444;
+            color: #991b1b;
+        }
+
+        .reference-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border: 4px solid #86efac;
+        }
+
+        .reference-title {
+            font-size: 1.8em;
+            color: #15803d;
+            margin-bottom: 20px;
+        }
+
+        .operators-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .operator-item {
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .operator-item code {
+            font-size: 1.5em;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .op-add { background: #d1fae5; }
+        .op-add code { color: #15803d; }
+        .op-sub { background: #dbeafe; }
+        .op-sub code { color: #1e40af; }
+        .op-mul { background: #e9d5ff; }
+        .op-mul code { color: #6b21a8; }
+        .op-div { background: #fef3c7; }
+        .op-div code { color: #92400e; }
+        .op-mod { background: #fce7f3; }
+        .op-mod code { color: #9f1239; }
+        .op-exp { background: #e0e7ff; }
+        .op-exp code { color: #3730a3; }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            .exercise-card {
+                padding: 20px;
+            }
+            .operators-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✨ Python Math Adventures | Python 數學大冒險 ✨</h1>
+            <p class="subtitle-en">Fill in the blanks with the correct math operators!</p>
+            <p class="subtitle-zh hidden">填入正確的數學運算符號！</p>
+            
+            <div class="lang-toggle">
+                <button class="lang-btn active" onclick="setLanguage('en')">English</button>
+                <button class="lang-btn" onclick="setLanguage('zh')">繁體中文</button>
+            </div>
+            
+            <div class="score-board">
+                <span class="score-label-en">Score:</span>
+                <span class="score-label-zh hidden">得分：</span>
+                <span id="score">0</span>/5
+            </div>
+        </div>
+
+        <!-- Exercise 1 -->
+        <div class="exercise-card">
+            <div class="exercise-header">
+                <div>
+                    <h2 class="exercise-title">🍕 <span class="title-en">Pizza Party Calculator</span><span class="title-zh hidden">披薩派對計算機</span></h2>
+                    <p class="exercise-desc desc-en">Help calculate how many pizza slices everyone gets!</p>
+                    <p class="exercise-desc desc-zh hidden">幫忙計算每個人可以得到多少片披薩！</p>
+                </div>
+                <div class="exercise-number">1</div>
+            </div>
+            
+            <div class="code-editor">
+                <div class="code-comment"># Pizza Party Calculator | 披薩派對計算機</div>
+                <div class="code-line">total_slices = 24</div>
+                <div class="code-line">friends = 6</div>
+                <div class="code-line">slices_per_person = total_slices <input type="text" class="blank-input" id="blank-1" maxlength="2"> friends</div>
+                <div class="code-line"></div>
+                <div class="code-function">print("Each friend gets", slices_per_person, "slices!")</div>
+                <div class="code-function">print("每位朋友得到", slices_per_person, "片！")</div>
+            </div>
+            
+            <div class="output-box">
+                <div class="output-title output-title-en">Expected Output:</div>
+                <div class="output-title output-title-zh hidden">預期輸出：</div>
+                <div class="output-content">Each friend gets 4 slices! | 每位朋友得到 4 片！</div>
+            </div>
+            
+            <div class="hint-box">
+                <span class="hint-en">💡 <strong>Hint:</strong> Use the division operator to split slices evenly</span>
+                <span class="hint-zh hidden">💡 <strong>提示：</strong>使用除法運算符來平均分配披薩片</span>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn btn-check" onclick="checkAnswer(1, '/')">
+                    ✓ <span class="btn-check-en">Check Answer</span><span class="btn-check-zh hidden">檢查答案</span>
+                </button>
+                <button class="btn btn-reset" onclick="resetExercise(1)">
+                    ↻ <span class="btn-reset-en">Reset</span><span class="btn-reset-zh hidden">重設</span>
+                </button>
+            </div>
+            <div id="result-1"></div>
+        </div>
+
+        <!-- Exercise 2 -->
+        <div class="exercise-card">
+            <div class="exercise-header">
+                <div>
+                    <h2 class="exercise-title">🎂 <span class="title-en">Birthday Age Calculator</span><span class="title-zh hidden">生日年齡計算機</span></h2>
+                    <p class="exercise-desc desc-en">Calculate how old someone will be next year!</p>
+                    <p class="exercise-desc desc-zh hidden">計算某人明年將會幾歲！</p>
+                </div>
+                <div class="exercise-number">2</div>
+            </div>
+            
+            <div class="code-editor">
+                <div class="code-comment"># Birthday Age Calculator | 生日年齡計算機</div>
+                <div class="code-function">name = input("What's your name? 你叫什麼名字？")</div>
+                <div class="code-function">current_age = int(input("How old are you? 你幾歲？"))</div>
+                <div class="code-line">next_year_age = current_age <input type="text" class="blank-input" id="blank-2" maxlength="2"> 1</div>
+                <div class="code-line"></div>
+                <div class="code-function">print(name, "you will be", next_year_age, "next year!")</div>
+                <div class="code-function">print(name, "明年你將會", next_year_age, "歲！")</div>
+            </div>
+            
+            <div class="output-box">
+                <div class="output-title output-title-en">Expected Output:</div>
+                <div class="output-title output-title-zh hidden">預期輸出：</div>
+                <div class="output-content">Example: Sofia you will be 11 next year! | 範例：小明 明年你將會 11 歲！</div>
+            </div>
+            
+            <div class="hint-box">
+                <span class="hint-en">💡 <strong>Hint:</strong> Use the addition operator to add 1 year</span>
+                <span class="hint-zh hidden">💡 <strong>提示：</strong>使用加法運算符來增加 1 歲</span>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn btn-check" onclick="checkAnswer(2, '+')">
+                    ✓ <span class="btn-check-en">Check Answer</span><span class="btn-check-zh hidden">檢查答案</span>
+                </button>
+                <button class="btn btn-reset" onclick="resetExercise(2)">
+                    ↻ <span class="btn-reset-en">Reset</span><span class="btn-reset-zh hidden">重設</span>
+                </button>
+            </div>
+            <div id="result-2"></div>
+        </div>
+
+        <!-- Exercise 3 -->
+        <div class="exercise-card">
+            <div class="exercise-header">
+                <div>
+                    <h2 class="exercise-title">🌟 <span class="title-en">Star Points Counter</span><span class="title-zh hidden">星星點數計算機</span></h2>
+                    <p class="exercise-desc desc-en">Calculate total points from collecting stars!</p>
+                    <p class="exercise-desc desc-zh hidden">計算收集星星獲得的總點數！</p>
+                </div>
+                <div class="exercise-number">3</div>
+            </div>
+            
+            <div class="code-editor">
+                <div class="code-comment"># Star Points Counter | 星星點數計算機</div>
+                <div class="code-line">stars_collected = 15</div>
+                <div class="code-line">points_per_star = 10</div>
+                <div class="code-line">total_points = stars_collected <input type="text" class="blank-input" id="blank-3" maxlength="2"> points_per_star</div>
+                <div class="code-line"></div>
+                <div class="code-function">print("You earned", total_points, "points!")</div>
+                <div class="code-function">print("你獲得了", total_points, "點！")</div>
+            </div>
+            
+            <div class="output-box">
+                <div class="output-title output-title-en">Expected Output:</div>
+                <div class="output-title output-title-zh hidden">預期輸出：</div>
+                <div class="output-content">You earned 150 points! | 你獲得了 150 點！</div>
+            </div>
+            
+            <div class="hint-box">
+                <span class="hint-en">💡 <strong>Hint:</strong> Use the multiplication operator</span>
+                <span class="hint-zh hidden">💡 <strong>提示：</strong>使用乘法運算符</span>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn btn-check" onclick="checkAnswer(3, '*')">
+                    ✓ <span class="btn-check-en">Check Answer</span><span class="btn-check-zh hidden">檢查答案</span>
+                </button>
+                <button class="btn btn-reset" onclick="resetExercise(3)">
+                    ↻ <span class="btn-reset-en">Reset</span><span class="btn-reset-zh hidden">重設</span>
+                </button>
+            </div>
+            <div id="result-3"></div>
+        </div>
+
+        <!-- Exercise 4 -->
+        <div class="exercise-card">
+            <div class="exercise-header">
+                <div>
+                    <h2 class="exercise-title">🍭 <span class="title-en">Candy Sharing</span><span class="title-zh hidden">糖果分享</span></h2>
+                    <p class="exercise-desc desc-en">Find out how many candies are left after sharing!</p>
+                    <p class="exercise-desc desc-zh hidden">找出分享後還剩下多少顆糖果！</p>
+                </div>
+                <div class="exercise-number">4</div>
+            </div>
+            
+            <div class="code-editor">
+                <div class="code-comment"># Candy Sharing | 糖果分享</div>
+                <div class="code-line">total_candies = 23</div>
+                <div class="code-line">friends = 5</div>
+                <div class="code-line">leftover = total_candies <input type="text" class="blank-input" id="blank-4" maxlength="2"> friends</div>
+                <div class="code-line"></div>
+                <div class="code-function">print("You have", leftover, "candies left over!")</div>
+                <div class="code-function">print("你還剩下", leftover, "顆糖果！")</div>
+            </div>
+            
+            <div class="output-box">
+                <div class="output-title output-title-en">Expected Output:</div>
+                <div class="output-title output-title-zh hidden">預期輸出：</div>
+                <div class="output-content">You have 3 candies left over! | 你還剩下 3 顆糖果！</div>
+            </div>
+            
+            <div class="hint-box">
+                <span class="hint-en">💡 <strong>Hint:</strong> Use the modulo operator (%) to find the remainder</span>
+                <span class="hint-zh hidden">💡 <strong>提示：</strong>使用模數運算符 (%) 來求餘數</span>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn btn-check" onclick="checkAnswer(4, '%')">
+                    ✓ <span class="btn-check-en">Check Answer</span><span class="btn-check-zh hidden">檢查答案</span>
+                </button>
+                <button class="btn btn-reset" onclick="resetExercise(4)">
+                    ↻ <span class="btn-reset-en">Reset</span><span class="btn-reset-zh hidden">重設</span>
+                </button>
+            </div>
+            <div id="result-4"></div>
+        </div>
+
+        <!-- Exercise 5 -->
+        <div class="exercise-card">
+            <div class="exercise-header">
+                <div>
+                    <h2 class="exercise-title">🚀 <span class="title-en">Space Mission Calculator</span><span class="title-zh hidden">太空任務計算機</span></h2>
+                    <p class="exercise-desc desc-en">Calculate the speed of a rocket!</p>
+                    <p class="exercise-desc desc-zh hidden">計算火箭的速度！</p>
+                </div>
+                <div class="exercise-number">5</div>
+            </div>
+            
+            <div class="code-editor">
+                <div class="code-comment"># Space Mission Calculator | 太空任務計算機</div>
+                <div class="code-function">distance = float(input("Distance in km: 距離（公里）："))</div>
+                <div class="code-function">time = float(input("Time in hours: 時間（小時）："))</div>
+                <div class="code-line">speed = distance <input type="text" class="blank-input" id="blank-5" maxlength="2"> time</div>
+                <div class="code-line"></div>
+                <div class="code-function">print("The rocket's speed is", speed, "km/h")</div>
+                <div class="code-function">print("火箭的速度是", speed, "公里/小時")</div>
+            </div>
+            
+            <div class="output-box">
+                <div class="output-title output-title-en">Expected Output:</div>
+                <div class="output-title output-title-zh hidden">預期輸出：</div>
+                <div class="output-content">Example: The rocket's speed is 500.0 km/h | 範例：火箭的速度是 500.0 公里/小時</div>
+            </div>
+            
+            <div class="hint-box">
+                <span class="hint-en">💡 <strong>Hint:</strong> Speed = distance divided by time</span>
+                <span class="hint-zh hidden">💡 <strong>提示：</strong>速度 = 距離除以時間</span>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn btn-check" onclick="checkAnswer(5, '/')">
+                    ✓ <span class="btn-check-en">Check Answer</span><span class="btn-check-zh hidden">檢查答案</span>
+                </button>
+                <button class="btn btn-reset" onclick="resetExercise(5)">
+                    ↻ <span class="btn-reset-en">Reset</span><span class="btn-reset-zh hidden">重設</span>
+                </button>
+            </div>
+            <div id="result-5"></div>
+        </div>
+
+        <!-- Reference Card -->
+        <div class="reference-card">
+            <h3 class="reference-title">🎓 <span class="ref-title-en">Python Math Operators Reference</span><span class="ref-title-zh hidden">Python 數學運算符號參考</span></h3>
+            <div class="operators-grid">
+                <div class="operator-item op-add">
+                    <code>+</code>
+                    <p class="op-desc-en">Addition (add numbers)</p>
+                    <p class="op-desc-zh hidden">加法（數字相加）</p>
+                </div>
+                <div class="operator-item op-sub">
+                    <code>-</code>
+                    <p class="op-desc-en">Subtraction (subtract numbers)</p>
+                    <p class="op-desc-zh hidden">減法（數字相減）</p>
+                </div>
+                <div class="operator-item op-mul">
+                    <code>*</code>
+                    <p class="op-desc-en">Multiplication (multiply numbers)</p>
+                    <p class="op-desc-zh hidden">乘法（數字相乘）</p>
+                </div>
+                <div class="operator-item op-div">
+                    <code>/</code>
+                    <p class="op-desc-en">Division (divide numbers)</p>
+                    <p class="op-desc-zh hidden">除法（數字相除）</p>
+                </div>
+                <div class="operator-item op-mod">
+                    <code>%</code>
+                    <p class="op-desc-en">Modulo (find remainder)</p>
+                    <p class="op-desc-zh hidden">模數（求餘數）</p>
+                </div>
+                <div class="operator-item op-exp">
+                    <code>**</code>
+                    <p class="op-desc-en">Exponent (power of)</p>
+                    <p class="op-desc-zh hidden">指數（次方）</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let score = 0;
+        let answeredQuestions = new Set();
+
+        function checkAnswer(exerciseNum, correctAnswer) {
+            const input = document.getElementById(`blank-${exerciseNum}`);
+            const userAnswer = input.value.trim();
+            const resultDiv = document.getElementById(`result-${exerciseNum}`);
+            
+            if (userAnswer === correctAnswer) {
+                resultDiv.className = 'result correct';
+                resultDiv.innerHTML = `
+                    ✓ <span class="correct-en">Awesome! You got it right! 🎉</span>
+                    <span class="correct-zh hidden">太棒了！答對了！🎉</span>
+                `;
+                
+                if (!answeredQuestions.has(exerciseNum)) {
+                    score++;
+                    answeredQuestions.add(exerciseNum);
+                    document.getElementById('score').textContent = score;
+                }
+            } else {
+                resultDiv.className = 'result incorrect';
+                resultDiv.innerHTML = `
+                    ✗ <span class="incorrect-en">Not quite! Try again! The answer is: <code>${correctAnswer}</code></span>
+                    <span class="incorrect-zh hidden">再試試看！正確答案是：<code>${correctAnswer}</code></span>
+                `;
+            }
+        }
+
+        function resetExercise(exerciseNum) {
+            document.getElementById(`blank-${exerciseNum}`).value = '';
+            document.getElementById(`result-${exerciseNum}`).innerHTML = '';
+        }
+
+        function setLanguage(lang) {
+            // Toggle active button
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Show/hide appropriate language elements
+            if (lang === 'en') {
+                document.querySelectorAll('.subtitle-en, .title-en, .desc-en, .hint-en, .output-title-en, .btn-check-en, .btn-reset-en, .ref-title-en, .op-desc-en, .score-label-en, .correct-en, .incorrect-en').forEach(el => {
+                    el.classList.remove('hidden');
+                });
+                document.querySelectorAll('.subtitle-zh, .title-zh, .desc-zh, .hint-zh, .output-title-zh, .btn-check-zh, .btn-reset-zh, .ref-title-zh, .op-desc-zh, .score-label-zh, .correct-zh, .incorrect-zh').forEach(el => {
+                    el.classList.add('hidden');
+                });
+            } else {
+                document.querySelectorAll('.subtitle-zh, .title-zh, .desc-zh, .hint-zh, .output-title-zh, .btn-check-zh, .btn-reset-zh, .ref-title-zh, .op-desc-zh, .score-label-zh, .correct-zh, .incorrect-zh').forEach(el => {
+                    el.classList.remove('hidden');
+                });
+                document.querySelectorAll('.subtitle-en, .title-en, .desc-en, .hint-en, .output-title-en, .btn-check-en, .btn-reset-en, .ref-title-en, .op-desc-en, .score-label-en, .correct-en, .incorrect-en').forEach(el => {
+                    el.classList.add('hidden');
+                });
+            }
+        }
+    </script>
+</body>
+</html>
