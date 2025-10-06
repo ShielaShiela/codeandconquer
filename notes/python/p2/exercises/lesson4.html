@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Math Adventures Level 2 | Python 數學大冒險 第二級</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #7c2d12;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .level-badge {
+            background: #dc2626;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 0.5em;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            color: #374151;
+        }
+
+        .lang-toggle {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .lang-btn {
+            background: white;
+            border: 3px solid #ea580c;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .lang-btn.active {
+            background: #ea580c;
+            color: white;
+        }
+
+        .lang-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .score-board {
+            background: white;
+            display: inline-block;
+            padding: 15px 30px;
+            border-radius: 50px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #dc2626;
+        }
+
+        .exercise-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border: 4px solid #fed7aa;
+        }
+
+        .exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 20px;
+        }
+
+        .exercise-title {
+            font-size: 1.8em;
+            color: #c2410c;
+            margin-bottom: 8px;
+        }
+
+        .exercise-desc {
+            color: #6b7280;
+            font-size: 1.1em;
+        }
+
+        .exercise-number {
+            font-size: 2em;
+            color: #ea580c;
+            font-weight: bold;
+        }
+
+        .difficulty-badge {
+            display: inline-block;
+            background: #fbbf24;
+            color: #78350f;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .code-editor {
+            background: #1e1e1e;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+
+        .code-line {
+            color: #4ade80;
+        }
+
+        .code-comment {
+            color: #ef4444;
+        }
+
+        .code-function {
+            color: #a78bfa;
+        }
+
+        .code-keyword {
+            color: #fbbf24;
+        }
+
+        .blank-input {
+            padding: 5px 10px;
+            margin: 0 3px;
+            border: 2px solid #f97316;
+            border-radius: 5px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            background: white;
+            color: #1f2937;
+        }
+
+        .blank-small {
+            width: 60px;
+        }
+
+        .blank-medium {
+            width: 120px;
+        }
+
+        .blank-large {
+            width: 180px;
+        }
+
+        .blank-input:focus {
+            outline: none;
+            border-color: #ea580c;
+            box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.1);
+        }
+
+        .output-box {
+            background: #dbeafe;
+            border: 2px solid #60a5fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .output-title {
+            font-weight: bold;
+            color: #1e40af;
+            margin-bottom: 5px;
+        }
+
+        .output-content {
+            font-family: 'Courier New', monospace;
+            color: #374151;
+        }
+
+        .hint-box {
+            background: #fef3c7;
+            border: 2px solid #fbbf24;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #92400e;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-check {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-check:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+
+        .btn-reset {
+            background: #6b7280;
+            color: white;
+            flex: 0.5;
+        }
+
+        .btn-reset:hover {
+            background: #4b5563;
+            transform: translateY(-2px);
+        }
+
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .result.correct {
+            background: #d1fae5;
+            border: 2px solid #10b981;
+            color: #065f46;
+        }
+
+        .result.incorrect {
+            background: #fee2e2;
+            border: 2px solid #ef4444;
+            color: #991b1b;
+        }
+
+        .reference-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border: 4px solid #fcd34d;
+        }
+
+        .reference-title {
+            font-size: 1.8em;
+            color: #92400e;
+            margin-bottom: 20px;
+        }
+
+        .tips-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .tip-item {
+            padding: 15px;
+            border-radius: 10px;
+            background: #fef3c7;
+            border-left: 5px solid #f59e0b;
+        }
+
+        .tip-item strong {
+            color: #92400e;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+            .exercise-card {
+                padding: 20px;
+            }
+            .blank-medium {
+                width: 100px;
+            }
+            .blank-large {
+                width: 140px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔥 Python Math Adventures <span class="level-badge">Level 2</span> 🔥</h1>
+            <h1>🔥 Python 數學大冒險 <span class="level-badge">第二級</span> 🔥</h1>
+            <p class="subtitle-en">Fill in both variables AND operators - Challenge Mode!</p>
+            <p class="subtitle-zh hidden">填入變數和運算符號 - 挑戰模式！</p>
+            
+            <div class="lang-toggle">
+                <button class="lang-btn active" onclick="setLanguage('en')">English</button>
+                <button class="lang-btn" onclick="setLanguage('zh')">繁體中文</button>
+            </div>
+
+        <!-- Reference Card -->
+        <div class="reference-card">
+            <h3 class="reference-title">📚 <span class="ref-title-en">Python Tips & Tricks</span><span class="ref-title-zh hidden">Python 技巧與訣竅</span></h3>
+            <div class="tips-grid">
+                <div class="tip-item">
+                    <strong class="tip-strong-en">Variable Naming Rules | 變數命名規則</strong>
+                    <p class="tip-text-en">Use descriptive names like <code>total_score</code>, <code>average</code>, or <code>points_above</code>. Use underscores (_) to separate words!</p>
+                    <p class="tip-text-zh hidden">使用描述性名稱，如 <code>total_score</code>、<code>average</code> 或 <code>points_above</code>。使用底線 (_) 分隔單字！</p>
+                </div>
+                
+                <div class="tip-item">
+                    <strong class="tip-strong-en">Order of Operations | 運算順序</strong>
+                    <p class="tip-text-en">Python follows PEMDAS: Parentheses, Exponents, Multiplication/Division, Addition/Subtraction</p>
+                    <p class="tip-text-zh hidden">Python 遵循運算順序：括號、指數、乘除、加減</p>
+                </div>
+                
+                <div class="tip-item">
+                    <strong class="tip-strong-en">Integer vs Float Division | 整數與浮點數除法</strong>
+                    <p class="tip-text-en"><code>//</code> gives whole numbers (85 // 3 = 28), while <code>/</code> gives decimals (85 / 3 = 28.333...)</p>
+                    <p class="tip-text-zh hidden"><code>//</code> 得到整數（85 // 3 = 28），而 <code>/</code> 得到小數（85 / 3 = 28.333...）</p>
+                </div>
+                
+                <div class="tip-item">
+                    <strong class="tip-strong-en">Modulo Operator % | 模數運算符 %</strong>
+                    <p class="tip-text-en">The % operator gives the remainder. Example: 135 % 60 = 15 (remainder when dividing 135 by 60)</p>
+                    <p class="tip-text-zh hidden">% 運算符給出餘數。例如：135 % 60 = 15（135 除以 60 的餘數）</p>
+                </div>
+                
+                <div class="tip-item">
+                    <strong class="tip-strong-en">Chaining Operations | 連鎖運算</strong>
+                    <p class="tip-text-en">You can chain multiple operations: <code>total = a + b + c</code> or <code>result = x * y / z</code></p>
+                    <p class="tip-text-zh hidden">你可以連鎖多個運算：<code>total = a + b + c</code> 或 <code>result = x * y / z</code></p>
+                </div>
+                
+                <div class="tip-item">
+                    <strong class="tip-strong-en">Using Variables | 使用變數</strong>
+                    <p class="tip-text-en">Store intermediate results in variables to make code clearer and reusable!</p>
+                    <p class="tip-text-zh hidden">將中間結果儲存在變數中，使程式碼更清晰且可重複使用！</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let score = 0;
+        let answeredQuestions = new Set();
+
+        function checkAnswer(exerciseNum, correctAnswers) {
+            let allCorrect = true;
+            let userAnswers = [];
+            
+            // Collect all user answers for this exercise
+            for (let i = 1; i <= correctAnswers.length; i++) {
+                const input = document.getElementById(`blank-${exerciseNum}-${i}`);
+                if (input) {
+                    userAnswers.push(input.value.trim());
+                }
+            }
+            
+            // Check each answer
+            for (let i = 0; i < correctAnswers.length; i++) {
+                if (userAnswers[i] !== correctAnswers[i]) {
+                    allCorrect = false;
+                    break;
+                }
+            }
+            
+            const resultDiv = document.getElementById(`result-${exerciseNum}`);
+            
+            if (allCorrect) {
+                resultDiv.className = 'result correct';
+                resultDiv.innerHTML = `
+                    ✓ <span class="correct-en">Excellent! Perfect answer! 🎉🎉🎉</span>
+                    <span class="correct-zh hidden">太棒了！完美答案！🎉🎉🎉</span>
+                `;
+                
+                if (!answeredQuestions.has(exerciseNum)) {
+                    score++;
+                    answeredQuestions.add(exerciseNum);
+                    document.getElementById('score').textContent = score;
+                }
+            } else {
+                resultDiv.className = 'result incorrect';
+                let answerText = correctAnswers.join(', ').replace(/,/g, ' | ');
+                resultDiv.innerHTML = `
+                    ✗ <span class="incorrect-en">Not quite! Check your answers. The correct answers are: <code>${answerText}</code></span>
+                    <span class="incorrect-zh hidden">再試試看！檢查你的答案。正確答案是：<code>${answerText}</code></span>
+                `;
+            }
+        }
+
+        function resetExercise(exerciseNum, numBlanks) {
+            for (let i = 1; i <= numBlanks; i++) {
+                const input = document.getElementById(`blank-${exerciseNum}-${i}`);
+                if (input) {
+                    input.value = '';
+                }
+            }
+            document.getElementById(`result-${exerciseNum}`).innerHTML = '';
+        }
+
+        function setLanguage(lang) {
+            // Toggle active button
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Show/hide appropriate language elements
+            if (lang === 'en') {
+                document.querySelectorAll('.subtitle-en, .title-en, .desc-en, .hint-en, .output-title-en, .btn-check-en, .btn-reset-en, .ref-title-en, .score-label-en, .correct-en, .incorrect-en, .tip-strong-en, .tip-text-en').forEach(el => {
+                    el.classList.remove('hidden');
+                });
+                document.querySelectorAll('.subtitle-zh, .title-zh, .desc-zh, .hint-zh, .output-title-zh, .btn-check-zh, .btn-reset-zh, .ref-title-zh, .score-label-zh, .correct-zh, .incorrect-zh, .tip-strong-zh, .tip-text-zh').forEach(el => {
+                    el.classList.add('hidden');
+                });
+            } else {
+                document.querySelectorAll('.subtitle-zh, .title-zh, .desc-zh, .hint-zh, .output-title-zh, .btn-check-zh, .btn-reset-zh, .ref-title-zh, .score-label-zh, .correct-zh, .incorrect-zh, .tip-strong-zh, .tip-text-zh').forEach(el => {
+                    el.classList.remove('hidden');
+                });
+                document.querySelectorAll('.subtitle-en, .title-en, .desc-en, .hint-en, .output-title-en, .btn-check-en, .btn-reset-en, .ref-title-en, .score-label-en, .correct-en, .incorrect-en, .tip-strong-en, .tip-text-en').forEach(el => {
+                    el.classList.add('hidden');
+                });
+            }
+        }
+    </script>
+</body>
+</html>
+            
+            <div class="score-board">
+                <span class="score-label-en">Score:</span>
+                <span class="score-label-zh hidden">得分：</span>
+                <span id="score">0</span>/5
+            </div>
+        </div>
+
+        <!-- Exercise 1 -->
+        <div class="exercise-card">
+            <div class="exercise-header">
+                <div>
+                    <h2 class="exercise-title">🎮 <span class="title-en">Game Score Calculator</span><span class="title-zh hidden">遊戲分數計算機</span></h2>
+                    <p class="exercise-desc desc-en">Calculate total game score with bonus points!</p>
+                    <p class="exercise-desc desc-zh hidden">計算遊戲總分數（包含獎勵分數）！</p>
+                    <span class="difficulty-badge">⭐⭐ Medium | 中等</span>
+                </div>
+                <div class="exercise-number">1</div>
+            </div>
+            
+            <div class="code-editor">
+                <div class="code-comment"># Game Score Calculator | 遊戲分數計算機</div>
+                <div class="code-line">base_score = 450</div>
+                <div class="code-line">bonus_multiplier = 3</div>
+                <div class="code-line">extra_points = 50</div>
+                <div class="code-line"><input type="text" class="blank-input blank-medium" id="blank-1-1" placeholder="variable_name"> = base_score <input type="text" class="blank-input blank-small" id="blank-1-2" placeholder="op"> bonus_multiplier</div>
+                <div class="code-line">final_score = <input type="text" class="blank-input blank-medium" id="blank-1-3" placeholder="variable_name"> <input type="text" class="blank-input blank-small" id="blank-1-4" placeholder="op"> extra_points</div>
+                <div class="code-line"></div>
+                <div class="code-function">print("Your final score is:", final_score)</div>
+                <div class="code-function">print("你的最終分數是：", final_score)</div>
+            </div>
+            
+            <div class="output-box">
+                <div class="output-title output-title-en">Expected Output:</div>
+                <div class="output-title output-title-zh hidden">預期輸出：</div>
+                <div class="output-content">Your final score is: 1400 | 你的最終分數是：1400</div>
+            </div>
+            
+            <div class="hint-box">
+                <span class="hint-en">💡 <strong>Hint:</strong> First multiply base_score by multiplier, store it in a variable, then add extra_points</span>
+                <span class="hint-zh hidden">💡 <strong>提示：</strong>先將 base_score 乘以倍數，儲存到變數中，然後加上額外分數</span>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn btn-check" onclick="checkAnswer(1, ['total_bonus', '*', 'total_bonus', '+'])">
+                    ✓ <span class="btn-check-en">Check Answer</span><span class="btn-check-zh hidden">檢查答案</span>
+                </button>
+                <button class="btn btn-reset" onclick="resetExercise(1, 4)">
+                    ↻ <span class="btn-reset-en">Reset</span><span class="btn-reset-zh hidden">重設</span>
+                </button>
+            </div>
+            <div id="result-1"></div>
+        </div>
+
+        <!-- Exercise 2 -->
+        <div class="exercise-card">
+            <div class="exercise-header">
+                <div>
+                    <h2 class="exercise-title">🏃 <span class="title-en">Marathon Time Calculator</span><span class="title-zh hidden">馬拉松時間計算機</span></h2>
+                    <p class="exercise-desc desc-en">Convert running time from minutes to hours and minutes!</p>
+                    <p class="exercise-desc desc-zh hidden">將跑步時間從分鐘轉換為小時和分鐘！</p>
+                    <span class="difficulty-badge">⭐⭐⭐ Hard | 困難</span>
+                </div>
+                <div class="exercise-number">2</div>
+            </div>
+            
+            <div class="code-editor">
+                <div class="code-comment"># Marathon Time Calculator | 馬拉松時間計算機</div>
+                <div class="code-function">total_minutes = int(input("Total minutes: 總分鐘數："))</div>
+                <div class="code-line"><input type="text" class="blank-input blank-medium" id="blank-2-1" placeholder="variable_name"> = total_minutes <input type="text" class="blank-input blank-small" id="blank-2-2" placeholder="op"> 60</div>
+                <div class="code-line"><input type="text" class="blank-input blank-medium" id="blank-2-3" placeholder="variable_name"> = total_minutes <input type="text" class="blank-input blank-small" id="blank-2-4" placeholder="op"> 60</div>
+                <div class="code-line"></div>
+                <div class="code-function">print("Time:", <input type="text" class="blank-input blank-medium" id="blank-2-5" placeholder="variable_name">, "hours and", <input type="text" class="blank-input blank-medium" id="blank-2-6" placeholder="variable_name">, "minutes")</div>
+                <div class="code-function">print("時間：", <input type="text" class="blank-input blank-medium" id="blank-2-7" placeholder="variable_name">, "小時", <input type="text" class="blank-input blank-medium" id="blank-2-8" placeholder="variable_name">, "分鐘")</div>
+            </div>
+            
+            <div class="output-box">
+                <div class="output-title output-title-en">Expected Output (if input is 135):</div>
+                <div class="output-title output-title-zh hidden">預期輸出（如果輸入是 135）：</div>
+                <div class="output-content">Time: 2 hours and 15 minutes | 時間：2 小時 15 分鐘</div>
+            </div>
+            
+            <div class="hint-box">
+                <span class="hint-en">💡 <strong>Hint:</strong> Use // for hours (division) and % for remaining minutes (modulo). Use the same variable names in print!</span>
+                <span class="hint-zh hidden">💡 <strong>提示：</strong>使用 // 求小時數（除法）和 % 求剩餘分鐘數（模數）。在 print 中使用相同的變數名稱！</span>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn btn-check" onclick="checkAnswer(2, ['hours', '//', 'minutes', '%', 'hours', 'minutes', 'hours', 'minutes'])">
+                    ✓ <span class="btn-check-en">Check Answer</span><span class="btn-check-zh hidden">檢查答案</span>
+                </button>
+                <button class="btn btn-reset" onclick="resetExercise(2, 8)">
+                    ↻ <span class="btn-reset-en">Reset</span><span class="btn-reset-zh hidden">重設</span>
+                </button>
+            </div>
+            <div id="result-2"></div>
+        </div>
+
+        <!-- Exercise 3 -->
+        <div class="exercise-card">
+            <div class="exercise-header">
+                <div>
+                    <h2 class="exercise-title">💰 <span class="title-en">Shopping Budget Tracker</span><span class="title-zh hidden">購物預算追蹤器</span></h2>
+                    <p class="exercise-desc desc-en">Calculate how much money is left after shopping!</p>
+                    <p class="exercise-desc desc-zh hidden">計算購物後還剩下多少錢！</p>
+                    <span class="difficulty-badge">⭐⭐ Medium | 中等</span>
+                </div>
+                <div class="exercise-number">3</div>
+            </div>
+            
+            <div class="code-editor">
+                <div class="code-comment"># Shopping Budget Tracker | 購物預算追蹤器</div>
+                <div class="code-line">budget = 1000</div>
+                <div class="code-line">item1 = 250</div>
+                <div class="code-line">item2 = 180</div>
+                <div class="code-line">item3 = 95</div>
+                <div class="code-line"><input type="text" class="blank-input blank-medium" id="blank-3-1" placeholder="variable_name"> = item1 <input type="text" class="blank-input blank-small" id="blank-3-2" placeholder="op"> item2 <input type="text" class="blank-input blank-small" id="blank-3-3" placeholder="op"> item3</div>
+                <div class="code-line"><input type="text" class="blank-input blank-medium" id="blank-3-4" placeholder="variable_name"> = budget <input type="text" class="blank-input blank-small" id="blank-3-5" placeholder="op"> <input type="text" class="blank-input blank-medium" id="blank-3-6" placeholder="variable_name"></div>
+                <div class="code-line"></div>
+                <div class="code-function">print("Money left:", <input type="text" class="blank-input blank-medium" id="blank-3-7" placeholder="variable_name">)</div>
+                <div class="code-function">print("剩餘金額：", <input type="text" class="blank-input blank-medium" id="blank-3-8" placeholder="variable_name">)</div>
+            </div>
+            
+            <div class="output-box">
+                <div class="output-title output-title-en">Expected Output:</div>
+                <div class="output-title output-title-zh hidden">預期輸出：</div>
+                <div class="output-content">Money left: 475 | 剩餘金額：475</div>
+            </div>
+            
+            <div class="hint-box">
+                <span class="hint-en">💡 <strong>Hint:</strong> Add all items to get total_spent, then subtract from budget to get money_left</span>
+                <span class="hint-zh hidden">💡 <strong>提示：</strong>將所有物品相加得到 total_spent，然後從預算中減去得到 money_left</span>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn btn-check" onclick="checkAnswer(3, ['total_spent', '+', '+', 'money_left', '-', 'total_spent', 'money_left', 'money_left'])">
+                    ✓ <span class="btn-check-en">Check Answer</span><span class="btn-check-zh hidden">檢查答案</span>
+                </button>
+                <button class="btn btn-reset" onclick="resetExercise(3, 8)">
+                    ↻ <span class="btn-reset-en">Reset</span><span class="btn-reset-zh hidden">重設</span>
+                </button>
+            </div>
+            <div id="result-3"></div>
+        </div>
+
+        <!-- Exercise 4 -->
+        <div class="exercise-card">
+            <div class="exercise-header">
+                <div>
+                    <h2 class="exercise-title">🌡️ <span class="title-en">Temperature Converter</span><span class="title-zh hidden">溫度轉換器</span></h2>
+                    <p class="exercise-desc desc-en">Convert Celsius to Fahrenheit using the formula!</p>
+                    <p class="exercise-desc desc-zh hidden">使用公式將攝氏溫度轉換為華氏溫度！</p>
+                    <span class="difficulty-badge">⭐⭐⭐ Hard | 困難</span>
+                </div>
+                <div class="exercise-number">4</div>
+            </div>
+            
+            <div class="code-editor">
+                <div class="code-comment"># Temperature Converter | 溫度轉換器</div>
+                <div class="code-comment"># Formula: F = (C * 9/5) + 32 | 公式：F = (C * 9/5) + 32</div>
+                <div class="code-function">celsius = float(input("Enter Celsius: 輸入攝氏溫度："))</div>
+                <div class="code-line"><input type="text" class="blank-input blank-medium" id="blank-4-1" placeholder="variable_name"> = celsius <input type="text" class="blank-input blank-small" id="blank-4-2" placeholder="op"> 9 <input type="text" class="blank-input blank-small" id="blank-4-3" placeholder="op"> 5</div>
+                <div class="code-line">fahrenheit = <input type="text" class="blank-input blank-medium" id="blank-4-4" placeholder="variable_name"> <input type="text" class="blank-input blank-small" id="blank-4-5" placeholder="op"> 32</div>
+                <div class="code-line"></div>
+                <div class="code-function">print(celsius, "°C is", fahrenheit, "°F")</div>
+                <div class="code-function">print(celsius, "°C 是", fahrenheit, "°F")</div>
+            </div>
+            
+            <div class="output-box">
+                <div class="output-title output-title-en">Expected Output (if input is 25):</div>
+                <div class="output-title output-title-zh hidden">預期輸出（如果輸入是 25）：</div>
+                <div class="output-content">25.0 °C is 77.0 °F | 25.0 °C 是 77.0 °F</div>
+            </div>
+            
+            <div class="hint-box">
+                <span class="hint-en">💡 <strong>Hint:</strong> First multiply celsius by 9, then divide by 5 to get temp. Then add 32 to temp</span>
+                <span class="hint-zh hidden">💡 <strong>提示：</strong>先將攝氏溫度乘以 9，然後除以 5 得到 temp。然後將 32 加到 temp</span>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn btn-check" onclick="checkAnswer(4, ['temp', '*', '/', 'temp', '+'])">
+                    ✓ <span class="btn-check-en">Check Answer</span><span class="btn-check-zh hidden">檢查答案</span>
+                </button>
+                <button class="btn btn-reset" onclick="resetExercise(4, 5)">
+                    ↻ <span class="btn-reset-en">Reset</span><span class="btn-reset-zh hidden">重設</span>
+                </button>
+            </div>
+            <div id="result-4"></div>
+        </div>
+
+        <!-- Exercise 5 -->
+        <div class="exercise-card">
+            <div class="exercise-header">
+                <div>
+                    <h2 class="exercise-title">🎯 <span class="title-en">Class Average Calculator</span><span class="title-zh hidden">班級平均分數計算機</span></h2>
+                    <p class="exercise-desc desc-en">Calculate the average score and check if it passes!</p>
+                    <p class="exercise-desc desc-zh hidden">計算平均分數並檢查是否及格！</p>
+                    <span class="difficulty-badge">⭐⭐⭐ Hard | 困難</span>
+                </div>
+                <div class="exercise-number">5</div>
+            </div>
+            
+            <div class="code-editor">
+                <div class="code-comment"># Class Average Calculator | 班級平均分數計算機</div>
+                <div class="code-function">score1 = int(input("Score 1: 分數1："))</div>
+                <div class="code-function">score2 = int(input("Score 2: 分數2："))</div>
+                <div class="code-function">score3 = int(input("Score 3: 分數3："))</div>
+                <div class="code-line"><input type="text" class="blank-input blank-medium" id="blank-5-1" placeholder="variable_name"> = score1 <input type="text" class="blank-input blank-small" id="blank-5-2" placeholder="op"> score2 <input type="text" class="blank-input blank-small" id="blank-5-3" placeholder="op"> score3</div>
+                <div class="code-line"><input type="text" class="blank-input blank-medium" id="blank-5-4" placeholder="variable_name"> = <input type="text" class="blank-input blank-medium" id="blank-5-5" placeholder="variable_name"> <input type="text" class="blank-input blank-small" id="blank-5-6" placeholder="op"> 3</div>
+                <div class="code-line">pass_mark = 60</div>
+                <div class="code-line"><input type="text" class="blank-input blank-medium" id="blank-5-7" placeholder="variable_name"> = <input type="text" class="blank-input blank-medium" id="blank-5-8" placeholder="variable_name"> <input type="text" class="blank-input blank-small" id="blank-5-9" placeholder="op"> pass_mark</div>
+                <div class="code-line"></div>
+                <div class="code-function">print("Average:", <input type="text" class="blank-input blank-medium" id="blank-5-10" placeholder="variable_name">)</div>
+                <div class="code-function">print("Points above passing:", <input type="text" class="blank-input blank-medium" id="blank-5-11" placeholder="variable_name">)</div>
+                <div class="code-function">print("平均分數：", <input type="text" class="blank-input blank-medium" id="blank-5-12" placeholder="variable_name">)</div>
+                <div class="code-function">print("超過及格線的分數：", <input type="text" class="blank-input blank-medium" id="blank-5-13" placeholder="variable_name">)</div>
+            </div>
+            
+            <div class="output-box">
+                <div class="output-title output-title-en">Expected Output (if inputs are 85, 92, 78):</div>
+                <div class="output-title output-title-zh hidden">預期輸出（如果輸入是 85, 92, 78）：</div>
+                <div class="output-content">Average: 85 | Points above passing: 25 | 平均分數：85 | 超過及格線的分數：25</div>
+            </div>
+            
+            <div class="hint-box">
+                <span class="hint-en">💡 <strong>Hint:</strong> Add all scores to get total_score, divide by 3 for average, then subtract pass_mark to get points_above. Use same variable names in print!</span>
+                <span class="hint-zh hidden">💡 <strong>提示：</strong>將所有分數相加得到 total_score，除以 3 得到平均分，然後減去及格分數得到 points_above。在 print 中使用相同的變數名稱！</span>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn btn-check" onclick="checkAnswer(5, ['total_score', '+', '+', 'average', 'total_score', '//', 'points_above', 'average', '-', 'average', 'points_above', 'average', 'points_above'])">
+                    ✓ <span class="btn-check-en">Check Answer</span><span class="btn-check-zh hidden">檢查答案</span>
+                </button>
+                <button class="btn btn-reset" onclick="resetExercise(5, 13)">
+                    ↻ <span class="btn-reset-en">Reset</span><span class="btn-reset-zh hidden">重設</span>
+                </button>
+            </div>
+            <div id="result-5"></div>
+        </div>
+        <!-- Reference Card -->
+        <div class="reference-card">
+            <h3 class="reference-title">📚 <span class="ref-title-en">Python Tips & Tricks</span><span class="ref-title-zh hidden">Python 技巧與訣竅</span></h3>
+            <div class="tips-grid">
+                <div class="tip-item">
+                    <strong class="tip-strong-en">Variable Naming Rules | 變數命名規則</strong>
+                    <p class="tip-text-en">Use descriptive names like <code>total_score</code>, <code>average</code>, or <code>points_above</code>. Use underscores (_) to separate words!</p>
+                    <p class="tip-text-zh hidden">使用描述性名稱，如 <code>total_score</code>、<code>average</code> 或 <code>points_above</code>。使用底線 (_) 分隔單字！</p>
+                </div>
+                
+                <div class="tip-item">
+                    <strong class="tip-strong-en">Order of Operations | 運算順序</strong>
+                    <p class="tip-text-en">Python follows PEMDAS: Parentheses, Exponents, Multiplication/Division, Addition/Subtraction</p>
+                    <p class="tip-text-zh hidden">Python 遵循運算順序：括號、指數、乘除、加減</p>
+                </div>
+                
+                <div class="tip-item">
+                    <strong class="tip-strong-en">Integer vs Float Division | 整數與浮點數除法</strong>
+                    <p class="tip-text-en"><code>//</code> gives whole numbers (85 // 3 = 28), while <code>/</code> gives decimals (85 / 3 = 28.333...)</p>
+                    <p class="tip-text-zh hidden"><code>//</code> 得到整數（85 // 3 = 28），而 <code>/</code> 得到小數（85 / 3 = 28.333...）</p>
+                </div>
+                
+                <div class="tip-item">
+                    <strong class="tip-strong-en">Modulo Operator % | 模數運算符 %</strong>
+                    <p class="tip-text-en">The % operator gives the remainder. Example: 135 % 60 = 15 (remainder when dividing 135 by 60)</p>
+                    <p class="tip-text-zh hidden">% 運算符給出餘數。例如：135 % 60 = 15（135 除以 60 的餘數）</p>
+                </div>
+                
+                <div class="tip-item">
+                    <strong class="tip-strong-en">Chaining Operations | 連鎖運算</strong>
+                    <p class="tip-text-en">You can chain multiple operations: <code>total = a + b + c</code> or <code>result = x * y / z</code></p>
+                    <p class="tip-text-zh hidden">你可以連鎖多個運算：<code>total = a + b + c</code> 或 <code>result = x * y / z</code></p>
+                </div>
+                
+                <div class="tip-item">
+                    <strong class="tip-strong-en">Using Variables | 使用變數</strong>
+                    <p class="tip-text-en">Store intermediate results in variables to make code clearer and reusable!</p>
+                    <p class="tip-text-zh hidden">將中間結果儲存在變數中，使程式碼更清晰且可重複使用！</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // let score = 0;
+        // let answeredQuestions = new Set();
+
+        function checkAnswer(exerciseNum, correctAnswers) {
+            let allCorrect = true;
+            let userAnswers = [];
+            
+            // Collect all user answers for this exercise
+            for (let i = 1; i <= correctAnswers.length; i++) {
+                const input = document.getElementById(`blank-${exerciseNum}-${i}`);
+                if (input) {
+                    userAnswers.push(input.value.trim());
+                }
+            }
+            
+            // Check each answer
+            for (let i = 0; i < correctAnswers.length; i++) {
+                if (userAnswers[i] !== correctAnswers[i]) {
+                    allCorrect = false;
+                    break;
+                }
+            }
+            
+            const resultDiv = document.getElementById(`result-${exerciseNum}`);
+            
+            if (allCorrect) {
+                resultDiv.className = 'result correct';
+                resultDiv.innerHTML = `
+                    ✓ <span class="correct-en">Excellent! Perfect answer! 🎉🎉🎉</span>
+                    <span class="correct-zh hidden">太棒了！完美答案！🎉🎉🎉</span>
+                `;
+                
+                if (!answeredQuestions.has(exerciseNum)) {
+                    score++;
+                    answeredQuestions.add(exerciseNum);
+                    document.getElementById('score').textContent = score;
+                }
+            } else {
+                resultDiv.className = 'result incorrect';
+                let answerText = correctAnswers.join(', ').replace(/,/g, ' | ');
+                resultDiv.innerHTML = `
+                    ✗ <span class="incorrect-en">Not quite! Check your answers. The correct answers are: <code>${answerText}</code></span>
+                    <span class="incorrect-zh hidden">再試試看！檢查你的答案。正確答案是：<code>${answerText}</code></span>
+                `;
+            }
+        }
+
+        function resetExercise(exerciseNum, numBlanks) {
+            for (let i = 1; i <= numBlanks; i++) {
+                const input = document.getElementById(`blank-${exerciseNum}-${i}`);
+                if (input) {
+                    input.value = '';
+                }
+            }
+            document.getElementById(`result-${exerciseNum}`).innerHTML = '';
+        }
+
+        function setLanguage(lang) {
+            // Toggle active button
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Show/hide appropriate language elements
+            if (lang === 'en') {
+                document.querySelectorAll('.subtitle-en, .title-en, .desc-en, .hint-en, .output-title-en, .btn-check-en, .btn-reset-en, .ref-title-en, .score-label-en, .correct-en, .incorrect-en, .tip-strong-en, .tip-text-en').forEach(el => {
+                    el.classList.remove('hidden');
+                });
+                document.querySelectorAll('.subtitle-zh, .title-zh, .desc-zh, .hint-zh, .output-title-zh, .btn-check-zh, .btn-reset-zh, .ref-title-zh, .score-label-zh, .correct-zh, .incorrect-zh, .tip-strong-zh, .tip-text-zh').forEach(el => {
+                    el.classList.add('hidden');
+                });
+            } else {
+                document.querySelectorAll('.subtitle-zh, .title-zh, .desc-zh, .hint-zh, .output-title-zh, .btn-check-zh, .btn-reset-zh, .ref-title-zh, .score-label-zh, .correct-zh, .incorrect-zh, .tip-strong-zh, .tip-text-zh').forEach(el => {
+                    el.classList.remove('hidden');
+                });
+                document.querySelectorAll('.subtitle-en, .title-en, .desc-en, .hint-en, .output-title-en, .btn-check-en, .btn-reset-en, .ref-title-en, .score-label-en, .correct-en, .incorrect-en, .tip-strong-en, .tip-text-en').forEach(el => {
+                    el.classList.add('hidden');
+                });
+            }
+        }
+    </script>
+</body>
+</html>
