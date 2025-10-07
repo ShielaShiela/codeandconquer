@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Truth Table Learning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            flex: 1;
+            min-width: 150px;
+            padding: 12px 20px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .tab-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .tab-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .quiz-question {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .question-text {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .answer-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .answer-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid #667eea;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .answer-btn:hover {
+            background: #f0f0ff;
+        }
+
+        .answer-btn.correct {
+            background: #4caf50;
+            color: white;
+            border-color: #4caf50;
+        }
+
+        .answer-btn.incorrect {
+            background: #f44336;
+            color: white;
+            border-color: #f44336;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .score-board {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .score-board h2 {
+            margin-bottom: 10px;
+        }
+
+        .score-numbers {
+            font-size: 36px;
+            font-weight: bold;
+        }
+
+        .custom-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .generate-btn:hover {
+            background: #5568d3;
+        }
+
+        .reset-btn {
+            background: #f44336;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .reset-btn:hover {
+            background: #da190b;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #2196f3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 Interactive Truth Table Learning</h1>
+        <p class="subtitle">Master AND and OR operations through interactive exercises!</p>
+
+        <div class="score-board">
+            <h2>Your Score</h2>
+            <div class="score-numbers">
+                <span id="score">0</span> / <span id="total">0</span>
+                <span style="font-size: 20px; display: block; margin-top: 10px;" id="percentage">(0%)</span>
+            </div>
+            <button class="reset-btn" onclick="resetScore()">Reset Score</button>
+        </div>
+
+        <div class="tab-buttons">
+            <button class="tab-btn active" onclick="showTab('and-table')">AND Table</button>
+            <button class="tab-btn" onclick="showTab('or-table')">OR Table</button>
+            <button class="tab-btn" onclick="showTab('quiz-basic')">Quiz: Basic</button>
+            <button class="tab-btn" onclick="showTab('quiz-complete')">Quiz: Complete</button>
+            <button class="tab-btn" onclick="showTab('quiz-complex')">Quiz: Complex</button>
+            <button class="tab-btn" onclick="showTab('custom')">Create Your Own</button>
+        </div>
+
+        <!-- AND Truth Table -->
+        <div id="and-table" class="tab-content active">
+            <h2>Truth Table for AND Operation</h2>
+            <div class="info-box">
+                <strong>AND Operation:</strong> Returns True only when BOTH inputs are True.
+            </div>
+            <table>
+                <tr>
+                    <th>A</th>
+                    <th>B</th>
+                    <th>A AND B</th>
+                </tr>
+                <tr><td>False</td><td>False</td><td>False</td></tr>
+                <tr><td>False</td><td>True</td><td>False</td></tr>
+                <tr><td>True</td><td>False</td><td>False</td></tr>
+                <tr><td>True</td><td>True</td><td>True</td></tr>
+            </table>
+        </div>
+
+        <!-- OR Truth Table -->
+        <div id="or-table" class="tab-content">
+            <h2>Truth Table for OR Operation</h2>
+            <div class="info-box">
+                <strong>OR Operation:</strong> Returns True when AT LEAST ONE input is True.
+            </div>
+            <table>
+                <tr>
+                    <th>A</th>
+                    <th>B</th>
+                    <th>A OR B</th>
+                </tr>
+                <tr><td>False</td><td>False</td><td>False</td></tr>
+                <tr><td>False</td><td>True</td><td>True</td></tr>
+                <tr><td>True</td><td>False</td><td>True</td></tr>
+                <tr><td>True</td><td>True</td><td>True</td></tr>
+            </table>
+        </div>
+
+        <!-- Quiz: Basic Operations -->
+        <div id="quiz-basic" class="tab-content">
+            <h2>Quiz 1: Basic Operations</h2>
+            <div class="info-box">
+                Answer each question by clicking True or False. Get immediate feedback!
+            </div>
+            <div id="basic-questions"></div>
+        </div>
+
+        <!-- Quiz: Complete the Table -->
+        <div id="quiz-complete" class="tab-content">
+            <h2>Quiz 2: Complete the Truth Table</h2>
+            <div class="info-box">
+                Fill in the missing values in the truth table.
+            </div>
+            <div id="complete-questions"></div>
+        </div>
+
+        <!-- Quiz: Complex Expressions -->
+        <div id="quiz-complex" class="tab-content">
+            <h2>Quiz 3: Complex Expressions</h2>
+            <div class="info-box">
+                <strong>Tip:</strong> Remember operator precedence: NOT > AND > OR
+            </div>
+            <div id="complex-questions"></div>
+        </div>
+
+        <!-- Custom Truth Table -->
+        <div id="custom" class="tab-content">
+            <h2>Create Your Own Truth Table</h2>
+            <div class="info-box">
+                Enter an expression using A and B with 'and', 'or', and 'not' operators.<br>
+                <strong>Examples:</strong> A and B, A or B, (A and B) or (not A), not A and B
+            </div>
+            <input type="text" id="custom-expression" class="custom-input" placeholder="Enter expression (e.g., A and B)">
+            <button class="generate-btn" onclick="generateCustomTable()">Generate Truth Table</button>
+            <div id="custom-result"></div>
+        </div>
+    </div>
+
+    <script>
+        let score = 0;
+        let totalQuestions = 0;
+        const answeredQuestions = new Set();
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function updateScore() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('total').textContent = totalQuestions;
+            const percentage = totalQuestions > 0 ? Math.round((score / totalQuestions) * 100) : 0;
+            document.getElementById('percentage').textContent = `(${percentage}%)`;
+        }
+
+        function resetScore() {
+            score = 0;
+            totalQuestions = 0;
+            answeredQuestions.clear();
+            updateScore();
+            initializeQuizzes();
+        }
+
+        function checkAnswer(questionId, userAnswer, correctAnswer, element) {
+            if (answeredQuestions.has(questionId)) return;
+            
+            answeredQuestions.add(questionId);
+            totalQuestions++;
+            
+            const questionDiv = element.closest('.quiz-question');
+            const buttons = questionDiv.querySelectorAll('.answer-btn');
+            const feedbackDiv = questionDiv.querySelector('.feedback') || document.createElement('div');
+            feedbackDiv.className = 'feedback';
+            
+            buttons.forEach(btn => btn.disabled = true);
+            
+            if (userAnswer === correctAnswer) {
+                score++;
+                element.classList.add('correct');
+                feedbackDiv.classList.add('correct');
+                feedbackDiv.textContent = '✓ Correct! Well done!';
+            } else {
+                element.classList.add('incorrect');
+                feedbackDiv.classList.add('incorrect');
+                feedbackDiv.textContent = `✗ Incorrect. The correct answer is ${correctAnswer}.`;
+            }
+            
+            if (!questionDiv.querySelector('.feedback')) {
+                questionDiv.appendChild(feedbackDiv);
+            }
+            
+            updateScore();
+        }
+
+        function createQuizQuestion(container, questions) {
+            container.innerHTML = '';
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'quiz-question';
+                questionDiv.innerHTML = `
+                    <div class="question-text">${q.question}</div>
+                    <div class="answer-buttons">
+                        <button class="answer-btn" onclick="checkAnswer('${container.id}-${index}', true, ${q.answer}, this)">True</button>
+                        <button class="answer-btn" onclick="checkAnswer('${container.id}-${index}', false, ${q.answer}, this)">False</button>
+                    </div>
+                `;
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function initializeQuizzes() {
+            const basicQuestions = [
+                { question: "True AND True = ?", answer: true },
+                { question: "True AND False = ?", answer: false },
+                { question: "False OR True = ?", answer: true },
+                { question: "False OR False = ?", answer: false },
+                { question: "True OR True = ?", answer: true },
+                { question: "False AND False = ?", answer: false }
+            ];
+
+            const completeQuestions = [
+                { question: "True AND True = ?", answer: true },
+                { question: "False AND True = ?", answer: false },
+                { question: "True OR False = ?", answer: true },
+                { question: "False OR False = ?", answer: false }
+            ];
+
+            const complexQuestions = [
+                { question: "True and True or False = ?", answer: true },
+                { question: "False or True and False = ?", answer: false },
+                { question: "(True or False) and True = ?", answer: true },
+                { question: "True and (False or True) = ?", answer: true },
+                { question: "not True or False = ?", answer: false },
+                { question: "True and not False = ?", answer: true }
+            ];
+
+            createQuizQuestion(document.getElementById('basic-questions'), basicQuestions);
+            createQuizQuestion(document.getElementById('complete-questions'), completeQuestions);
+            createQuizQuestion(document.getElementById('complex-questions'), complexQuestions);
+        }
+
+        function generateCustomTable() {
+            const expression = document.getElementById('custom-expression').value.trim();
+            const resultDiv = document.getElementById('custom-result');
+            
+            if (!expression) {
+                resultDiv.innerHTML = '<div class="info-box" style="border-color: #f44336; background: #ffebee;">Please enter an expression!</div>';
+                return;
+            }
+
+            try {
+                const table = document.createElement('table');
+                table.innerHTML = `
+                    <tr>
+                        <th>A</th>
+                        <th>B</th>
+                        <th>${expression}</th>
+                    </tr>
+                `;
+
+                const values = [false, true];
+                for (let a of values) {
+                    for (let b of values) {
+                        const A = a, B = b;
+                        const result = eval(expression.replace(/and/g, '&&').replace(/or/g, '||').replace(/not/g, '!'));
+                        const row = table.insertRow();
+                        row.innerHTML = `<td>${a}</td><td>${b}</td><td>${result}</td>`;
+                    }
+                }
+
+                resultDiv.innerHTML = '<h3 style="margin-top: 20px;">Result:</h3>';
+                resultDiv.appendChild(table);
+            } catch (error) {
+                resultDiv.innerHTML = '<div class="info-box" style="border-color: #f44336; background: #ffebee;">Invalid expression! Use A, B, and, or, not operators.</div>';
+            }
+        }
+
+        initializeQuizzes();
+    </script>
+</body>
+</html>
