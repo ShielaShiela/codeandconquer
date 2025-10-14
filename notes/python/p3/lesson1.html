@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Functions: No Return Values & Global Variables | Python 函數：無返回值與全域變數</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #2d3561 0%, #3f4c7e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+        }
+        
+        h2 {
+            color: #2d3561;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+        
+        h3 {
+            color: #667eea;
+            margin: 20px 0 10px 0;
+            font-size: 1.3em;
+        }
+        
+        .bilingual {
+            display: flex;
+            gap: 10px;
+            align-items: baseline;
+            margin-bottom: 10px;
+        }
+        
+        .en {
+            color: #2d3561;
+            font-weight: 600;
+        }
+        
+        .zh {
+            color: #666;
+            font-size: 0.95em;
+        }
+        
+        pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            border: 2px solid #667eea;
+        }
+        
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.95em;
+        }
+        
+        .example-box {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .output {
+            background: #1e1e1e;
+            color: #4ec9b0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+        
+        .exercise {
+            background: #fff3cd;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #ffc107;
+        }
+        
+        .question {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .question-number {
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .options {
+            margin: 15px 0;
+        }
+        
+        .option {
+            display: block;
+            padding: 12px;
+            margin: 8px 0;
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .option:hover {
+            background: #e9ecef;
+            border-color: #667eea;
+        }
+        
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: transform 0.2s;
+            margin: 10px 5px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .feedback {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .correct {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+        
+        .incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.95em;
+            resize: vertical;
+        }
+        
+        .note {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #4caf50;
+        }
+        
+        .warning {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #ff9800;
+        }
+        
+        .highlight {
+            background: #fff176;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        
+        .parts-label {
+            background: #ff6b6b;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            margin-left: 10px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Python Functions: No Return Values & Global Variables</h1>
+            <p class="subtitle">Python 函數：無返回值與全域變數</p>
+        </header>
+        
+        <div class="content">
+            <!-- Introduction Section -->
+            <div class="section">
+                <h2>Introduction | 簡介</h2>
+                <div class="bilingual">
+                    <p class="en">Functions in Python are reusable blocks of code that perform specific tasks.</p>
+                    <p class="zh">（Python 中的函數是執行特定任務的可重複使用程式碼區塊。）</p>
+                </div>
+                <div class="bilingual">
+                    <p class="en">Not all functions need to return values - some functions perform actions without sending data back.</p>
+                    <p class="zh">（並非所有函數都需要返回值 - 有些函數執行動作而不返回資料。）</p>
+                </div>
+                
+                <div class="note">
+                    <strong>Key Concept | 核心概念:</strong><br>
+                    <span class="en">A function without a return statement returns <code>None</code> by default.</span><br>
+                    <span class="zh">沒有 return 語句的函數預設返回 <code>None</code>。</span>
+                </div>
+            </div>
+            
+            <!-- Basic Function Structure -->
+            <div class="section">
+                <h2>Basic Function Structure (No Parameters, No Return) | 基本函數結構（無參數，無返回值）</h2>
+                
+                <h3>Function Anatomy | 函數結構</h3>
+                <pre><code>def function_name():      <span class="parts-label">① Function Header</span>
+    # function body        <span class="parts-label">② Function Body</span>
+    statement1
+    statement2</code></pre>
+                
+                <div class="example-box">
+                    <strong>Parts Explanation | 部分說明:</strong>
+                    <ul style="margin-top: 10px; margin-left: 20px;">
+                        <li><strong>① Function Header | 函數標頭:</strong> <code>def function_name():</code>
+                            <ul style="margin-left: 20px;">
+                                <li><code>def</code> - keyword to define a function | 定義函數的關鍵字</li>
+                                <li><code>function_name</code> - name of the function | 函數名稱</li>
+                                <li><code>()</code> - parentheses (empty = no parameters) | 括號（空的 = 無參數）</li>
+                                <li><code>:</code> - colon marks the start of function body | 冒號標記函數主體的開始</li>
+                            </ul>
+                        </li>
+                        <li><strong>② Function Body | 函數主體:</strong> Indented code that executes when function is called | 呼叫函數時執行的縮排程式碼</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Example 1 -->
+            <div class="section">
+                <h2>Example 1: Simple Greeting Function | 範例 1：簡單的問候函數</h2>
+                <pre><code># Define the function | 定義函數
+def say_hello():
+    print("Hello, World!")
+    print("Welcome to Python functions!")
+
+# Call the function | 呼叫函數
+say_hello()</code></pre>
+                
+                <div class="output">
+<strong>Output | 輸出:</strong><br>
+Hello, World!<br>
+Welcome to Python functions!
+                </div>
+                
+                <div class="note">
+                    <strong>Explanation | 說明:</strong><br>
+                    <span class="en">This function prints messages but doesn't return any value. It performs an action (printing) and then completes.</span><br>
+                    <span class="zh">此函數列印訊息但不返回任何值。它執行動作（列印）然後完成。</span>
+                </div>
+            </div>
+            
+            <!-- Global Variables Section -->
+            <div class="section">
+                <h2>Global Variables | 全域變數</h2>
+                <div class="bilingual">
+                    <p class="en">Global variables are created outside of functions and can be accessed anywhere in the program.</p>
+                    <p class="zh">（全域變數在函數外部建立，可在程式的任何地方存取。）</p>
+                </div>
+                
+                <div class="warning">
+                    <strong>Important | 重要:</strong><br>
+                    <span class="en">To modify a global variable inside a function, you must use the <code>global</code> keyword.</span><br>
+                    <span class="zh">要在函數內部修改全域變數，必須使用 <code>global</code> 關鍵字。</span>
+                </div>
+            </div>
+            
+            <!-- Example 2 -->
+            <div class="section">
+                <h2>Example 2: Reading Global Variables | 範例 2：讀取全域變數</h2>
+                <pre><code># Global variable | 全域變數
+user_name = "Alice"
+
+def greet_user():
+    # Reading global variable (no 'global' keyword needed) | 讀取全域變數（不需要 'global' 關鍵字）
+    print(f"Hello, {user_name}!")
+    print("How are you today?")
+
+greet_user()</code></pre>
+                
+                <div class="output">
+<strong>Output | 輸出:</strong><br>
+Hello, Alice!<br>
+How are you today?
+                </div>
+            </div>
+            
+            <!-- Example 3 -->
+            <div class="section">
+                <h2>Example 3: Modifying Global Variables | 範例 3：修改全域變數</h2>
+                <pre><code># Global variable | 全域變數
+counter = 0
+
+def increment_counter():
+    global counter  # Declare that we're using the global variable | 宣告我們正在使用全域變數
+    counter = counter + 1
+    print(f"Counter is now: {counter}")
+
+print(f"Initial counter: {counter}")
+increment_counter()
+increment_counter()
+increment_counter()
+print(f"Final counter: {counter}")</code></pre>
+                
+                <div class="output">
+<strong>Output | 輸出:</strong><br>
+Initial counter: 0<br>
+Counter is now: 1<br>
+Counter is now: 2<br>
+Counter is now: 3<br>
+Final counter: 3
+                </div>
+            </div>
+            
+            <!-- Example 4 -->
+            <div class="section">
+                <h2>Example 4: Multiple Global Variables | 範例 4：多個全域變數</h2>
+                <pre><code># Multiple global variables | 多個全域變數
+score = 0
+player_name = "Player1"
+level = 1
+
+def update_game_status():
+    global score, level  # Multiple global variables | 多個全域變數
+    score = score + 100
+    level = level + 1
+    print(f"{player_name} advanced to level {level}!")
+    print(f"Current score: {score}")
+
+update_game_status()
+update_game_status()</code></pre>
+                
+                <div class="output">
+<strong>Output | 輸出:</strong><br>
+Player1 advanced to level 2!<br>
+Current score: 100<br>
+Player1 advanced to level 3!<br>
+Current score: 200
+                </div>
+            </div>
+            
+            <!-- Example 5 -->
+            <div class="section">
+                <h2>Example 5: Practical Example - Task Manager | 範例 5：實際範例 - 任務管理器</h2>
+                <pre><code># Global variables for task management | 任務管理的全域變數
+tasks = []
+completed_count = 0
+
+def add_task():
+    global tasks
+    task = "Complete homework"
+    tasks.append(task)
+    print(f"Added task: {task}")
+    print(f"Total tasks: {len(tasks)}")
+
+def complete_task():
+    global tasks, completed_count
+    if len(tasks) > 0:
+        completed = tasks.pop(0)
+        completed_count = completed_count + 1
+        print(f"Completed: {completed}")
+        print(f"Tasks completed today: {completed_count}")
+
+def show_status():
+    print(f"\n=== Task Status | 任務狀態 ===")
+    print(f"Pending tasks: {len(tasks)}")
+    print(f"Completed tasks: {completed_count}")
+
+# Using the functions | 使用函數
+add_task()
+add_task()
+show_status()
+complete_task()
+show_status()</code></pre>
+                
+                <div class="output">
+<strong>Output | 輸出:</strong><br>
+Added task: Complete homework<br>
+Total tasks: 1<br>
+Added task: Complete homework<br>
+Total tasks: 2<br>
+<br>
+=== Task Status | 任務狀態 ===<br>
+Pending tasks: 2<br>
+Completed tasks: 0<br>
+Completed: Complete homework<br>
+Tasks completed today: 1<br>
+<br>
+=== Task Status | 任務狀態 ===<br>
+Pending tasks: 1<br>
+Completed tasks: 1
+                </div>
+            </div>
+            
+            <!-- Exercise Section 1: Multiple Choice -->
+            <div class="exercise">
+                <h2>Exercise 1: Multiple Choice Questions | 練習 1：選擇題</h2>
+                <p><strong>Test your understanding of functions and global variables! | 測試你對函數和全域變數的理解！</strong></p>
+                
+                <!-- Question 1 -->
+                <div class="question">
+                    <span class="question-number">Question 1 | 問題 1</span>
+                    <p><strong>What does a function without a return statement return by default?</strong><br>
+                    <em>沒有 return 語句的函數預設返回什麼？</em></p>
+                    
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q1" value="a">
+                            A) 0 (zero)
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q1" value="b">
+                            B) None
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q1" value="c">
+                            C) Empty string ""
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q1" value="d">
+                            D) It causes an error
+                        </label>
+                    </div>
+                    
+                    <button onclick="checkAnswer('q1', 'b', 'feedback1')">Submit | 提交</button>
+                    <div id="feedback1" class="feedback"></div>
+                </div>
+                
+                <!-- Question 2 -->
+                <div class="question">
+                    <span class="question-number">Question 2 | 問題 2</span>
+                    <p><strong>Which keyword is used to modify a global variable inside a function?</strong><br>
+                    <em>哪個關鍵字用於在函數內部修改全域變數？</em></p>
+                    
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q2" value="a">
+                            A) public
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q2" value="b">
+                            B) global
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q2" value="c">
+                            C) external
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q2" value="d">
+                            D) shared
+                        </label>
+                    </div>
+                    
+                    <button onclick="checkAnswer('q2', 'b', 'feedback2')">Submit | 提交</button>
+                    <div id="feedback2" class="feedback"></div>
+                </div>
+                
+                <!-- Question 3 -->
+                <div class="question">
+                    <span class="question-number">Question 3 | 問題 3</span>
+                    <p><strong>What will this code output?</strong> | <em>這段程式碼會輸出什麼？</em></p>
+                    <pre><code>message = "Hello"
+
+def show_message():
+    print(message)
+
+show_message()</code></pre>
+                    
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q3" value="a">
+                            A) Error | 錯誤
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q3" value="b">
+                            B) None
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q3" value="c">
+                            C) Hello
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q3" value="d">
+                            D) message
+                        </label>
+                    </div>
+                    
+                    <button onclick="checkAnswer('q3', 'c', 'feedback3')">Submit | 提交</button>
+                    <div id="feedback3" class="feedback"></div>
+                </div>
+                
+                <!-- Question 4 -->
+                <div class="question">
+                    <span class="question-number">Question 4 | 問題 4</span>
+                    <p><strong>What happens if you try to modify a global variable without using the 'global' keyword?</strong><br>
+                    <em>如果你試圖在不使用 'global' 關鍵字的情況下修改全域變數會發生什麼？</em></p>
+                    
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q4" value="a">
+                            A) The global variable is modified | 全域變數被修改
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q4" value="b">
+                            B) A new local variable is created instead | 會建立一個新的區域變數
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q4" value="c">
+                            C) The program crashes | 程式當機
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q4" value="d">
+                            D) Nothing happens | 什麼都不會發生
+                        </label>
+                    </div>
+                    
+                    <button onclick="checkAnswer('q4', 'b', 'feedback4')">Submit | 提交</button>
+                    <div id="feedback4" class="feedback"></div>
+                </div>
+                
+                <!-- Question 5 -->
+                <div class="question">
+                    <span class="question-number">Question 5 | 問題 5</span>
+                    <p><strong>What is the output of this code?</strong> | <em>這段程式碼的輸出是什麼？</em></p>
+                    <pre><code>count = 10
+
+def change_count():
+    global count
+    count = 20
+    print(count)
+
+change_count()
+print(count)</code></pre>
+                    
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q5" value="a">
+                            A) 10<br>&nbsp;&nbsp;&nbsp;10
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q5" value="b">
+                            B) 20<br>&nbsp;&nbsp;&nbsp;10
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q5" value="c">
+                            C) 20<br>&nbsp;&nbsp;&nbsp;20
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q5" value="d">
+                            D) Error | 錯誤
+                        </label>
+                    </div>
+                    
+                    <button onclick="checkAnswer('q5', 'c', 'feedback5')">Submit | 提交</button>
+                    <div id="feedback5" class="feedback"></div>
+                </div>
+            </div>
+            
+            <!-- Exercise Section 2: Code Analysis -->
+            <div class="exercise">
+                <h2>Exercise 2: Identify Function Parts | 練習 2：識別函數部分</h2>
+                <p><strong>Analyze the following function and identify its components! | 分析以下函數並識別其組成部分！</strong></p>
+                
+                <div class="question">
+                    <span class="question-number">Code Analysis | 程式碼分析</span>
+                    <pre><code>temperature = 25
+
+def check_temperature():
+    global temperature
+    if temperature > 30:
+        print("It's hot!")
+    else:
+        print("Temperature is comfortable")
+    temperature = temperature + 1</code></pre>
+                    
+                    <p><strong>Identify the following parts (write your answers below):</strong><br>
+                    <em>識別以下部分（在下面寫下你的答案）：</em></p>
+                    
+                    <div style="background: white; padding: 20px; border-radius: 8px; margin: 15px 0;">
+                        <p><strong>1. What is the function name? | 函數名稱是什麼？</strong></p>
+                        <textarea id="analysis1" placeholder="Type your answer here... | 在這裡輸入你的答案..." style="min-height: 60px;"></textarea>
+                        
+                        <p style="margin-top: 15px;"><strong>2. What is the global variable? | 全域變數是什麼？</strong></p>
+                        <textarea id="analysis2" placeholder="Type your answer here... | 在這裡輸入你的答案..." style="min-height: 60px;"></textarea>
+                        
+                        <p style="margin-top: 15px;"><strong>3. Does this function have parameters? | 此函數有參數嗎？</strong></p>
+                        <textarea id="analysis3" placeholder="Type your answer here... | 在這裡輸入你的答案..." style="min-height: 60px;"></textarea>
+                        
+                        <p style="margin-top: 15px;"><strong>4. Does this function return a value? | 此函數返回值嗎？</strong></p>
+                        <textarea id="analysis4" placeholder="Type your answer here... | 在這裡輸入你的答案..." style="min-height: 60px;"></textarea>
+                        
+                        <p style="margin-top: 15px;"><strong>5. What actions does this function perform? | 此函數執行什麼動作？</strong></p>
+                        <textarea id="analysis5" placeholder="Type your answer here... | 在這裡輸入你的答案..." style="min-height: 100px;"></textarea>
+                    </div>
+                    
+                    <button onclick="showAnalysisAnswers()">Show Answers | 顯示答案</button>
+                    <button onclick="hideAnalysisAnswers()">Hide Answers | 隱藏答案</button>
+                    <div id="analysisAnswers" class="feedback" style="display: none;">
+                        <strong>✓ Sample Answers | 參考答案:</strong><br><br>
+                        <strong>1.</strong> The function name is <code>check_temperature</code><br>
+                        函數名稱是 <code>check_temperature</code><br><br>
+                        <strong>2.</strong> The global variable is <code>temperature</code><br>
+                        全域變數是 <code>temperature</code><br><br>
+                        <strong>3.</strong> No, this function has no parameters (the parentheses are empty)<br>
+                        沒有，此函數沒有參數（括號是空的）<br><br>
+                        <strong>4.</strong> No, this function does not return a value (no return statement)<br>
+                        沒有，此函數不返回值（沒有 return 語句）<br><br>
+                        <strong>5.</strong> This function:<br>
+                        - Checks if temperature is greater than 30<br>
+                        - Prints a message based on the temperature<br>
+                        - Increments the temperature by 1<br><br>
+                        此函數：<br>
+                        - 檢查溫度是否大於 30<br>
+                        - 根據溫度列印訊息<br>
+                        - 將溫度增加 1
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Exercise Section 3: Implementation -->
+            <div class="exercise">
+                <h2>Exercise 3: Write Your Own Function | 練習 3：編寫你自己的函數</h2>
+                <p><strong>Create a function based on the requirements below! | 根據以下要求建立一個函數！</strong></p>
+                
+                <div class="question">
+                    <span class="question-number">Task | 任務</span>
+                    <p><strong>Requirements | 要求:</strong></p>
+                    <ul style="margin-left: 30px; margin-top: 10px;">
+                        <li>Create a global variable called <code>balance</code> with initial value 1000</li>
+                        <li>建立一個名為 <code>balance</code> 的全域變數，初始值為 1000</li>
+                        <li>Create a function called <code>withdraw_money</code> with no parameters</li>
+                        <li>建立一個名為 <code>withdraw_money</code> 的函數，不帶參數</li>
+                        <li>The function should subtract 100 from the balance</li>
+                        <li>函數應從餘額中減去 100</li>
+                        <li>The function should print the new balance</li>
+                        <li>函數應列印新餘額</li>
+                        <li>The function should NOT return any value</li>
+                        <li>函數不應返回任何值</li>
+                    </ul>
+                    
+                    <div style="background: white; padding: 20px; border-radius: 8px; margin: 15px 0;">
+                        <p><strong>Write your code here | 在這裡寫下你的程式碼:</strong></p>
+                        <textarea id="implementation" placeholder="# Write your function here...\n# 在這裡寫下你的函數...\n\nbalance = 1000\n\ndef withdraw_money():\n    # Your code here | 你的程式碼在這裡\n    pass" style="min-height: 250px;"></textarea>
+                    </div>
+                    
+                    <button onclick="showImplementationAnswer()">Show Solution | 顯示解答</button>
+                    <button onclick="hideImplementationAnswer()">Hide Solution | 隱藏解答</button>
+                    <div id="implementationAnswer" class="feedback" style="display: none;">
+                        <strong>✓ Sample Solution | 參考解答:</strong><br><br>
+                        <pre><code># Global variable | 全域變數
+balance = 1000
+
+def withdraw_money():
+    global balance  # Declare global variable | 宣告全域變數
+    balance = balance - 100  # Subtract 100 | 減去 100
+    print(f"Current balance: ${balance}")  # Print new balance | 列印新餘額
+
+# Test the function | 測試函數
+print(f"Initial balance: ${balance}")
+withdraw_money()
+withdraw_money()
+print(f"Final balance: ${balance}")</code></pre>
+                        
+                        <strong>Expected Output | 預期輸出:</strong>
+                        <div class="output">
+Initial balance: $1000<br>
+Current balance: $900<br>
+Current balance: $800<br>
+Final balance: $800
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Summary -->
+            <div class="section">
+                <h2>Key Takeaways | 重點總結</h2>
+                <ul style="margin-left: 30px; line-height: 2;">
+                    <li><strong>Functions without return</strong> perform actions but return <code>None</code> by default<br>
+                    <strong>沒有返回值的函數</strong>執行動作但預設返回 <code>None</code></li>
+                    
+                    <li><strong>Global variables</strong> are defined outside functions and accessible everywhere<br>
+                    <strong>全域變數</strong>在函數外部定義，可在任何地方存取</li>
+                    
+                    <li>Use the <strong>global keyword</strong> to modify global variables inside functions<br>
+                    使用 <strong>global 關鍵字</strong>在函數內部修改全域變數</li>
+                    
+                    <li><strong>Reading</strong> global variables doesn't require the global keyword<br>
+                    <strong>讀取</strong>全域變數不需要 global 關鍵字</li>
+                    
+                    <li><strong>Function structure:</strong> def name(): followed by indented code block<br>
+                    <strong>函數結構：</strong>def 名稱(): 後接縮排的程式碼區塊</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Check answer function for multiple choice
+        function checkAnswer(questionName, correctAnswer, feedbackId) {
+            const selected = document.querySelector(`input[name="${questionName}"]:checked`);
+            const feedback = document.getElementById(feedbackId);
+            
+            if (!selected) {
+                feedback.className = 'feedback incorrect';
+                feedback.style.display = 'block';
+                feedback.innerHTML = '⚠️ Please select an answer! | 請選擇一個答案！';
+                return;
+            }
+            
+            if (selected.value === correctAnswer) {
+                feedback.className = 'feedback correct';
+                feedback.style.display = 'block';
+                feedback.innerHTML = '✓ Correct! Well done! | 正確！做得好！';
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.style.display = 'block';
+                feedback.innerHTML = '✗ Incorrect. Try again! | 不正確。再試一次！';
+            }
+        }
+        
+        // Show analysis answers
+        function showAnalysisAnswers() {
+            document.getElementById('analysisAnswers').style.display = 'block';
+            document.getElementById('analysisAnswers').className = 'feedback correct';
+        }
+        
+        // Hide analysis answers
+        function hideAnalysisAnswers() {
+            document.getElementById('analysisAnswers').style.display = 'none';
+        }
+        
+        // Show implementation answer
+        function showImplementationAnswer() {
+            document.getElementById('implementationAnswer').style.display = 'block';
+            document.getElementById('implementationAnswer').className = 'feedback correct';
+        }
+        
+        // Hide implementation answer
+        function hideImplementationAnswer() {
+            document.getElementById('implementationAnswer').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
